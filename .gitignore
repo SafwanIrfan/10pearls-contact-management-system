@@ -1,0 +1,9 @@
+# Frontend
+frontend/node_modules/
+frontend/build/
+
+# Backend (when you add it)
+backend/target/
+
+# Env files
+.env
