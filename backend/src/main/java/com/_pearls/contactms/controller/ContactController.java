@@ -1,5 +1,6 @@
 package com._pearls.contactms.controller;
 
+import com._pearls.contactms.dto.PaginatedResponseDTO;
 import com._pearls.contactms.modal.Contact;
 import com._pearls.contactms.service.ContactService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,11 +23,11 @@ public class ContactController {
     }
 
     @GetMapping("/contacts")
-    public ResponseEntity<Page<Contact>> getPaginatedContacts(
+    public ResponseEntity<PaginatedResponseDTO<Contact>> getPaginatedContacts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
             ) {
-        Page<Contact> contacts = contactService.getPaginatedContacts(page,size);
+        PaginatedResponseDTO<Contact> contacts = contactService.getPaginatedContacts(page,size);
         return ResponseEntity.ok().body(contacts);
     }
 }

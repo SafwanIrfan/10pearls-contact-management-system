@@ -1,5 +1,6 @@
 package com._pearls.contactms.service;
 
+import com._pearls.contactms.dto.PaginatedResponseDTO;
 import com._pearls.contactms.modal.Contact;
 import com._pearls.contactms.repo.ContactRepo;
 import org.springframework.data.domain.Page;
@@ -20,14 +21,20 @@ public class ContactService {
         this.contactRepo = contactRepo;
     }
 
-    public Page<Contact> getPaginatedContacts(int page, int size) {
+    public PaginatedResponseDTO<Contact> getPaginatedContacts(int page, int size) {
 
-        Pageable pageable = PageRequest.of(
-                page,
-                size,
-                Sort.by("createdAt").descending()
-        );
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Contact> contactPage = contactRepo.findAll(pageable);
 
-        return contactRepo.findAll(pageable);
+        PaginatedResponseDTO<Contact> response = new PaginatedResponseDTO<>();
+
+        response.setData(contactPage.getContent());
+        response.setPage(contactPage.getNumber());
+        response.setSize(contactPage.getSize());
+        response.setTotalElements(contactPage.getTotalElements());
+        response.setTotalPages(contactPage.getTotalPages());
+
+        return response;
+
     }
 }
