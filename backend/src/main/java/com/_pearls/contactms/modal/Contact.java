@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -31,6 +32,15 @@ public class Contact {
     @NotNull
     @Column(unique = true)
     private String phone;
+
+    @NotNull
+    private LocalDateTime createdAt;
+
+
+
+    public @NotNull LocalDateTime getCreatedAt() { return createdAt;}
+
+    public void setCreatedAt(@NotNull LocalDateTime createdAt) {this.createdAt = createdAt;}
 
     public @NotNull String getPhone() {
         return phone;
