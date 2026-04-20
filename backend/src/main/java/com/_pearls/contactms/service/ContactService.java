@@ -1,16 +1,17 @@
 package com._pearls.contactms.service;
 
+import com._pearls.contactms.dto.ContactRequestDTO;
+import com._pearls.contactms.dto.ContactResponseDTO;
 import com._pearls.contactms.dto.PaginatedResponseDTO;
-import com._pearls.contactms.modal.Contact;
+import com._pearls.contactms.mapper.ContactMapper;
+import com._pearls.contactms.model.Contact;
 import com._pearls.contactms.repo.ContactRepo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Service
 public class ContactService {
@@ -36,5 +37,14 @@ public class ContactService {
 
         return response;
 
+    }
+
+    public ContactResponseDTO addContact(ContactRequestDTO contactRequestDTO) {
+
+        Contact contact = ContactMapper.toModel(contactRequestDTO);
+        contact.setCreatedAt(LocalDateTime.now());
+        contactRepo.save(contact);
+
+        return ContactMapper.toDTO(contact);
     }
 }
