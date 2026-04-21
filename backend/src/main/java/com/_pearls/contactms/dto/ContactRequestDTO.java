@@ -21,6 +21,7 @@ public class ContactRequestDTO {
     @Email(message = "Email should be valid")
     private String email;
 
+    @Column(unique = true)
     @NotBlank(message = "Phone no is required")
     private String phone;
 

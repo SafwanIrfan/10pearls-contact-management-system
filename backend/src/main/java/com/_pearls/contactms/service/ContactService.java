@@ -47,4 +47,10 @@ public class ContactService {
 
         return ContactMapper.toDTO(contact);
     }
+
+    public ContactResponseDTO updateContact(Long id, ContactRequestDTO newContact) {
+
+        Contact contact = contactRepo.findById(id)
+                .orElseThrow(() -> new  )
+    }
 }
