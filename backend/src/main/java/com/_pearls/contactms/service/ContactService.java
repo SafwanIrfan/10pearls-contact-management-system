@@ -3,6 +3,9 @@ package com._pearls.contactms.service;
 import com._pearls.contactms.dto.ContactRequestDTO;
 import com._pearls.contactms.dto.ContactResponseDTO;
 import com._pearls.contactms.dto.PaginatedResponseDTO;
+import com._pearls.contactms.exception.ContactNotFoundException;
+import com._pearls.contactms.exception.EmailAlreadyExistsException;
+import com._pearls.contactms.exception.PhoneNoAlreadyExistsException;
 import com._pearls.contactms.mapper.ContactMapper;
 import com._pearls.contactms.model.Contact;
 import com._pearls.contactms.repo.ContactRepo;
@@ -48,9 +51,35 @@ public class ContactService {
         return ContactMapper.toDTO(contact);
     }
 
-    public ContactResponseDTO updateContact(Long id, ContactRequestDTO newContact) {
+    public ContactResponseDTO updateContact(Long id, ContactRequestDTO updatedContact) {
 
         Contact contact = contactRepo.findById(id)
-                .orElseThrow(() -> new  )
+                .orElseThrow(() -> new ContactNotFoundException("Contact not found with id: " + id));
+
+        if(contactRepo.existsByEmailAndIdNot(updatedContact.getEmail(), id)) {
+
+            throw new EmailAlreadyExistsException(
+                    "A contact with this email" //throw new stops execution
+                            + " already exists: " + updatedContact.getEmail()
+            );
+        }
+
+        if(contactRepo.existsByPhoneAndIdNot(updatedContact.getPhone(), id)) {
+
+            throw new PhoneNoAlreadyExistsException(
+                    "A contact with this phone number" //throw new stops execution
+                            + " already exists: " + updatedContact.getPhone()
+            );
+        }
+
+        contact.setTitle(updatedContact.getTitle());
+        contact.setLastName(updatedContact.getLastName());
+        contact.setFirstName(updatedContact.getFirstName());
+        contact.setEmail(updatedContact.getEmail());
+        contact.setPhone(updatedContact.getPhone());
+
+        Contact contactUpdated = contactRepo.save(contact);
+        return ContactMapper.toDTO(contactUpdated);
+
     }
 }

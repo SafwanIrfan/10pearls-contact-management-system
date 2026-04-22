@@ -44,9 +44,9 @@ public class ContactController {
     @PutMapping("/contact/update/{id}")
     @Operation(summary = "Update a Contact")
     public ResponseEntity<ContactResponseDTO> updateContact(@PathVariable Long id,
-                                                            @Validated({Default.class}) @RequestBody ContactRequestDTO newContact) {
+                                                            @Validated({Default.class}) @RequestBody ContactRequestDTO updatedContact) {
 
-        ContactResponseDTO contactResponseDTO = contactService.updateContact(id, newContact);
+        ContactResponseDTO contactResponseDTO = contactService.updateContact(id, updatedContact);
 
         return ResponseEntity.ok().body(contactResponseDTO);
 
