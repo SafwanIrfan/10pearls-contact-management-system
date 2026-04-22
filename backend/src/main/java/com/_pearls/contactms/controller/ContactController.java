@@ -49,6 +49,17 @@ public class ContactController {
         ContactResponseDTO contactResponseDTO = contactService.updateContact(id, updatedContact);
 
         return ResponseEntity.ok().body(contactResponseDTO);
+    }
+
+    @DeleteMapping("/contact/delete/{id}")
+    @Operation(summary = "Deletes a contact")
+    public ResponseEntity<Void> deleteContact(@PathVariable Long id) {
+
+        contactService.deleteContact(id);
+
+        //returns 204 response which tells no content
+        return ResponseEntity.noContent().build();
 
     }
 }
+

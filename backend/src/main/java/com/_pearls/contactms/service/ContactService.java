@@ -82,4 +82,12 @@ public class ContactService {
         return ContactMapper.toDTO(contactUpdated);
 
     }
+
+    public void deleteContact(Long id) {
+
+        contactRepo.findById(id).
+                orElseThrow(() -> new ContactNotFoundException("Contact not found with id: " + id));
+
+        contactRepo.deleteById(id);
+    }
 }
