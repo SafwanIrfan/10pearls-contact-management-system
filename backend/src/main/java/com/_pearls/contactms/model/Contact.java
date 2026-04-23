@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Contact {
@@ -23,38 +24,17 @@ public class Contact {
     private String title;
 
     @NotNull
-    @Email
-    @Column(unique = true)
-    private String email;
-
-    @NotNull
-    @Column(unique = true)
-    private String phone;
-
-    @NotNull
     private LocalDateTime createdAt;
 
+    @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EmailContact> email;
 
+    @OneToMany(mappedBy = "contact",  cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PhoneContact> phone;
 
     public @NotNull LocalDateTime getCreatedAt() { return createdAt;}
 
     public void setCreatedAt(@NotNull LocalDateTime createdAt) {this.createdAt = createdAt;}
-
-    public @NotNull String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(@NotNull String phone) {
-        this.phone = phone;
-    }
-
-    public @NotNull @Email String getEmail() {
-        return email;
-    }
-
-    public void setEmail(@NotNull @Email String email) {
-        this.email = email;
-    }
 
     public @NotNull String getTitle() {
         return title;
@@ -86,5 +66,21 @@ public class Contact {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<EmailContact> getEmail() {
+        return email;
+    }
+
+    public void setEmail(List<EmailContact> email) {
+        this.email = email;
+    }
+
+    public List<PhoneContact> getPhone() {
+        return phone;
+    }
+
+    public void setPhone(List<PhoneContact> phone) {
+        this.phone = phone;
     }
 }

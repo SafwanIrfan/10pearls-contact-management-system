@@ -25,11 +25,11 @@ public class ContactController {
 
     @GetMapping("/contacts")
     @Operation(summary = "Get Contacts")
-    public ResponseEntity<PaginatedResponseDTO<Contact>> getPaginatedContacts(
+    public ResponseEntity<PaginatedResponseDTO<ContactResponseDTO>> getPaginatedContacts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
             ) {
-        PaginatedResponseDTO<Contact> contacts = contactService.getPaginatedContacts(page,size);
+        PaginatedResponseDTO<ContactResponseDTO> contacts = contactService.getPaginatedContacts(page,size);
         return ResponseEntity.ok().body(contacts);
     }
 

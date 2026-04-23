@@ -1,11 +1,9 @@
 package com._pearls.contactms.dto;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.Email;
+import com._pearls.contactms.model.EmailContact;
+import com._pearls.contactms.model.PhoneContact;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
-import java.time.LocalDateTime;
+import java.util.List;
 
 public class ContactRequestDTO {
 
@@ -18,12 +16,9 @@ public class ContactRequestDTO {
     @NotBlank(message = "Title is required")
     private String title;
 
-    @Email(message = "Email should be valid")
-    private String email;
+    private List<EmailRequestDTO> emails;
 
-    @Column(unique = true)
-    @NotBlank(message = "Phone no is required")
-    private String phone;
+    private List<PhoneRequestDTO> phones;
 
     public @NotBlank(message = "First name is required") String getFirstName() {
         return firstName;
@@ -49,19 +44,19 @@ public class ContactRequestDTO {
         this.title = title;
     }
 
-    public @Email(message = "Email should be valid") String getEmail() {
-        return email;
+    public List<EmailRequestDTO> getEmails() {
+        return emails;
     }
 
-    public void setEmail(@Email(message = "Email should be valid") String email) {
-        this.email = email;
+    public void setEmails(List<EmailRequestDTO> emails) {
+        this.emails = emails;
     }
 
-    public @NotBlank(message = "Phone no is required") String getPhone() {
-        return phone;
+    public List<PhoneRequestDTO> getPhones() {
+        return phones;
     }
 
-    public void setPhone(@NotBlank(message = "Phone no is required") String phone) {
-        this.phone = phone;
+    public void setPhones(List<PhoneRequestDTO> phones) {
+        this.phones = phones;
     }
 }

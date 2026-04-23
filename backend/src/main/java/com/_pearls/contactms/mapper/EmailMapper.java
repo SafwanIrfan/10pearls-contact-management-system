@@ -1,0 +1,39 @@
+package com._pearls.contactms.mapper;
+
+import com._pearls.contactms.dto.EmailRequestDTO;
+import com._pearls.contactms.dto.EmailResponseDTO;
+import com._pearls.contactms.model.Contact;
+import com._pearls.contactms.model.EmailContact;
+import jakarta.validation.constraints.Email;
+
+import java.util.List;
+
+public class EmailMapper {
+
+    public static List<EmailContact> mapEmailsToModel(
+            List<EmailRequestDTO> emailRequestDTOS, Contact contact) {
+
+        return emailRequestDTOS
+                .stream()
+                .map(dto -> {
+                    EmailContact emailContact = new EmailContact();
+                    emailContact.setEmail(dto.getEmail());
+                    emailContact.setLabel(dto.getLabel());
+                    emailContact.setContact(contact);
+                    return emailContact;
+                }).toList();
+    }
+
+    public static List<EmailResponseDTO> mapEmailsToDTO(List<EmailContact> emailContacts) {
+
+        return emailContacts
+                .stream()
+                .map(email -> {
+                    EmailResponseDTO emailResponseDTO = new EmailResponseDTO();
+                    emailResponseDTO.setId(email.getId());
+                    emailResponseDTO.setEmail(email.getEmail());
+                    emailResponseDTO.setLabel(email.getLabel());
+                    return emailResponseDTO;
+                }).toList();
+    }
+}

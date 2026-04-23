@@ -1,6 +1,10 @@
 package com._pearls.contactms.dto;
 
+import com._pearls.contactms.model.EmailContact;
+import com._pearls.contactms.model.PhoneContact;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ContactResponseDTO {
 
@@ -8,8 +12,8 @@ public class ContactResponseDTO {
     private String firstName;
     private String lastName;
     private String title;
-    private String email;
-    private String phone;
+    private List<EmailResponseDTO> emails;
+    private List<PhoneResponseDTO> phones;
     private LocalDateTime createdAt;
 
     public Long getId() {
@@ -44,27 +48,25 @@ public class ContactResponseDTO {
         this.title = title;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public List<EmailResponseDTO> getEmails() {
+        return emails;
+    }
+    public void setEmails(List<EmailResponseDTO> emails) {
+        this.emails = emails;
+    }
+
+    public List<PhoneResponseDTO> getPhones() {
+        return phones;
+    }
+    public void setPhones(List<PhoneResponseDTO> phones) {
+        this.phones = phones;
     }
 }
