@@ -7,6 +7,7 @@ import com._pearls.contactms.model.EmailContact;
 import jakarta.validation.constraints.Email;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EmailMapper {
 
@@ -21,7 +22,8 @@ public class EmailMapper {
                     emailContact.setLabel(dto.getLabel());
                     emailContact.setContact(contact);
                     return emailContact;
-                }).toList();
+                }).collect(Collectors.toList());
+        //.collect(Collectors.toList()) is mutable
     }
 
     public static List<EmailResponseDTO> mapEmailsToDTO(List<EmailContact> emailContacts) {

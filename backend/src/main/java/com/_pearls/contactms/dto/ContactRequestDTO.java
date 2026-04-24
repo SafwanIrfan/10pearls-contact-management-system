@@ -1,7 +1,4 @@
 package com._pearls.contactms.dto;
-
-import com._pearls.contactms.model.EmailContact;
-import com._pearls.contactms.model.PhoneContact;
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 

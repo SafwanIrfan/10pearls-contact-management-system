@@ -6,6 +6,7 @@ import com._pearls.contactms.model.Contact;
 import com._pearls.contactms.model.PhoneContact;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PhoneMapper {
 
@@ -20,7 +21,8 @@ public class PhoneMapper {
                     phoneContact.setLabel(dto.getLabel());
                     phoneContact.setContact(contact);
                     return phoneContact;
-                }).toList();
+                }).collect(Collectors.toList());
+        //.collect(Collectors.toList()) is mutable
     }
 
     public static List<PhoneResponseDTO> mapPhonesToDTO(List<PhoneContact> phoneContacts) {

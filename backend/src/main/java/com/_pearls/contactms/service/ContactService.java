@@ -77,17 +77,21 @@ public class ContactService {
         contact.setLastName(updatedContact.getLastName());
         contact.setFirstName(updatedContact.getFirstName());
 
+        //first clear emails
+        contact.getEmail().clear();
         //map emails to Modal
         List<EmailContact> emails = EmailMapper.mapEmailsToModel(updatedContact.getEmails(), contact);
-        contact.setEmail(emails);
+        contact.getEmail().addAll(emails);
 
+
+        //first clear phones
+        contact.getPhone().clear();
         //map phones to Modal
         List<PhoneContact> phones = PhoneMapper.mapPhonesToModel(updatedContact.getPhones(), contact);
-        contact.setPhone(phones);
+        contact.getPhone().addAll(phones);
 
         Contact contactUpdated = contactRepo.save(contact);
         return ContactMapper.toDTO(contactUpdated);
-
     }
 
     public void deleteContact(Long id) {
