@@ -11,7 +11,7 @@ public class User {
     private Long id;
 
     @Column(unique = true)
-    private String username;
+    private String phoneNo;
 
     @Column(unique = true)
     private String email;
@@ -35,12 +35,12 @@ public class User {
         this.email = email;
     }
 
-    public String getUsername() {
-        return username;
+    public String getPhoneNo() {
+        return phoneNo;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
     }
 
     public Long getId() {

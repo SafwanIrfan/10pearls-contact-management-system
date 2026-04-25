@@ -1,9 +1,8 @@
 package com._pearls.contactms.controller;
 
-import com._pearls.contactms.dto.ContactRequestDTO;
-import com._pearls.contactms.dto.ContactResponseDTO;
-import com._pearls.contactms.dto.PaginatedResponseDTO;
-import com._pearls.contactms.model.Contact;
+import com._pearls.contactms.dto.contactdto.ContactRequestDTO;
+import com._pearls.contactms.dto.contactdto.ContactResponseDTO;
+import com._pearls.contactms.dto.contactdto.PaginatedResponseDTO;
 import com._pearls.contactms.service.ContactService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,9 +1,9 @@
 package com._pearls.contactms.mapper;
 
-import com._pearls.contactms.dto.ContactRequestDTO;
-import com._pearls.contactms.dto.ContactResponseDTO;
-import com._pearls.contactms.dto.EmailResponseDTO;
-import com._pearls.contactms.dto.PhoneResponseDTO;
+import com._pearls.contactms.dto.contactdto.ContactRequestDTO;
+import com._pearls.contactms.dto.contactdto.ContactResponseDTO;
+import com._pearls.contactms.dto.emaildto.EmailResponseDTO;
+import com._pearls.contactms.dto.phonedto.PhoneResponseDTO;
 import com._pearls.contactms.model.Contact;
 import com._pearls.contactms.model.EmailContact;
 import com._pearls.contactms.model.PhoneContact;

@@ -1,7 +1,7 @@
 package com._pearls.contactms.mapper;
 
-import com._pearls.contactms.dto.PhoneRequestDTO;
-import com._pearls.contactms.dto.PhoneResponseDTO;
+import com._pearls.contactms.dto.phonedto.PhoneRequestDTO;
+import com._pearls.contactms.dto.phonedto.PhoneResponseDTO;
 import com._pearls.contactms.model.Contact;
 import com._pearls.contactms.model.PhoneContact;
 

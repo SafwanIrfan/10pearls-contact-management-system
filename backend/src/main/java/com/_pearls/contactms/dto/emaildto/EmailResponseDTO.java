@@ -1,4 +1,4 @@
-package com._pearls.contactms.dto;
+package com._pearls.contactms.dto.emaildto;
 
 public class EmailResponseDTO {
 

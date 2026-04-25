@@ -1,10 +1,9 @@
 package com._pearls.contactms.mapper;
 
-import com._pearls.contactms.dto.EmailRequestDTO;
-import com._pearls.contactms.dto.EmailResponseDTO;
+import com._pearls.contactms.dto.emaildto.EmailRequestDTO;
+import com._pearls.contactms.dto.emaildto.EmailResponseDTO;
 import com._pearls.contactms.model.Contact;
 import com._pearls.contactms.model.EmailContact;
-import jakarta.validation.constraints.Email;
 
 import java.util.List;
 import java.util.stream.Collectors;

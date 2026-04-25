@@ -1,4 +1,6 @@
-package com._pearls.contactms.dto;
+package com._pearls.contactms.dto.contactdto;
+import com._pearls.contactms.dto.emaildto.EmailRequestDTO;
+import com._pearls.contactms.dto.phonedto.PhoneRequestDTO;
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 

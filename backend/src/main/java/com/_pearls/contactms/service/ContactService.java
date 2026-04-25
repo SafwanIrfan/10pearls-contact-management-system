@@ -1,8 +1,8 @@
 package com._pearls.contactms.service;
 
-import com._pearls.contactms.dto.ContactRequestDTO;
-import com._pearls.contactms.dto.ContactResponseDTO;
-import com._pearls.contactms.dto.PaginatedResponseDTO;
+import com._pearls.contactms.dto.contactdto.ContactRequestDTO;
+import com._pearls.contactms.dto.contactdto.ContactResponseDTO;
+import com._pearls.contactms.dto.contactdto.PaginatedResponseDTO;
 import com._pearls.contactms.exception.ContactNotFoundException;
 import com._pearls.contactms.mapper.ContactMapper;
 import com._pearls.contactms.mapper.EmailMapper;

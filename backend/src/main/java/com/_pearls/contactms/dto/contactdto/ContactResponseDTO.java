@@ -1,7 +1,7 @@
-package com._pearls.contactms.dto;
+package com._pearls.contactms.dto.contactdto;
 
-import com._pearls.contactms.model.EmailContact;
-import com._pearls.contactms.model.PhoneContact;
+import com._pearls.contactms.dto.emaildto.EmailResponseDTO;
+import com._pearls.contactms.dto.phonedto.PhoneResponseDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;

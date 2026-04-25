@@ -1,4 +1,4 @@
-package com._pearls.contactms.dto;
+package com._pearls.contactms.dto.emaildto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
