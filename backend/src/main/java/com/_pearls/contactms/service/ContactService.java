@@ -3,7 +3,7 @@ package com._pearls.contactms.service;
 import com._pearls.contactms.dto.contactdto.ContactRequestDTO;
 import com._pearls.contactms.dto.contactdto.ContactResponseDTO;
 import com._pearls.contactms.dto.contactdto.PaginatedResponseDTO;
-import com._pearls.contactms.exception.ContactNotFoundException;
+import com._pearls.contactms.exception.NotFoundException;
 import com._pearls.contactms.mapper.ContactMapper;
 import com._pearls.contactms.mapper.EmailMapper;
 import com._pearls.contactms.mapper.PhoneMapper;
@@ -71,7 +71,7 @@ public class ContactService {
     public ContactResponseDTO updateContact(Long id, ContactRequestDTO updatedContact) {
 
         Contact contact = contactRepo.findById(id)
-                .orElseThrow(() -> new ContactNotFoundException("Contact not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Contact not found with id: " + id));
 
         contact.setTitle(updatedContact.getTitle());
         contact.setLastName(updatedContact.getLastName());
@@ -97,7 +97,7 @@ public class ContactService {
     public void deleteContact(Long id) {
 
         contactRepo.findById(id).
-                orElseThrow(() -> new ContactNotFoundException("Contact not found with id: " + id));
+                orElseThrow(() -> new NotFoundException("Contact not found with id: " + id));
 
         contactRepo.deleteById(id);
     }

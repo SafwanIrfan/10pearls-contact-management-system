@@ -1,8 +1,10 @@
 package com._pearls.contactms.service;
 
+import com._pearls.contactms.dto.authdto.LoginRequestDTO;
 import com._pearls.contactms.dto.authdto.RegisterRequestDTO;
 import com._pearls.contactms.exception.BadRequestException;
 import com._pearls.contactms.exception.ConflictException;
+import com._pearls.contactms.exception.NotFoundException;
 import com._pearls.contactms.model.User;
 import com._pearls.contactms.repo.AuthRepo;
 import com._pearls.contactms.utils.AuthHelper;
@@ -11,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -50,5 +54,21 @@ public class AuthService {
         authRepo.save(user);
 
         return "Registered Successfully : " + registerRequestDTO.getIdentifier();
+    }
+
+    public Optional<String> authenticate(LoginRequestDTO loginRequestDTO) {
+
+        User user =  new User();
+
+        String identifier = loginRequestDTO.getIdentifier();
+
+        if(AuthHelper.isEmail(identifier)) {
+            user = authRepo.findByEmail(identifier)
+                    .orElseThrow(() -> new BadRequestException("Invalid Email"));
+        }
+
+        if(AuthHelper.isPhoneNo(identifier)) {
+
+        }
     }
 }

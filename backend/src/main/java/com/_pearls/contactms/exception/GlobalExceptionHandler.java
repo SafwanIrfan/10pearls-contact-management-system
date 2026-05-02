@@ -28,15 +28,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
-    @ExceptionHandler(ContactNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleContactNotFoundException(
-            ContactNotFoundException ex){
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleContactNotFoundException(
+            NotFoundException ex){
 
-        log.warn("Contact not found {}", ex.getMessage());
+        log.warn(ex.getMessage());
 
-        Map<String, String> errors = new HashMap<>();
-        errors.put("message", "Contact not found");
-        return ResponseEntity.badRequest().body(errors);
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
     }
 
     @ExceptionHandler(BadRequestException.class)
