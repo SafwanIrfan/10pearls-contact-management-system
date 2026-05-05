@@ -38,13 +38,12 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
 
-        Optional<String> tokenOptional = authService.authenticate(loginRequestDTO);
+        String token = authService.authenticate(loginRequestDTO);
 
-        if(tokenOptional.isEmpty()) {
+        if(token.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        String token = tokenOptional.get();
         return ResponseEntity.ok(new LoginResponseDTO(token));
 
     }

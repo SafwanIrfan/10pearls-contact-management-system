@@ -4,6 +4,7 @@ import com._pearls.contactms.exception.NotFoundException;
 import com._pearls.contactms.model.User;
 import com._pearls.contactms.repo.AuthRepo;
 import com._pearls.contactms.utils.AuthHelper;
+import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
+    @NullMarked
     public UserDetails loadUserByUsername(String identifier) throws NotFoundException {
 
         User user;

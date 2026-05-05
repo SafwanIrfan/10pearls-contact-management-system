@@ -12,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
-@RestController
+@RestController("/contacts")
 @Tag(name = "Contact", description = "API for managing Contacts")
 public class ContactController {
 
@@ -22,7 +22,7 @@ public class ContactController {
         this.contactService = contactService;
     }
 
-    @GetMapping("/contacts")
+    @GetMapping("/all")
     @Operation(summary = "Get Contacts")
     public ResponseEntity<PaginatedResponseDTO<ContactResponseDTO>> getPaginatedContacts(
             @RequestParam(defaultValue = "0") int page,
