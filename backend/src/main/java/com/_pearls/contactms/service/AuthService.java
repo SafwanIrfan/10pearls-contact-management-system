@@ -10,6 +10,10 @@ import com._pearls.contactms.repo.AuthRepo;
 import com._pearls.contactms.utils.AuthHelper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,12 +24,14 @@ import java.util.Optional;
 public class AuthService {
 
     private final AuthRepo authRepo;
-    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
-    public AuthService(AuthRepo authRepo, PasswordEncoder passwordEncoder) {
+    public AuthService(AuthRepo authRepo, AuthenticationManager authenticationManager) {
         this.authRepo = authRepo;
-        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
+
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
 
     public String register(RegisterRequestDTO registerRequestDTO) {
@@ -50,25 +56,17 @@ public class AuthService {
             throw new BadRequestException("Invalid Email or Phone Number");
         }
 
-        user.setPassword(passwordEncoder.encode(registerRequestDTO.getPassword()));
+        user.setPassword(encoder.encode(registerRequestDTO.getPassword()));
         authRepo.save(user);
 
         return "Registered Successfully : " + registerRequestDTO.getIdentifier();
     }
 
     public Optional<String> authenticate(LoginRequestDTO loginRequestDTO) {
+        Authentication authentication =
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(users.getUsername(), users.getPassword()));
+        if(authentication.isAuthenticated())
+            return jwtService.generateToken(loginRequestDTO.getIdentifier()) ;
 
-        User user =  new User();
-
-        String identifier = loginRequestDTO.getIdentifier();
-
-        if(AuthHelper.isEmail(identifier)) {
-            user = authRepo.findByEmail(identifier)
-                    .orElseThrow(() -> new BadRequestException("Invalid Email"));
-        }
-
-        if(AuthHelper.isPhoneNo(identifier)) {
-
-        }
     }
 }
