@@ -2,7 +2,6 @@ package com._pearls.contactms.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,12 +19,17 @@ public class JwtService {
 
     private final SecretKey secretKey;
 
-    public JwtService(@Value("${jwt.secret}") String base64SecretKey) {
-        System.out.println("SECRET LENGTH (raw string): " + base64SecretKey.length());
-        System.out.println("SECRET VALUE: [" + base64SecretKey + "]"); // brackets reveal whitespace
-        byte[] keyBytes = Decoders.BASE64.decode(base64SecretKey);
-        System.out.println("DECODED BYTES: " + keyBytes.length);
-        this.secretKey = Keys.hmacShaKeyFor(keyBytes);
+    public JwtService(@Value("${jwt.secret}") String base64Secret) {
+        try{
+            byte[] keyBytes = Decoders.BASE64.decode(base64Secret);
+            this.secretKey = Keys.hmacShaKeyFor(keyBytes);
+        } catch(RuntimeException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public SecretKey getKey() {
+        return this.secretKey;
     }
 
     public String generateToken(String identifier) {
@@ -40,7 +43,7 @@ public class JwtService {
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) //10hours
                 .and()
-                .signWith(secretKey)
+                .signWith(getKey())
                 .compact();
     }
 
