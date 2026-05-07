@@ -8,6 +8,7 @@ import com._pearls.contactms.model.User;
 import com._pearls.contactms.repo.AuthRepo;
 import com._pearls.contactms.utils.AuthHelper;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -59,10 +60,12 @@ public class AuthService {
 
     public String authenticate(LoginRequestDTO loginRequestDTO) {
         Authentication authentication =
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO.getIdentifier(), loginRequestDTO.getPassword()));
-        if(authentication.isAuthenticated())
-            return jwtService.generateToken(loginRequestDTO.getIdentifier());
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                loginRequestDTO.getIdentifier(), loginRequestDTO.getPassword()
+                        ));
 
-        return "Invalid Credentials";
+        return jwtService.generateToken(loginRequestDTO.getIdentifier());
+
     }
 }
