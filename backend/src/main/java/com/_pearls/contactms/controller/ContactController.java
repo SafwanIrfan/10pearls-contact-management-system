@@ -12,7 +12,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
-@RestController("/contacts")
+@RestController()
+@RequestMapping("/contacts")
 @Tag(name = "Contact", description = "API for managing Contacts")
 public class ContactController {
 
