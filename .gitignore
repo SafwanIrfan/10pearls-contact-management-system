@@ -7,3 +7,6 @@ backend/target/
 
 # Env files
 .env
+
+#SonarQube
+.scannerwork/
