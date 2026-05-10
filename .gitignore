@@ -9,4 +9,5 @@ backend/target/
 .env
 
 #SonarQube
-.scannerwork
+.sonarqube/
+.scannerwork/
