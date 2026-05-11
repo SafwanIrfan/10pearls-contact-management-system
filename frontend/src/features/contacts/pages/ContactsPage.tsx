@@ -12,6 +12,20 @@ const ContactsPage = () => {
                 <h1 className="text-heading text-2xl font-bold text-center">Contacts</h1>
             </div>
 
+            <div className="flex w-full h-full mt-2">
+                <div className="w-30 h-full p-3 rounded-lg border border-secondary-500">
+                    <p>Contacts List</p>
+                </div>
+
+                <div className="w-full h-full p-3 rounded-lg border border-secondary-500">
+                    <p>Contact Details</p>
+                </div>
+
+                <div className="w-full h-full p-3 rounded-lg border border-secondary-500">
+                    <p>Contact Details</p>
+                </div>
+            </div>
+
             {/* {loading && <div>Loading...</div>}
             {error && <div>Error: {error}</div>}
 
