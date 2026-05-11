@@ -13,7 +13,7 @@ const ContactsPage = () => {
             </div>
 
             <div className="flex w-full h-full mt-2">
-                <div className="w-30 h-full p-3 rounded-lg border border-secondary-500">
+                <div className="w-30 h-full p-3 rounded-lg border border-secondary-500 font-poppins">
                     <p>Contacts List</p>
                 </div>
 

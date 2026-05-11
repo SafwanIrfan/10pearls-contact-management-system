@@ -2,6 +2,10 @@ import { ToastContainer } from 'react-toastify'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './routes'
 
-const App = () => <RouterProvider router={router} />
+const App = () =>
+    <>
+        <RouterProvider router={router} />
+        <ToastContainer />
+    </>
 
 export default App
