@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { Download, Upload, UserPlus } from "lucide-react";
 import { useContacts } from "../hooks/useContact"
 
 const ContactsPage = () => {
@@ -6,46 +6,30 @@ const ContactsPage = () => {
     const { contacts, loading, error, refetch } = useContacts();
 
     return (
+        <div className="flex-1 h-screen px-4 sm:px-6 py-4 ">
+            <section className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 justify-between border-b border-gray-100">
+                {/* Title */}
+                <h1 className="font-poppins text-xl sm:text-3xl font-semibold text-heading">
+                    Contact List
+                </h1>
 
-        <section className="flex-1 h-screen">
-            <div className="flex w-min bg-button p-3 rounded-lg border shadow-lg ">
-                <h1 className="text-heading text-2xl font-bold text-center">Contacts</h1>
-            </div>
-
-            <div className="flex w-full h-full mt-2">
-                <div className="w-30 h-full p-3 rounded-lg border border-secondary-500 font-poppins">
-                    <p>Contacts List</p>
+                {/* Actions */}
+                <div className="flex items-center gap-2 flex-wrap">
+                    <button className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium text-text bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <Upload size={14} strokeWidth={1.8} />
+                        <span className="hidden sm:inline">Import</span>
+                    </button>
+                    <button className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium text-text bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <Download size={14} strokeWidth={1.8} />
+                        <span className="hidden sm:inline">Export</span>
+                    </button>
+                    <button className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium text-white bg-button rounded-lg hover:bg-button/90 transition-colors">
+                        <UserPlus size={14} strokeWidth={1.8} />
+                        <span className="hidden sm:inline">Add Employee</span>
+                    </button>
                 </div>
-
-                <div className="w-full h-full p-3 rounded-lg border border-secondary-500">
-                    <p>Contact Details</p>
-                </div>
-
-                <div className="w-full h-full p-3 rounded-lg border border-secondary-500">
-                    <p>Contact Details</p>
-                </div>
-            </div>
-
-            {/* {loading && <div>Loading...</div>}
-            {error && <div>Error: {error}</div>}
-
-            {
-                contacts &&
-                <div>
-                    {contacts?.data?.map((contact) => (
-                        <div key={contact.id}>
-                            <div>{contact.firstName}</div>
-                            <div>{contact.lastName}</div>
-                            <div>{contact.title}</div>
-                            <div>{contact?.emails?.map((email) => <span key={email.email}>{email.email}</span>)}</div>
-                            <div>{contact?.phones?.map((phone) => <span key={phone.phone}>{phone.phone}</span>)}</div>
-                        </div>
-                    ))
-                    }
-                </div>
-            } */}
-        </section>
-    )
+            </section>
+        </div>
+    );
 }
-
 export default ContactsPage

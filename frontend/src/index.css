@@ -3,11 +3,12 @@
 @theme {
   --font-poppins: "Poppins", sans-serif;
 
-  --color-bg: #FCF9FB;
-  --color-button: #C4B8FF;
+  --color-bg: #F2F7FA;
+  --color-button: #346869;
   --color-heading: #1E141E;
   --color-text: #2A2A2A;
-  --color-secondary: #F0EAED;
+  --color-secondaryButton: #9DBE81;
+  --color-secondary: #1C212D;
 }
 
 body {

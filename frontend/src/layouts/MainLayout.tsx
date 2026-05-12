@@ -4,11 +4,11 @@ import Sidebar from "../shared/components/Sidebar";
 
 const MainLayout = () => {
     return (
-        <div className="flex min-h-screen">
-            <Sidebar />
-            <div className="flex-1 flex flex-col">
-                <Navbar />
-                <main className="p-4">
+        <div className="font-poppins h-screen flex flex-col">
+            <Navbar />
+            <div className="flex flex-1 overflow-hidden">
+                <Sidebar />
+                <main className="flex-1 overflow-y-auto p-4 bg-bg">
                     <Outlet />
                 </main>
             </div>
