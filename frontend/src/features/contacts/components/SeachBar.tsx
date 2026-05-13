@@ -62,7 +62,37 @@ export default function SearchBar({
             font-poppins min-w-0
           "
         />
+
+        {/* Clear Button */}
+        <button
+          onClick={handleClear}
+          className={`
+            shrink-0 p-0.5 rounded-full transition-all duration-150
+            text-gray-400 hover:text-text hover:bg-gray-100
+            ${value ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"}
+          `}
+          tabIndex={value ? 0 : -1}
+          aria-label="Clear search"
+        >
+          <X size={13} strokeWidth={2.5} />
+        </button>
       </div>
+      {/* Filter Button */}
+      {showFilter && (
+        <button
+          onClick={onFilter}
+          className="
+            flex items-center gap-2 px-3 py-2.5
+            text-sm font-medium text-text
+            bg-white border border-gray-200 rounded-xl
+            shadow-sm hover:border-gray-300 hover:bg-gray-50
+            active:scale-95 transition-all duration-150
+          "
+        >
+          <SlidersHorizontal size={15} strokeWidth={1.8} />
+          <span className="hidden sm:inline">Filter</span>
+        </button>
+      )}
     </div>
   );
 }
