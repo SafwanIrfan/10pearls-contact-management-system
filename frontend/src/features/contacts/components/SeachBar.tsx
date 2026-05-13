@@ -22,4 +22,47 @@ export default function SearchBar({
     onSearch?.("");
     inputRef.current?.focus();
   };
+
+  return (
+    <div className="flex items-center gap-2 w-full max-w-md mt-10 font-poppins">
+      {/* Search Input */}
+      <div
+        className={`
+          relative flex items-center flex-1 gap-2
+          bg-white border rounded-xl px-3 py-2.5
+          transition-all duration-200 ease-in-out
+          ${
+            focused
+              ? "border-button shadow-[0_0_0_3px_rgba(52,104,105,0.12)]"
+              : "border-gray-200 shadow-sm hover:border-gray-300"
+          }
+        `}
+      >
+        {/* Search Icon */}
+        <Search
+          size={15}
+          strokeWidth={2}
+          className={`shrink-0 transition-colors duration-200 ${
+            focused ? "text-button" : "text-gray-400"
+          }`}
+        />
+
+        {/* Input */}
+        <input
+          ref={inputRef}
+          type="text"
+          value={value}
+          onChange={handleChange}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          placeholder={placeholder}
+          className="
+            flex-1 bg-transparent text-sm text-text
+            placeholder:text-gray-400 outline-none
+            font-poppins min-w-0
+          "
+        />
+      </div>
+    </div>
+  );
 }
