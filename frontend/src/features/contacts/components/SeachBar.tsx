@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { Search, X, SlidersHorizontal } from "lucide-react";
 import type { SearchBarProps } from "../types/search.type";
+import Button from "../../../shared/components/Button";
 
 export default function SearchBar({
   placeholder = "Search contacts...",
@@ -79,19 +80,7 @@ export default function SearchBar({
       </div>
       {/* Filter Button */}
       {showFilter && (
-        <button
-          onClick={onFilter}
-          className="
-            flex items-center gap-2 px-3 py-2.5
-            text-sm font-medium text-text
-            bg-white border border-gray-200 rounded-xl
-            shadow-sm hover:border-gray-300 hover:bg-gray-50
-            active:scale-95 transition-all duration-150
-          "
-        >
-          <SlidersHorizontal size={15} strokeWidth={1.8} />
-          <span className="hidden sm:inline">Filter</span>
-        </button>
+        <Button icon={SlidersHorizontal} label="Filter" onClick={onFilter} />
       )}
     </div>
   );

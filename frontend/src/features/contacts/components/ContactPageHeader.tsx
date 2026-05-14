@@ -1,4 +1,5 @@
 import { Download, Upload, UserPlus } from "lucide-react";
+import Button from "../../../shared/components/Button";
 
 const ContactPageHeader = () => {
   return (
@@ -10,18 +11,9 @@ const ContactPageHeader = () => {
 
       {/* Actions */}
       <div className="flex items-center gap-2 flex-wrap">
-        <button className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium text-text bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-          <Upload size={14} strokeWidth={1.8} />
-          <span className="hidden sm:inline">Import</span>
-        </button>
-        <button className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium text-text bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-          <Download size={14} strokeWidth={1.8} />
-          <span className="hidden sm:inline">Export</span>
-        </button>
-        <button className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium text-white bg-button rounded-lg hover:bg-button/90 transition-colors">
-          <UserPlus size={14} strokeWidth={1.8} />
-          <span className="hidden sm:inline">Add Employee</span>
-        </button>
+        <Button icon={Upload} label="Import" />
+        <Button icon={Download} label="Export" />
+        <Button icon={UserPlus} label="Add Contact" variant="primary" />
       </div>
     </section>
   );
