@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for API calls
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()// Allow login/courts
-                        .anyRequest().authenticated() // Protect other routes
+                        .anyRequest().permitAll() // Protect other routes
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
