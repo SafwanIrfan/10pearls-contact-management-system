@@ -1,11 +1,14 @@
 package com._pearls.contactms.config;
 
+import com._pearls.contactms.exception.GlobalExceptionHandler;
 import com._pearls.contactms.service.CustomUserDetailsService;
 import com._pearls.contactms.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +22,8 @@ import java.io.IOException;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+
+    private static final Logger log = LoggerFactory.getLogger(JwtFilter.class);
 
     @Autowired
     private JwtService jwtService;
@@ -42,7 +47,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = null;
         String identifier = null;
 
-        System.out.println("Incoming Request: " + request.getMethod() + " " + request.getRequestURI());
+        log.info("Incoming Request: {} {}", request.getMethod(), request.getRequestURI());
 
         if(authHeader != null && authHeader.startsWith("Bearer")){
             token = authHeader.substring(7);

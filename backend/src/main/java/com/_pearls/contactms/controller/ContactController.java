@@ -3,6 +3,7 @@ package com._pearls.contactms.controller;
 import com._pearls.contactms.dto.contactdto.ContactRequestDTO;
 import com._pearls.contactms.dto.contactdto.ContactResponseDTO;
 import com._pearls.contactms.dto.contactdto.PaginatedResponseDTO;
+import com._pearls.contactms.exception.BadRequestException;
 import com._pearls.contactms.service.ContactService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,10 +34,19 @@ public class ContactController {
         return ResponseEntity.ok().body(contacts);
     }
 
+    @GetMapping("/contact/{id}")
+    @Operation(summary = "Get Contact")
+    public ResponseEntity<ContactResponseDTO> getContactById(@PathVariable Long id) {
+        if (id == null || id <= 0) {
+            throw new BadRequestException("Invalid Contact ID");
+        }
+        ContactResponseDTO contact = contactService.getContactById(id);
+        return ResponseEntity.ok().body(contact);
+    }
+
     @PostMapping("/contact/add")
     @Operation(summary = "Create a new Contact")
     public ResponseEntity<ContactResponseDTO> addContact(@Validated({Default.class}) @RequestBody ContactRequestDTO newContact) {
-
         ContactResponseDTO contact = contactService.addContact(newContact);
         return ResponseEntity.ok().body(contact);
     }
@@ -47,16 +57,13 @@ public class ContactController {
                                                             @Validated({Default.class}) @RequestBody ContactRequestDTO updatedContact) {
 
         ContactResponseDTO contactResponseDTO = contactService.updateContact(id, updatedContact);
-
         return ResponseEntity.ok().body(contactResponseDTO);
     }
 
     @DeleteMapping("/contact/delete/{id}")
     @Operation(summary = "Deletes a contact")
     public ResponseEntity<Void> deleteContact(@PathVariable Long id) {
-
         contactService.deleteContact(id);
-
         //returns 204 response which tells no content
         return ResponseEntity.noContent().build();
 

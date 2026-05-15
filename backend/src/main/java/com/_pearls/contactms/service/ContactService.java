@@ -11,6 +11,8 @@ import com._pearls.contactms.model.Contact;
 import com._pearls.contactms.model.EmailContact;
 import com._pearls.contactms.model.PhoneContact;
 import com._pearls.contactms.repo.ContactRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +24,7 @@ import java.util.List;
 @Service
 public class ContactService {
 
+    private static final Logger log = LoggerFactory.getLogger(ContactService.class);
     private final ContactRepo contactRepo;
 
     public ContactService(ContactRepo contactRepo) {
@@ -46,8 +49,15 @@ public class ContactService {
         response.setTotalElements(contactPage.getTotalElements());
         response.setTotalPages(contactPage.getTotalPages());
 
+        log.info("Incoming Request: {} {}", page, size);
         return response;
+    }
 
+    public ContactResponseDTO getContactById(Long id) {
+        Contact contact = contactRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Contact not found with id: " + id));
+        log.info("Contact fetched with id: {}", id);
+        return ContactMapper.toDTO(contact);
     }
 
     public ContactResponseDTO addContact(ContactRequestDTO contactRequestDTO) {
@@ -64,7 +74,7 @@ public class ContactService {
         contact.setPhone(phones);
 
         contactRepo.save(contact);
-
+        log.info("Added contact with id: {}", contact.getId());
         return ContactMapper.toDTO(contact);
     }
 
@@ -91,14 +101,14 @@ public class ContactService {
         contact.getPhone().addAll(phones);
 
         Contact contactUpdated = contactRepo.save(contact);
+        log.info("Updated contact with id: {}", contact.getId());
         return ContactMapper.toDTO(contactUpdated);
     }
 
     public void deleteContact(Long id) {
-
-        contactRepo.findById(id).
-                orElseThrow(() -> new NotFoundException("Contact not found with id: " + id));
-
+        ContactResponseDTO contact = getContactById(id);
         contactRepo.deleteById(id);
+        log.info("Delete contact with id: {}", id);
     }
+
 }
