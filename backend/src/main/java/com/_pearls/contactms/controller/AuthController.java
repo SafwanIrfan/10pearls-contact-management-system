@@ -32,7 +32,6 @@ public class AuthController {
     @Operation(summary = "Register a new user")
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequestDTO registerRequestDTO) {
-
         String response = authService.register(registerRequestDTO);
         return ResponseEntity.ok(response);
     }
@@ -42,12 +41,10 @@ public class AuthController {
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
 
         String token = authService.authenticate(loginRequestDTO);
-
         if(token.isEmpty()) {
             log.warn("Invalid token");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
         return ResponseEntity.ok(new LoginResponseDTO(token));
 
     }

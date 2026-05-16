@@ -2,6 +2,9 @@ package com._pearls.contactms.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -18,6 +21,10 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    // One user can have many reset tokens (each request creates a new one)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PasswordResetToken> passwordResetTokens = new ArrayList<>();
 
     public String getPassword() {
         return password;
@@ -49,5 +56,12 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<PasswordResetToken> getPasswordResetTokens() {
+        return passwordResetTokens;
+    }
+    public void setPasswordResetTokens(List<PasswordResetToken> passwordResetTokens) {
+        this.passwordResetTokens = passwordResetTokens;
     }
 }
