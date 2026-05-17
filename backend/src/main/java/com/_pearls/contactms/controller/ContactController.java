@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController()
 @RequestMapping("/contacts")
@@ -49,6 +51,13 @@ public class ContactController {
     public ResponseEntity<ContactResponseDTO> addContact(@Validated({Default.class}) @RequestBody ContactRequestDTO newContact) {
         ContactResponseDTO contact = contactService.addContact(newContact);
         return ResponseEntity.ok().body(contact);
+    }
+
+    @PostMapping("/contacts/add")
+    @Operation(summary = "Create new Contacts")
+    public ResponseEntity<List<ContactResponseDTO>> addContact(@Validated({Default.class}) @RequestBody List<ContactRequestDTO> newContacts) {
+        List<ContactResponseDTO> contacts = contactService.addContacts(newContacts);
+        return ResponseEntity.ok().body(contacts);
     }
 
     @PutMapping("/contact/update/{id}")

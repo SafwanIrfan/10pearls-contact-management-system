@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ContactService {
@@ -78,6 +79,33 @@ public class ContactService {
         return ContactMapper.toDTO(contact);
     }
 
+    public List<ContactResponseDTO> addContacts(List<ContactRequestDTO> contactRequestDTOs) {
+
+        List<Contact> contacts = contactRequestDTOs.stream()
+                .map(contactRequestDTO -> {
+                    Contact contact = ContactMapper.toModel(contactRequestDTO);
+                    contact.setCreatedAt(LocalDateTime.now());
+
+                    // map emails to Model
+                    List<EmailContact> emails = EmailMapper.mapEmailsToModel(contactRequestDTO.getEmails(), contact);
+                    contact.setEmail(emails);
+
+                    // map phones to Model
+                    List<PhoneContact> phones = PhoneMapper.mapPhonesToModel(contactRequestDTO.getPhones(), contact);
+                    contact.setPhone(phones);
+
+                    return contact;
+                })
+                .collect(Collectors.toList());
+
+        contactRepo.saveAll(contacts);
+        log.info("Added {} contacts", contacts.size());
+
+        return contacts.stream()
+                .map(ContactMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     public ContactResponseDTO updateContact(Long id, ContactRequestDTO updatedContact) {
 
         Contact contact = contactRepo.findById(id)
@@ -110,5 +138,4 @@ public class ContactService {
         contactRepo.deleteById(id);
         log.info("Delete contact with id: {}", id);
     }
-
 }
