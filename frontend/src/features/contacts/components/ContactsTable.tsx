@@ -256,18 +256,20 @@ export default function ContactsTable() {
                           >
                             <Mail
                               size={11}
-                              className="shrink-0 text-gray-300"
+                              className="shrink-0 text-gray-500"
                             />
                             <span className="truncate max-w-[180px]">
                               {e.email}
                             </span>
-                            <span className="text-[10px] text-gray-300 capitalize">
-                              {e.label}
-                            </span>
+                            <div className="p-1 rounded border border-secondaryButton">
+                              <span className="text-[10px] text-gray-600 capitalize">
+                                {e.label}
+                              </span>
+                            </div>
                           </span>
                         ))}
                         {contact.emails?.length > 2 && (
-                          <span className="text-[10px] text-gray-300">
+                          <span className="text-[10px] text-gray-500">
                             +{contact.emails.length - 2} more
                           </span>
                         )}
@@ -283,16 +285,18 @@ export default function ContactsTable() {
                           >
                             <Phone
                               size={11}
-                              className="shrink-0 text-gray-300"
+                              className="shrink-0 text-gray-500"
                             />
                             <span>{p.phone}</span>
-                            <span className="text-[10px] text-gray-300 capitalize">
-                              {p.label}
-                            </span>
+                            <div className="p-1 rounded border border-secondaryButton">
+                              <span className="text-[10px] text-gray-600 capitalize">
+                                {p.label}
+                              </span>
+                            </div>
                           </span>
                         ))}
                         {contact.phones?.length > 2 && (
-                          <span className="text-[10px] text-gray-300">
+                          <span className="text-[10px] text-gray-500">
                             +{contact.phones.length - 2} more
                           </span>
                         )}

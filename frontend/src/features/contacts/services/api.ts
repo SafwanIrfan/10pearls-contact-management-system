@@ -1,4 +1,5 @@
 import api from "../../../services/api";
+import type { ContactRequestDTO } from "../types/contact.types";
 
 export const API_ENDPOINTS = {
   CONTACTS: (page: number, size: number) =>
@@ -15,6 +16,17 @@ export const fetchPaginatedContacts = async (page: number, size: number) => {
 
   if (response.status !== 200) {
     throw new Error("Failed to fetch contacts");
+  }
+
+  return response.data;
+};
+
+export const createContact = async (contactData: ContactRequestDTO) => {
+  const endpoint = API_ENDPOINTS.CONTACTS_CREATE;
+  const response = await api.post(`${endpoint}`, contactData);
+
+  if (response.status !== 200) {
+    throw new Error("Failed to add contacts");
   }
 
   return response.data;
