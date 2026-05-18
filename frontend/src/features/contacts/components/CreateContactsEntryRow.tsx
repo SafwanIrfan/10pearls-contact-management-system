@@ -7,19 +7,21 @@ interface AddContactsEntryRowProps {
   labels: string[];
   placeholder: string;
   error?: string;
+  type?: string;
   onValueChange: (val: string) => void;
   onLabelChange: (val: string) => void;
   onRemove: () => void;
   showRemove: boolean;
 }
 
-const AddContactsEntryRow = ({
+const CreateContactsEntryRow = ({
   icon,
   value,
   label,
   labels,
   placeholder,
   error,
+  type,
   onValueChange,
   onLabelChange,
   onRemove,
@@ -40,7 +42,7 @@ const AddContactsEntryRow = ({
       >
         <span className="text-gray-400 shrink-0">{icon}</span>
         <input
-          type="text"
+          type={type || "text"}
           value={value}
           placeholder={placeholder}
           onChange={(e) => onValueChange(e.target.value)}
@@ -73,4 +75,4 @@ const AddContactsEntryRow = ({
   </div>
 );
 
-export default AddContactsEntryRow;
+export default CreateContactsEntryRow;

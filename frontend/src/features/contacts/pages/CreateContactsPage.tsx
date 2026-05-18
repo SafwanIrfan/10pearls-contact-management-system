@@ -2,23 +2,17 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, Trash2, ArrowLeft, Mail, Phone } from "lucide-react";
+import { ArrowLeft, Mail, Phone } from "lucide-react";
 import toast from "react-hot-toast";
 import type { ContactRequestDTO, Emails, Phones } from "../types/contact.types";
 import { createContact } from "../services/api";
 import Button from "../../../shared/components/Button";
+import AddContactsEntryRow from "../components/CreateContactsEntryRow";
+import CreateContactSection from "../components/CreateContactSection";
+import type { FormErrors } from "../types/contact-form-errors.types";
+import CreateContactInputField from "../components/CreateContactInputField";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-interface FormErrors {
-  firstName?: string;
-  lastName?: string;
-  title?: string;
-  emails?: string[];
-  phones?: string[];
-}
-
-// ─── Constants ────────────────────────────────────────────────────────────────
+// Constants
 
 const EMAIL_LABELS = ["Work", "Personal", "Other"];
 const PHONE_LABELS = ["Mobile", "Work", "Home"];
@@ -26,81 +20,6 @@ const MAX_ENTRIES = 3;
 
 const EMPTY_EMAIL = (): Emails => ({ email: "", label: "Work" });
 const EMPTY_PHONE = (): Phones => ({ phone: "", label: "Mobile" });
-
-// ─── Field Components ─────────────────────────────────────────────────────────
-
-interface InputFieldProps {
-  label: string;
-  value: string;
-  placeholder?: string;
-  error?: string;
-  onChange: (val: string) => void;
-}
-
-const InputField = ({
-  label,
-  value,
-  placeholder,
-  error,
-  onChange,
-}: InputFieldProps) => (
-  <div className="flex flex-col gap-1.5">
-    <label className="text-sm font-medium text-heading">{label}</label>
-    <input
-      type="text"
-      value={value}
-      placeholder={placeholder}
-      onChange={(e) => onChange(e.target.value)}
-      className={`
-        w-full px-3 py-2.5 text-sm rounded-xl border outline-none
-        placeholder:text-gray-400 text-text font-poppins
-        transition-all duration-150
-        ${
-          error
-            ? "border-red-300 focus:border-red-400 focus:shadow-[0_0_0_3px_rgba(239,68,68,0.1)]"
-            : "border-gray-200 focus:border-button focus:shadow-[0_0_0_3px_rgba(52,104,105,0.12)]"
-        }
-      `}
-    />
-    {error && <p className="text-xs text-red-400">{error}</p>}
-  </div>
-);
-
-// ─── Dynamic Entry Row (Email or Phone) ───────────────────────────────────────
-
-// ─── Section Wrapper ──────────────────────────────────────────────────────────
-
-interface SectionProps {
-  title: string;
-  children: React.ReactNode;
-  onAdd: () => void;
-  canAdd: boolean;
-  addLabel: string;
-}
-
-const Section = ({
-  title,
-  children,
-  onAdd,
-  canAdd,
-  addLabel,
-}: SectionProps) => (
-  <div className="flex flex-col gap-3">
-    <h2 className="text-sm font-semibold text-heading">{title}</h2>
-    {children}
-    {canAdd && (
-      <button
-        onClick={onAdd}
-        className="self-start flex items-center gap-1.5 text-sm text-button font-medium hover:underline transition-all"
-      >
-        <Plus size={14} />
-        {addLabel}
-      </button>
-    )}
-  </div>
-);
-
-// ─── Validation ───────────────────────────────────────────────────────────────
 
 const validate = (
   firstName: string,
@@ -134,7 +53,7 @@ const validate = (
   return errors;
 };
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// Main
 
 export default function CreateContactPage() {
   const navigate = useNavigate();
@@ -147,7 +66,7 @@ export default function CreateContactPage() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
 
-  // ── Email helpers ──
+  // Email helpers
   const updateEmail = (i: number, field: keyof Emails, val: string) =>
     setEmails((prev) =>
       prev.map((e, idx) => (idx === i ? { ...e, [field]: val } : e)),
@@ -158,7 +77,7 @@ export default function CreateContactPage() {
   const removeEmail = (i: number) =>
     setEmails((prev) => prev.filter((_, idx) => idx !== i));
 
-  // ── Phone helpers ──
+  // Phone helpers
   const updatePhone = (i: number, field: keyof Phones, val: string) =>
     setPhones((prev) =>
       prev.map((p, idx) => (idx === i ? { ...p, [field]: val } : p)),
@@ -169,7 +88,6 @@ export default function CreateContactPage() {
   const removePhone = (i: number) =>
     setPhones((prev) => prev.filter((_, idx) => idx !== i));
 
-  // ── Submit ──
   const handleSubmit = async () => {
     const validationErrors = validate(
       firstName,
@@ -211,12 +129,14 @@ export default function CreateContactPage() {
       <div className="flex items-center gap-3 mb-6">
         <button
           onClick={() => navigate(-1)}
-          className="p-2 text-gray-500 hover:text-text hover:bg-gray-100 rounded-xl transition-all"
+          className="p-2 text-gray-500 hover:text-text hover:bg-gray-100 cursor-pointer rounded-xl transition-all"
         >
           <ArrowLeft size={18} />
         </button>
         <div>
-          <h1 className="text-xl font-semibold text-heading">Add Contact</h1>
+          <h1 className="text-xl sm:text-3xl font-semibold text-heading">
+            Add Contact
+          </h1>
           <p className="text-xs text-gray-500 mt-0.5">
             Fill in the details below to create a new contact.
           </p>
@@ -225,25 +145,26 @@ export default function CreateContactPage() {
 
       {/* Form Card */}
       <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 flex flex-col flex-1 overflow-hidden">
-        {/* Basic Info */}
         <div className="flex flex-col gap-6 overflow-y-auto flex-1 pr-1">
           <div className="flex flex-col gap-4">
-            <h2 className="text-sm font-semibold text-heading">Basic Info</h2>
+            <h2 className="text-md sm:text-xl font-semibold text-heading">
+              Basic Info
+            </h2>
             <div className="grid grid-cols-2 gap-3">
-              <InputField
+              <CreateContactInputField
                 label="First Name"
                 value={firstName}
-                placeholder="John"
+                placeholder="Safwan"
                 error={errors.firstName}
                 onChange={(val) => {
                   setFirstName(val);
                   setErrors((e) => ({ ...e, firstName: undefined }));
                 }}
               />
-              <InputField
+              <CreateContactInputField
                 label="Last Name"
                 value={lastName}
-                placeholder="Doe"
+                placeholder="Irfan"
                 error={errors.lastName}
                 onChange={(val) => {
                   setLastName(val);
@@ -251,7 +172,7 @@ export default function CreateContactPage() {
                 }}
               />
             </div>
-            <InputField
+            <CreateContactInputField
               label="Title"
               value={title}
               placeholder="e.g. Software Engineer"
@@ -264,12 +185,68 @@ export default function CreateContactPage() {
           </div>
 
           <hr className="border-gray-100" />
+
+          {/* Emails */}
+          <CreateContactSection
+            title="Email Addresses"
+            onAdd={addEmail}
+            canAdd={emails.length < MAX_ENTRIES}
+            addLabel="Add another email"
+          >
+            {emails.map((e, i) => (
+              <AddContactsEntryRow
+                key={i}
+                icon={<Mail size={14} />}
+                value={e.email}
+                label={e.label}
+                labels={EMAIL_LABELS}
+                placeholder="safwan@example.com"
+                error={errors.emails?.[i]}
+                onValueChange={(val) => {
+                  updateEmail(i, "email", val);
+                  setErrors((err) => ({ ...err, emails: undefined }));
+                }}
+                onLabelChange={(val) => updateEmail(i, "label", val)}
+                onRemove={() => removeEmail(i)}
+                showRemove={emails.length > 1}
+              />
+            ))}
+          </CreateContactSection>
+
+          <hr className="border-gray-100" />
+
+          {/* Phones */}
+          <CreateContactSection
+            title="Phone Numbers"
+            onAdd={addPhone}
+            canAdd={phones.length < MAX_ENTRIES}
+            addLabel="Add another phone"
+          >
+            {phones.map((p, i) => (
+              <AddContactsEntryRow
+                key={i}
+                icon={<Phone size={14} />}
+                value={p.phone}
+                label={p.label}
+                type="number"
+                labels={PHONE_LABELS}
+                placeholder="+12345678900"
+                error={errors.phones?.[i]}
+                onValueChange={(val) => {
+                  updatePhone(i, "phone", val);
+                  setErrors((err) => ({ ...err, phones: undefined }));
+                }}
+                onLabelChange={(val) => updatePhone(i, "label", val)}
+                onRemove={() => removePhone(i)}
+                showRemove={phones.length > 1}
+              />
+            ))}
+          </CreateContactSection>
         </div>
       </div>
 
       {/* Actions */}
       <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-100 mt-4">
-        <Button label="Cancel" variant="outline" onClick={() => navigate(-1)} />
         <Button
           label={submitting ? "Saving..." : "Save Contact"}
           variant="primary"
