@@ -181,15 +181,14 @@ const Pagination = ({
 const COLUMNS = ["Name", "Title", "Emails", "Phones"];
 
 export default function ContactsTable() {
-  const { contacts, loading, error, refetch } = useContacts();
-
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const { contacts, loading, error, refetch } = useContacts(page, pageSize);
 
   const data = contacts?.data ?? [];
   const totalElements = contacts?.totalElements ?? data.length;
   const totalPages = Math.ceil(totalElements / pageSize);
-  const paginated = data.slice((page - 1) * pageSize, page * pageSize);
+  const paginated = contacts.data;
 
   const handlePageSizeChange = (size: number) => {
     setPageSize(size);
