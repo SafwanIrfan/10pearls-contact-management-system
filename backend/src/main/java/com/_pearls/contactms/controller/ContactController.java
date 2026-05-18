@@ -29,7 +29,7 @@ public class ContactController {
     @GetMapping("/all")
     @Operation(summary = "Get Contacts")
     public ResponseEntity<PaginatedResponseDTO<ContactResponseDTO>> getPaginatedContacts(
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
             ) {
         PaginatedResponseDTO<ContactResponseDTO> contacts = contactService.getPaginatedContacts(page,size);

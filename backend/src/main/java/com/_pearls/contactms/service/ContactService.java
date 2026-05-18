@@ -34,7 +34,7 @@ public class ContactService {
 
     public PaginatedResponseDTO<ContactResponseDTO> getPaginatedContacts(int page, int size) {
 
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
         Page<Contact> contactPage = contactRepo.findAll(pageable);
 
         List<ContactResponseDTO> dtoList = contactPage.getContent()
