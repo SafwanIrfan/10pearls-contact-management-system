@@ -61,8 +61,7 @@ public class ContactService {
         return ContactMapper.toDTO(contact);
     }
 
-    public ContactResponseDTO addContact(ContactRequestDTO contactRequestDTO) {
-
+    public Contact addContactHelperFunction(ContactRequestDTO contactRequestDTO){
         Contact contact = ContactMapper.toModel(contactRequestDTO);
         contact.setCreatedAt(LocalDateTime.now());
 
@@ -73,7 +72,12 @@ public class ContactService {
         //map phones to Model
         List<PhoneContact> phones = PhoneMapper.mapPhonesToModel(contactRequestDTO.getPhones(), contact);
         contact.setPhone(phones);
+        return contact;
+    }
 
+    public ContactResponseDTO addContact(ContactRequestDTO contactRequestDTO) {
+
+        Contact contact = addContactHelperFunction(contactRequestDTO);
         contactRepo.save(contact);
         log.info("Added contact with id: {}", contact.getId());
         return ContactMapper.toDTO(contact);
@@ -82,20 +86,7 @@ public class ContactService {
     public List<ContactResponseDTO> addContacts(List<ContactRequestDTO> contactRequestDTOs) {
 
         List<Contact> contacts = contactRequestDTOs.stream()
-                .map(contactRequestDTO -> {
-                    Contact contact = ContactMapper.toModel(contactRequestDTO);
-                    contact.setCreatedAt(LocalDateTime.now());
-
-                    // map emails to Model
-                    List<EmailContact> emails = EmailMapper.mapEmailsToModel(contactRequestDTO.getEmails(), contact);
-                    contact.setEmail(emails);
-
-                    // map phones to Model
-                    List<PhoneContact> phones = PhoneMapper.mapPhonesToModel(contactRequestDTO.getPhones(), contact);
-                    contact.setPhone(phones);
-
-                    return contact;
-                })
+                .map(this::addContactHelperFunction)
                 .collect(Collectors.toList());
 
         contactRepo.saveAll(contacts);
