@@ -15,6 +15,7 @@ export const useContacts = (page: number, pageSize: number) => {
 
   const fetchContacts = async () => {
     try {
+      setError(null);
       setLoading(true);
       const response = await fetchPaginatedContacts(page, pageSize);
       setContacts(response);

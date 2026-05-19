@@ -60,7 +60,7 @@ const ErrorState = ({ onRetry }: { onRetry: () => void }) => (
       </p>
       <button
         onClick={onRetry}
-        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-text bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-all"
+        className="inline-flex items-center cursor-pointer gap-2 px-4 py-2 text-sm font-medium text-text bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-all"
       >
         <RefreshCw size={13} />
         Try again
