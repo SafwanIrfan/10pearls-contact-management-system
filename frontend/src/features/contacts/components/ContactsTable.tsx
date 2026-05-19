@@ -13,32 +13,8 @@ import {
 import type { ContactResponseDTO } from "../types/contact.types";
 import { useContacts } from "../hooks/useContact";
 import { Spinner } from "../../../shared/components/Spinner";
-
-const AVATAR_COLORS = [
-  "bg-teal-100 text-teal-700",
-  "bg-blue-100 text-blue-700",
-  "bg-violet-100 text-violet-700",
-  "bg-amber-100 text-amber-700",
-  "bg-rose-100 text-rose-700",
-];
-
-const Avatar = ({ name }: { name: string }) => {
-  const initials = name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-  const color = AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length];
-
-  return (
-    <div
-      className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 ${color}`}
-    >
-      {initials}
-    </div>
-  );
-};
+import Avatar from "./Avatar";
+import { useNavigate } from "react-router-dom";
 
 const EmptyState = () => (
   <tr>
@@ -185,6 +161,8 @@ export default function ContactsTable() {
   const [pageSize, setPageSize] = useState(10);
   const { contacts, loading, error, refetch } = useContacts(page, pageSize);
 
+  const navigate = useNavigate();
+
   const data = contacts?.data ?? [];
   const totalElements = contacts?.totalElements ?? data.length;
   const totalPages = Math.ceil(totalElements / pageSize);
@@ -232,7 +210,8 @@ export default function ContactsTable() {
                 return (
                   <tr
                     key={contact.id}
-                    className="border-b border-gray-50 hover:bg-gray-50/70 transition-colors group"
+                    onClick={() => navigate(`/contact/${contact.id}`)}
+                    className="border-b border-gray-50 hover:bg-gray-50/70 cursor-pointer transition-colors group"
                   >
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">

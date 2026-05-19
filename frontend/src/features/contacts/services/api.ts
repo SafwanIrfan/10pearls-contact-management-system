@@ -4,7 +4,7 @@ import type { ContactRequestDTO } from "../types/contact.types";
 export const API_ENDPOINTS = {
   CONTACTS: (page: number, size: number) =>
     `/contacts/all?page=${page}&size=${size}`,
-  CONTACTS_BY_ID: "/contacts/contact/:id",
+  CONTACTS_BY_ID: (id: number) => `/contacts/contact/${id}`,
   CONTACTS_CREATE: "/contacts/contact/add",
   CONTACTS_UPDATE: "/contacts/contact/update/:id",
   CONTACTS_DELETE: "/contacts/contact/delete/:id",
@@ -27,6 +27,17 @@ export const createContact = async (contactData: ContactRequestDTO) => {
 
   if (response.status !== 200) {
     throw new Error("Failed to add contacts");
+  }
+
+  return response.data;
+};
+
+export const fetchContactById = async (id: number) => {
+  const endpoint = API_ENDPOINTS.CONTACTS_BY_ID(id);
+  const response = await api.get(`${endpoint}`);
+
+  if (response.status !== 200) {
+    throw new Error("Failed to fetch contact with id: " + id);
   }
 
   return response.data;
