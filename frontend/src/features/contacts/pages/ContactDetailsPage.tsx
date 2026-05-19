@@ -9,61 +9,9 @@ import { useContactById } from "../hooks/useContactById";
 import Button from "../../../shared/components/Button";
 import { Spinner } from "../../../shared/components/Spinner";
 import Avatar from "../components/Avatar";
+import { ConfirmationModal } from "../../../shared/components/ConfirmationModal";
 
-// ─── Delete Confirmation Modal ────────────────────────────────────────────────
-
-interface DeleteModalProps {
-  name: string;
-  onConfirm: () => void;
-  onCancel: () => void;
-  deleting: boolean;
-}
-
-const DeleteModal = ({
-  name,
-  onConfirm,
-  onCancel,
-  deleting,
-}: DeleteModalProps) => (
-  <div className="fixed inset-0 z-50 flex items-center justify-center">
-    {/* Backdrop */}
-    <div
-      className="absolute inset-0 bg-black/30 backdrop-blur-sm"
-      onClick={onCancel}
-    />
-
-    {/* Dialog */}
-    <div className="relative bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm mx-4 flex flex-col gap-4">
-      <div className="flex flex-col gap-1">
-        <h3 className="text-base font-semibold text-heading">Delete Contact</h3>
-        <p className="text-sm text-gray-500">
-          Are you sure you want to delete{" "}
-          <span className="font-medium text-heading">{name}</span>? This action
-          cannot be undone.
-        </p>
-      </div>
-      <div className="flex items-center justify-end gap-2">
-        <Button
-          label="Cancel"
-          variant="outline"
-          onClick={onCancel}
-          disabled={deleting}
-        />
-        <button
-          onClick={onConfirm}
-          disabled={deleting}
-          className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-red-500 rounded-xl hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none transition-all active:scale-95"
-        >
-          <Trash2 size={14} />
-          {deleting ? "Deleting..." : "Delete"}
-        </button>
-      </div>
-    </div>
-  </div>
-);
-
-// ─── Info Card ────────────────────────────────────────────────────────────────
-
+//  Info Card
 interface InfoCardProps {
   title: string;
   children: React.ReactNode;
@@ -78,8 +26,7 @@ const InfoCard = ({ title, children }: InfoCardProps) => (
   </div>
 );
 
-// ─── Contact Entry Row ────────────────────────────────────────────────────────
-
+// Contact Entry Row
 interface EntryItemProps {
   icon: React.ReactNode;
   value: string;
@@ -98,8 +45,7 @@ const EntryItem = ({ icon, value, label }: EntryItemProps) => (
   </div>
 );
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
-
+// Main
 export default function ContactDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -111,7 +57,6 @@ export default function ContactDetailsPage() {
 
   const fullName = contact ? `${contact.firstName} ${contact.lastName}` : "";
 
-  // ── Handlers ──
   const handleEdit = () => navigate(`/contacts/edit/${id}`);
 
   const handleDelete = async () => {
@@ -126,7 +71,6 @@ export default function ContactDetailsPage() {
     }
   };
 
-  // ── States ──
   if (loading)
     return (
       <div className="h-full flex items-center justify-center">
@@ -152,11 +96,20 @@ export default function ContactDetailsPage() {
   return (
     <>
       {showDeleteModal && (
-        <DeleteModal
-          name={fullName}
+        <ConfirmationModal
+          title="Delete Contact"
+          message={
+            <>
+              Are you sure you want to delete{" "}
+              <span className="font-medium text-heading">{fullName}</span>? This
+              action cannot be undone.
+            </>
+          }
+          confirmLabel="Delete"
+          variant="danger"
+          loading={deleting}
           onConfirm={handleDelete}
           onCancel={() => setShowDeleteModal(false)}
-          deleting={deleting}
         />
       )}
 
@@ -165,7 +118,7 @@ export default function ContactDetailsPage() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate(-1)}
-            className="p-2 text-gray-500 hover:text-text hover:bg-gray-100 rounded-xl transition-all"
+            className="p-2 cursor-pointer text-gray-500 hover:text-text hover:bg-gray-100 rounded-xl transition-all"
           >
             <ArrowLeft size={18} />
           </button>
