@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<String> handleUnauthorizedRequest(ConflictException ex){
+    public ResponseEntity<String> handleUnauthorizedRequest(UnauthorizedException ex){
         log.warn(ex.getMessage());
 
         return ResponseEntity

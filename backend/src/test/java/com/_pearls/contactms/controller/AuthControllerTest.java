@@ -1,6 +1,7 @@
 package com._pearls.contactms.controller;
 
 import com._pearls.contactms.dto.authdto.LoginRequestDTO;
+import com._pearls.contactms.exception.UnauthorizedException;
 import com._pearls.contactms.service.AuthService;
 import com._pearls.contactms.service.JwtService;
 import org.junit.jupiter.api.DisplayName;
@@ -51,5 +52,40 @@ class AuthControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").value("mocked.jwt.token"));
+    }
+
+    // Edge Case: Invalid Credentials
+
+    @Test
+    @DisplayName("POST /auth/login → 401 UNAUTHORIZED when credentials are wrong")
+    void login_invalidCredentials_returns401() throws Exception {
+        // Arrange
+        LoginRequestDTO request = new LoginRequestDTO("user@example.com", "wrongPassword");
+        when(authService.authenticate(any(LoginRequestDTO.class)))
+                .thenThrow(new UnauthorizedException("Invalid credentials"));
+
+        // Act & Assert
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    // Edge Case: User Not Found
+
+    @Test
+    @DisplayName("POST /auth/login → 401 UNAUTHORIZED when user does not exist")
+    void login_userNotFound_returns401() throws Exception {
+        // Arrange — UserDetailsService throws UsernameNotFoundException internally,
+        // which Spring Security wraps as BadCredentialsException by default.
+        LoginRequestDTO request = new LoginRequestDTO("arslan@gmail.com", "password1234");
+        when(authService.authenticate(any(LoginRequestDTO.class)))
+                .thenThrow(new UnauthorizedException("User not found"));
+
+        // Act & Assert
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isUnauthorized());
     }
 }
