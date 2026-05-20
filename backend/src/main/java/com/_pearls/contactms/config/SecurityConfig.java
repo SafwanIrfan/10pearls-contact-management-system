@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for API calls
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()// Allow login/courts
+                        .requestMatchers("/auth/**").permitAll()// Allow login
                         .anyRequest().permitAll() // Protect other routes
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

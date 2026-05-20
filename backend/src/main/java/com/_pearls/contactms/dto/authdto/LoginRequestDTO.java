@@ -5,6 +5,14 @@ import jakarta.validation.constraints.Size;
 
 public class LoginRequestDTO {
 
+    public LoginRequestDTO(String identifier, String password) {
+        this.identifier = identifier;
+        this.password = password;
+    }
+
+    // Keep default constructor for Jackson
+    public LoginRequestDTO() {}
+
     @NotBlank(message = "Email or Phone no is required")
     private String identifier;
 

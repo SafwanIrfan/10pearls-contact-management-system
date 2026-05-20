@@ -40,10 +40,8 @@ public class AuthController {
     @Operation(summary = "Generate token on user login")
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
-
         String token = authService.authenticate(loginRequestDTO);
         return ResponseEntity.ok(new LoginResponseDTO(token));
-
     }
 
 }
