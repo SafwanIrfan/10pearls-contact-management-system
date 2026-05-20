@@ -3,7 +3,7 @@ import type { LucideIcon } from "lucide-react";
 type ButtonVariant = "primary" | "outline";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  label: string;
+  label?: string;
   icon?: LucideIcon;
   variant?: ButtonVariant;
   hideLabel?: boolean;
@@ -18,7 +18,7 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const base = `
-    flex items-center gap-2 px-3 sm:px-4 py-2.5 text-sm font-medium
+    flex items-center gap-0 sm:gap-2 px-3 sm:px-4 py-2.5 text-sm font-medium
     rounded-xl font-poppins transition-all duration-150 active:scale-95
     disabled:opacity-50 disabled:pointer-events-none cursor-pointer
   `;

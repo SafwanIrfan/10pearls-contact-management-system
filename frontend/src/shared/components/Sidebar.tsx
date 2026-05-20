@@ -1,19 +1,13 @@
 import { PanelLeftClose, PanelLeftOpen, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useContacts } from "../../features/contacts/hooks/useContact";
 
 const NAV_ITEMS = [{ label: "Contacts", icon: Users, path: "/" }];
 
 const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
-
-  useEffect(() => {
-    const handleResize = () => setCollapsed(window.innerWidth < 768);
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const { collapsed, setCollapsed } = useContacts();
 
   return (
     <aside

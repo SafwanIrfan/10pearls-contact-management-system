@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { getAllContactsResponse } from "../types/contact.types";
 import { fetchPaginatedContacts } from "../services/api";
 
-export const useContacts = (page: number, pageSize: number) => {
+export const useContacts = (page?: number, pageSize?: number) => {
   const [contacts, setContacts] = useState<getAllContactsResponse>({
     data: [],
     page: 1,
@@ -12,12 +12,20 @@ export const useContacts = (page: number, pageSize: number) => {
   });
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [collapsed, setCollapsed] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setCollapsed(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const fetchContacts = async () => {
     try {
       setError(null);
       setLoading(true);
-      const response = await fetchPaginatedContacts(page, pageSize);
+      const response = await fetchPaginatedContacts(page!, pageSize!);
       setContacts(response);
       console.log(response);
     } catch (error) {
@@ -36,5 +44,7 @@ export const useContacts = (page: number, pageSize: number) => {
     loading,
     error,
     refetch: fetchContacts,
+    collapsed,
+    setCollapsed,
   };
 };

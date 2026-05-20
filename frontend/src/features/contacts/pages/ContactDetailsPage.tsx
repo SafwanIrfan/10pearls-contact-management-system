@@ -10,6 +10,7 @@ import Button from "../../../shared/components/Button";
 import { Spinner } from "../../../shared/components/Spinner";
 import Avatar from "../components/Avatar";
 import { ConfirmationModal } from "../../../shared/components/ConfirmationModal";
+import { useContacts } from "../hooks/useContact";
 
 //  Info Card
 interface InfoCardProps {
@@ -49,6 +50,7 @@ const EntryItem = ({ icon, value, label }: EntryItemProps) => (
 export default function ContactDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { collapsed } = useContacts();
 
   const { contact, loading, error } = useContactById(Number(id!));
 
@@ -115,18 +117,35 @@ export default function ContactDetailsPage() {
 
       <div className="h-full flex flex-col px-4 py-6 font-poppins gap-6">
         {/* ── Header ── */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => navigate(-1)}
-            className="p-2 cursor-pointer text-gray-500 hover:text-text hover:bg-gray-100 rounded-xl transition-all"
-          >
-            <ArrowLeft size={18} />
-          </button>
-          <div>
-            <h1 className="text-xl font-semibold text-heading">
-              Contact Details
-            </h1>
-            <p className="text-xs text-gray-500 mt-0.5">Viewing full profile</p>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate(-1)}
+              className="p-2 cursor-pointer text-gray-500 hover:text-text hover:bg-gray-100 rounded-xl transition-all"
+            >
+              <ArrowLeft size={18} />
+            </button>
+            <div>
+              <h1 className="text-xl font-semibold text-heading">
+                Contact Details
+              </h1>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Button
+              label={collapsed ? "" : "Edit"}
+              icon={Pencil}
+              variant="outline"
+              onClick={handleEdit}
+            />
+            <Button
+              label={collapsed ? "" : "Delete"}
+              icon={Trash2}
+              variant="outline"
+              onClick={() => setShowDeleteModal(true)}
+              className="text-red-400 border-red-200 hover:bg-red-50 hover:border-red-300"
+            />
           </div>
         </div>
 
@@ -144,21 +163,6 @@ export default function ContactDetailsPage() {
                   {contact.title || "—"}
                 </p>
               </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button
-                label="Edit"
-                icon={Pencil}
-                variant="outline"
-                onClick={handleEdit}
-              />
-              <Button
-                label="Delete"
-                icon={Trash2}
-                variant="outline"
-                onClick={() => setShowDeleteModal(true)}
-                className="text-red-400 border-red-200 hover:bg-red-50 hover:border-red-300"
-              />
             </div>
           </div>
 
