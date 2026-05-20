@@ -57,7 +57,13 @@ public class GlobalExceptionHandler {
                 .body(ex.getMessage());
     }
 
-
-
-
+    @ExceptionHandler(
+            BadCredentialsException.class)
+    public ResponseEntity<String>
+    handleBadCredentials(
+            BadCredentialsException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("Invalid credentials");
+    }
 }

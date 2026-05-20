@@ -2,13 +2,13 @@ package com._pearls.contactms.service;
 
 import com._pearls.contactms.dto.authdto.LoginRequestDTO;
 import com._pearls.contactms.dto.authdto.RegisterRequestDTO;
+import com._pearls.contactms.exception.BadCredentialsException;
 import com._pearls.contactms.exception.BadRequestException;
 import com._pearls.contactms.exception.ConflictException;
 import com._pearls.contactms.model.User;
 import com._pearls.contactms.repo.AuthRepo;
 import com._pearls.contactms.utils.AuthHelper;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,15 +20,19 @@ public class AuthService {
     private final AuthRepo authRepo;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final BCryptPasswordEncoder encoder;
 
-    public AuthService(AuthRepo authRepo, AuthenticationManager authenticationManager, JwtService jwtService) {
+    public AuthService(
+            AuthRepo authRepo,
+            AuthenticationManager authenticationManager,
+            JwtService jwtService,
+            BCryptPasswordEncoder encoder
+    ) {
         this.authRepo = authRepo;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
+        this.encoder = encoder;
     }
-
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-
 
     public String register(RegisterRequestDTO registerRequestDTO) {
 
@@ -58,7 +62,7 @@ public class AuthService {
         return "Registered Successfully : " + registerRequestDTO.getIdentifier();
     }
 
-    public String authenticate(LoginRequestDTO loginRequestDTO) {
+    public String authenticate(LoginRequestDTO loginRequestDTO) throws BadCredentialsException {
         Authentication authentication =
                 authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(
