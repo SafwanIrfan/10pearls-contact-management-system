@@ -35,9 +35,7 @@ class AuthControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    // ─────────────────────────────────────────────
     // Happy Path
-    // ─────────────────────────────────────────────
 
     @Test
     @DisplayName("POST /auth/login → 200 OK with JWT token when credentials are valid")
