@@ -88,4 +88,16 @@ class AuthControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isUnauthorized());
     }
+
+    // Edge Case: Empty Body
+
+    @Test
+    @DisplayName("POST /auth/login → 400 BAD REQUEST when request body is missing")
+    void login_emptyRequestBody_returns400() throws Exception {
+        mockMvc.perform(post("/auth/login")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{}"))
+                .andExpect(status().is4xxClientError());
+
+    }
 }
