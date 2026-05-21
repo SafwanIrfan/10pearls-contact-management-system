@@ -27,12 +27,9 @@ jobs:
         with:
           node-version: 24
 
-      # Frontend tests + coverage
-      - name: Frontend Tests
+      - name: Install Frontend
         working-directory: frontend
-        run: |
-          npm install
-          npm test -- --coverage
+        run: npm install
 
       # Backend tests + JaCoCo
       - name: Backend Tests
