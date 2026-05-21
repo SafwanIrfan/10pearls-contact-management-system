@@ -31,6 +31,10 @@ jobs:
         working-directory: frontend
         run: npm install
 
+      - name: Give execute permission to mvnw
+        working-directory: backend
+        run: chmod +x mvnw
+
       # Backend tests + JaCoCo
       - name: Backend Tests
         working-directory: backend
