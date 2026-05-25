@@ -7,6 +7,6 @@ public class AuthHelper {
     }
 
     public static boolean isPhoneNo(String input) {
-        return input.matches("\\d{10,15}");
+        return input.matches("0\\d{9,14}");
     }
 }

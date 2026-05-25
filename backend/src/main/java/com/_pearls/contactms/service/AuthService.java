@@ -44,13 +44,11 @@ public class AuthService {
             if(authRepo.existsByEmail(identifier)) {
                 throw new ConflictException("Email already exists");
             }
-
             user.setEmail(identifier);
         } else if (AuthHelper.isPhoneNo(identifier)) {
             if(authRepo.existsByPhoneNo(identifier)) {
                 throw new ConflictException("Phone no already exists");
             }
-
             user.setPhoneNo(identifier);
         } else {
             throw new BadRequestException("Invalid Email or Phone Number");

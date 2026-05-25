@@ -1,6 +1,7 @@
 package com._pearls.contactms.service;
 
 import com._pearls.contactms.dto.authdto.LoginRequestDTO;
+import com._pearls.contactms.exception.UnauthorizedException;
 import com._pearls.contactms.repo.AuthRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -56,5 +57,40 @@ public class AuthServiceTest {
         assertThat(token).isEqualTo("mocked.jwt.token");
         verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
         verify(jwtService).generateToken("safwan123@gmail.com");
+    }
+
+    // authenticate() — Edge Case: Invalid Credentials
+
+    @Test
+    @DisplayName("authenticate() → throws BadCredentialsException when password is wrong")
+    void authenticate_wrongPassword_throwsBadCredentialsException() {
+        // Arrange — AuthenticationManager throws when credentials don't match
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+                .thenThrow(new UnauthorizedException("Bad credentials"));
+
+        // Act & Assert
+        assertThatThrownBy(() -> authService.authenticate(validLoginRequest))
+                .isInstanceOf(UnauthorizedException.class)
+                .hasMessageContaining("Bad credentials");
+
+        // jwtService should never be called if authentication fails
+        verifyNoInteractions(jwtService);
+    }
+
+    // authenticate() — Edge Case: JWT Token Validation
+    @Test
+    @DisplayName("authenticate() → token generated uses the correct identifier")
+    void authenticate_validCredentials_tokenGeneratedWithCorrectIdentifier() {
+        // Ensures jwtService receives the identifier from the request, not a hardcoded value
+        Authentication mockAuth = mock(Authentication.class);
+        LoginRequestDTO phoneLoginRequest = new LoginRequestDTO("03001234567", "password123");
+
+        when(authenticationManager.authenticate(any())).thenReturn(mockAuth);
+        when(jwtService.generateToken("03001234567")).thenReturn("phone.jwt.token");
+
+        String token = authService.authenticate(phoneLoginRequest);
+
+        assertThat(token).isEqualTo("phone.jwt.token");
+        verify(jwtService).generateToken("03001234567");
     }
 }
