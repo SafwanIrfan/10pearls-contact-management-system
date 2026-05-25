@@ -23,6 +23,7 @@ public class ContactSpecification {
             return cb.or(
                     cb.like(cb.lower(root.get("firstName")), pattern),
                     cb.like(cb.lower(root.get("lastName")), pattern),
+                    cb.like(cb.lower(root.get("title")), pattern),
                     cb.like(cb.lower(emailJoin.get("email")), pattern),
                     cb.like(cb.lower(phoneJoin.get("phone")), pattern)
             );
