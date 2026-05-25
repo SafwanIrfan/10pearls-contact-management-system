@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import type { getAllContactsResponse } from "../types/contact.types";
 import { fetchPaginatedContacts } from "../services/api";
 
-export const useContacts = (page?: number, pageSize?: number) => {
+export const useContacts = (
+  page?: number,
+  pageSize?: number,
+  search?: string,
+) => {
   const [contacts, setContacts] = useState<getAllContactsResponse>({
     data: [],
     page: 1,
@@ -25,7 +29,7 @@ export const useContacts = (page?: number, pageSize?: number) => {
     try {
       setError(null);
       setLoading(true);
-      const response = await fetchPaginatedContacts(page!, pageSize!);
+      const response = await fetchPaginatedContacts(page!, pageSize!, search);
       setContacts(response);
       console.log(response);
     } catch (error) {
@@ -36,8 +40,9 @@ export const useContacts = (page?: number, pageSize?: number) => {
   };
 
   useEffect(() => {
+    if (page === undefined || pageSize === undefined) return;
     fetchContacts();
-  }, [page, pageSize]);
+  }, [page, pageSize, search]);
 
   return {
     contacts,

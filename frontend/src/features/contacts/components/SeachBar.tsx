@@ -1,28 +1,26 @@
-import { useState, useRef } from "react";
-import { Search, X, SlidersHorizontal } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Search, X } from "lucide-react";
 import type { SearchBarProps } from "../types/search.type";
-import Button from "../../../shared/components/Button";
 
 export default function SearchBar({
   placeholder = "Search contacts...",
   onSearch,
-  onFilter,
-  showFilter = true,
 }: SearchBarProps) {
-  const [value, setValue] = useState("");
+  const [search, setSearch] = useState("");
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-    onSearch?.(e.target.value);
-  };
-
   const handleClear = () => {
-    setValue("");
-    onSearch?.("");
+    setSearch("");
     inputRef.current?.focus();
   };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(async () => {
+      onSearch(search);
+    }, 500);
+    return () => clearTimeout(timeoutId);
+  }, [search]);
 
   return (
     <div className="flex items-center gap-2 w-full max-w-md mt-10 font-poppins">
@@ -52,8 +50,8 @@ export default function SearchBar({
         <input
           ref={inputRef}
           type="text"
-          value={value}
-          onChange={handleChange}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           placeholder={placeholder}
@@ -70,18 +68,18 @@ export default function SearchBar({
           className={`
             shrink-0 p-0.5 rounded-full transition-all duration-150
             text-gray-400 hover:text-text hover:bg-gray-100
-            ${value ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"}
+            ${search ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"}
           `}
-          tabIndex={value ? 0 : -1}
+          tabIndex={search ? 0 : -1}
           aria-label="Clear search"
         >
           <X size={13} strokeWidth={2.5} />
         </button>
       </div>
-      {/* Filter Button */}
+      {/* Filter Button
       {showFilter && (
         <Button icon={SlidersHorizontal} label="Filter" onClick={onFilter} />
-      )}
+      )} */}
     </div>
   );
 }

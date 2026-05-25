@@ -10,7 +10,10 @@ import {
   UserCircle2,
   MoreHorizontal,
 } from "lucide-react";
-import type { ContactResponseDTO } from "../types/contact.types";
+import type {
+  ContactResponseDTO,
+  getAllContactsResponse,
+} from "../types/contact.types";
 import { useContacts } from "../hooks/useContact";
 import { Spinner } from "../../../shared/components/Spinner";
 import Avatar from "./Avatar";
@@ -152,26 +155,34 @@ const Pagination = ({
   </div>
 );
 
+interface ContactsTableProps {
+  contacts: getAllContactsResponse;
+  loading: boolean;
+  page: number;
+  setPage: (page: number) => void;
+  pageSize: number;
+  onPageSizeChange: (size: number) => void;
+}
+
 // Main
 
 const COLUMNS = ["Name", "Title", "Emails", "Phones"];
 
-export default function ContactsTable() {
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const { contacts, loading, error, refetch } = useContacts(page, pageSize);
-
+export default function ContactsTable({
+  contacts,
+  loading,
+  page,
+  setPage,
+  pageSize,
+  onPageSizeChange,
+}: ContactsTableProps) {
+  const { error, refetch } = useContacts();
   const navigate = useNavigate();
 
   const data = contacts?.data ?? [];
   const totalElements = contacts?.totalElements ?? data.length;
   const totalPages = Math.ceil(totalElements / pageSize);
   const paginated = contacts.data;
-
-  const handlePageSizeChange = (size: number) => {
-    setPageSize(size);
-    setPage(1);
-  };
 
   return (
     <div className="w-full mt-8 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden font-poppins">
@@ -302,7 +313,7 @@ export default function ContactsTable() {
           totalElements={totalElements}
           totalPages={totalPages}
           onPageChange={setPage}
-          onPageSizeChange={handlePageSizeChange}
+          onPageSizeChange={onPageSizeChange}
         />
       )}
     </div>
