@@ -11,6 +11,7 @@ import com._pearls.contactms.model.Contact;
 import com._pearls.contactms.model.EmailContact;
 import com._pearls.contactms.model.PhoneContact;
 import com._pearls.contactms.repo.ContactRepo;
+import com._pearls.contactms.specification.ContactSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -32,10 +33,11 @@ public class ContactService {
         this.contactRepo = contactRepo;
     }
 
-    public PaginatedResponseDTO<ContactResponseDTO> getPaginatedContacts(int page, int size) {
+    public PaginatedResponseDTO<ContactResponseDTO> getContacts(String keyword, int page, int size) {
+        log.info("Incoming request - keyword: {}, page: {}, size: {}", keyword, page, size);
 
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Contact> contactPage = contactRepo.findAll(pageable);
+        Page<Contact> contactPage = contactRepo.findAll(ContactSpecification.search(keyword), pageable);
 
         List<ContactResponseDTO> dtoList = contactPage.getContent()
                 .stream()
@@ -43,14 +45,12 @@ public class ContactService {
                 .toList();
 
         PaginatedResponseDTO<ContactResponseDTO> response = new PaginatedResponseDTO<>();
-
         response.setData(dtoList);
-        response.setPage(contactPage.getNumber());
+        response.setPage(contactPage.getNumber() + 1);
         response.setSize(contactPage.getSize());
         response.setTotalElements(contactPage.getTotalElements());
         response.setTotalPages(contactPage.getTotalPages());
 
-        log.info("Incoming Request: {} {}", page, size);
         return response;
     }
 

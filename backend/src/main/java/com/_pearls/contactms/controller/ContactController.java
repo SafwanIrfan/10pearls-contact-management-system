@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 
@@ -26,13 +27,14 @@ public class ContactController {
         this.contactService = contactService;
     }
 
-    @GetMapping("/all")
+    @GetMapping
     @Operation(summary = "Get Contacts")
     public ResponseEntity<PaginatedResponseDTO<ContactResponseDTO>> getPaginatedContacts(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search
             ) {
-        PaginatedResponseDTO<ContactResponseDTO> contacts = contactService.getPaginatedContacts(page,size);
+        PaginatedResponseDTO<ContactResponseDTO> contacts = contactService.getContacts(search, page,size);
         return ResponseEntity.ok().body(contacts);
     }
 
@@ -75,7 +77,6 @@ public class ContactController {
         contactService.deleteContact(id);
         //returns 204 response which tells no content
         return ResponseEntity.noContent().build();
-
     }
 }
 
