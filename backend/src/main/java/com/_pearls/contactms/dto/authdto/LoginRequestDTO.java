@@ -10,7 +10,6 @@ public class LoginRequestDTO {
         this.password = password;
     }
 
-    // Keep default constructor for Jackson
     public LoginRequestDTO() {}
 
     @NotBlank(message = "Email or Phone no is required")

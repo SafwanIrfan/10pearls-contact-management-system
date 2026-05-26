@@ -1,7 +1,10 @@
 package com._pearls.contactms.controller;
 
 import com._pearls.contactms.dto.authdto.LoginRequestDTO;
+import com._pearls.contactms.dto.authdto.RegisterRequestDTO;
 import com._pearls.contactms.exception.UnauthorizedException;
+import com._pearls.contactms.model.User;
+import com._pearls.contactms.repo.AuthRepo;
 import com._pearls.contactms.service.AuthService;
 import com._pearls.contactms.service.JwtService;
 import org.junit.jupiter.api.DisplayName;
@@ -15,10 +18,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @WebMvcTest(controllers = AuthController.class)
 @AutoConfigureMockMvc(addFilters = false)  // disables security filters
@@ -35,6 +39,9 @@ class AuthControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    AuthRepo authRepo;
 
     // Happy Path
 
@@ -98,6 +105,6 @@ class AuthControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("{}"))
                 .andExpect(status().is4xxClientError());
-
     }
+
 }

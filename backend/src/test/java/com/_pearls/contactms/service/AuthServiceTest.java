@@ -1,7 +1,9 @@
 package com._pearls.contactms.service;
 
 import com._pearls.contactms.dto.authdto.LoginRequestDTO;
+import com._pearls.contactms.dto.authdto.RegisterRequestDTO;
 import com._pearls.contactms.exception.UnauthorizedException;
+import com._pearls.contactms.model.User;
 import com._pearls.contactms.repo.AuthRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import static org.assertj.core.api.Assertions.*;
 
 import static org.mockito.Mockito.*;
@@ -28,6 +32,9 @@ public class AuthServiceTest {
 
     @Mock
     JwtService jwtService;
+
+    @Mock
+    BCryptPasswordEncoder encoder;
 
     @InjectMocks
     AuthService authService;
@@ -92,5 +99,21 @@ public class AuthServiceTest {
 
         assertThat(token).isEqualTo("phone.jwt.token");
         verify(jwtService).generateToken("03001234567");
+    }
+
+    // register() — Happy Path (Phone Number)
+    @Test
+    @DisplayName("register() → saves user and returns success message for valid phone number")
+    void register_validPhoneNumber_savesUserAndReturnsMessage() {
+        // Arrange
+        RegisterRequestDTO phoneRequest = new RegisterRequestDTO("03001234789", "password123");
+        when(authRepo.existsByPhoneNo("03001234789")).thenReturn(false);
+
+        // Act
+        String result = authService.register(phoneRequest);
+
+        // Assert
+        assertThat(result).contains("Registered Successfully");
+        verify(authRepo).save(any(User.class));
     }
 }
