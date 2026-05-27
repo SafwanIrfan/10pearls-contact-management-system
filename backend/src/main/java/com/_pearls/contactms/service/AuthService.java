@@ -2,6 +2,7 @@ package com._pearls.contactms.service;
 
 import com._pearls.contactms.dto.authdto.LoginRequestDTO;
 import com._pearls.contactms.dto.authdto.RegisterRequestDTO;
+import com._pearls.contactms.dto.authdto.RegisterResponseDTO;
 import com._pearls.contactms.exception.BadRequestException;
 import com._pearls.contactms.exception.ConflictException;
 import com._pearls.contactms.exception.UnauthorizedException;
@@ -57,7 +58,7 @@ public class AuthService {
         user.setPassword(encoder.encode(registerRequestDTO.getPassword()));
         authRepo.save(user);
 
-        return "Registered Successfully : " + registerRequestDTO.getIdentifier();
+        return jwtService.generateToken(registerRequestDTO.getIdentifier());
     }
 
     public String authenticate(LoginRequestDTO loginRequestDTO) {

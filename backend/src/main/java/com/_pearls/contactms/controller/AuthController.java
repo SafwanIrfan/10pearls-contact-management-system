@@ -3,6 +3,7 @@ package com._pearls.contactms.controller;
 import com._pearls.contactms.dto.authdto.LoginRequestDTO;
 import com._pearls.contactms.dto.authdto.LoginResponseDTO;
 import com._pearls.contactms.dto.authdto.RegisterRequestDTO;
+import com._pearls.contactms.dto.authdto.RegisterResponseDTO;
 import com._pearls.contactms.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,9 +33,9 @@ public class AuthController {
 
     @Operation(summary = "Register a new user")
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequestDTO registerRequestDTO) {
-        String response = authService.register(registerRequestDTO);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<RegisterResponseDTO> register(@RequestBody RegisterRequestDTO registerRequestDTO) {
+        String token = authService.register(registerRequestDTO);
+        return ResponseEntity.ok(new RegisterResponseDTO(token));
     }
 
     @Operation(summary = "Generate token on user login")

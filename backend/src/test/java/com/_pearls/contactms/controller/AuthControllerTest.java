@@ -5,8 +5,6 @@ import com._pearls.contactms.dto.authdto.RegisterRequestDTO;
 import com._pearls.contactms.exception.BadRequestException;
 import com._pearls.contactms.exception.ConflictException;
 import com._pearls.contactms.exception.UnauthorizedException;
-import com._pearls.contactms.model.User;
-import com._pearls.contactms.repo.AuthRepo;
 import com._pearls.contactms.service.AuthService;
 import com._pearls.contactms.service.JwtService;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +19,6 @@ import tools.jackson.databind.ObjectMapper;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -107,13 +104,13 @@ class AuthControllerTest {
     void register_validEmail_returns200() throws Exception {
         RegisterRequestDTO request = new RegisterRequestDTO("safwan@test.com", "password123");
         when(authService.register(any(RegisterRequestDTO.class)))
-                .thenReturn("Registered Successfully : safwan@test.com");
+                .thenReturn("mocked.jwt.token");
 
         mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Registered Successfully : safwan@test.com"));
+                .andExpect(jsonPath("$.token").value("mocked.jwt.token"));
     }
 
     @Test
@@ -121,18 +118,16 @@ class AuthControllerTest {
     void register_validPhone_returns200() throws Exception {
         RegisterRequestDTO request = new RegisterRequestDTO("03001234567", "password123");
         when(authService.register(any(RegisterRequestDTO.class)))
-                .thenReturn("Registered Successfully : 03001234567");
+                .thenReturn("mocked.jwt.token");
 
         mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Registered Successfully : 03001234567"));
+                .andExpect(jsonPath("$.token").value("mocked.jwt.token"));
     }
 
     // register() — Edge Case: Duplicate Email
-// ─────────────────────────────────────────────
-
     @Test
     @DisplayName("POST /auth/register → 409 CONFLICT when email already exists")
     void register_duplicateEmail_returns409() throws Exception {
