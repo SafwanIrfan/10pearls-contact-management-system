@@ -10,9 +10,6 @@ public class RegisterRequestDTO {
         this.password = password;
     }
 
-    // Keep default constructor for Jackson
-    public RegisterRequestDTO() {}
-
     @NotBlank(message = "Email or Phone no is required")
     private String identifier;
 

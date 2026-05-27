@@ -28,11 +28,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         if (AuthHelper.isEmail(identifier)) {
             user = authRepo.findByEmail(identifier)
-                    .orElseThrow(() -> new NotFoundException("User not found with email"));
+                    .orElseThrow(() -> new NotFoundException("User not found with this email: "+ identifier));
 
         } else if (AuthHelper.isPhoneNo(identifier)) {
             user = authRepo.findByPhoneNo(identifier)
-                    .orElseThrow(() -> new NotFoundException("User not found with phone number"));
+                    .orElseThrow(() -> new NotFoundException("User not found with phone number: "+ identifier));
 
         } else {
             throw new NotFoundException("Invalid email or phone number");

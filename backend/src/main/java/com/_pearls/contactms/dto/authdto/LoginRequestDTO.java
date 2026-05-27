@@ -10,8 +10,6 @@ public class LoginRequestDTO {
         this.password = password;
     }
 
-    public LoginRequestDTO() {}
-
     @NotBlank(message = "Email or Phone no is required")
     private String identifier;
 

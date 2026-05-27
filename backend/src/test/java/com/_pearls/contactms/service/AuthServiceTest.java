@@ -2,6 +2,8 @@ package com._pearls.contactms.service;
 
 import com._pearls.contactms.dto.authdto.LoginRequestDTO;
 import com._pearls.contactms.dto.authdto.RegisterRequestDTO;
+import com._pearls.contactms.exception.BadRequestException;
+import com._pearls.contactms.exception.ConflictException;
 import com._pearls.contactms.exception.UnauthorizedException;
 import com._pearls.contactms.model.User;
 import com._pearls.contactms.repo.AuthRepo;
@@ -40,6 +42,7 @@ public class AuthServiceTest {
     AuthService authService;
 
     private LoginRequestDTO validLoginRequest;
+    private RegisterRequestDTO validEmailRegisterRequest;
 
     @BeforeEach
     void setUp() {
@@ -48,7 +51,7 @@ public class AuthServiceTest {
 
     // authenticate() — Happy Path
     @Test
-    @DisplayName("authenticate() → returns JWT token when credentials are valid")
+    @DisplayName("authenticate() -> returns JWT token when credentials are valid")
     void authenticate_validCredentials_returnsToken() {
         // Arrange
         Authentication mockAuth = mock(Authentication.class);
@@ -69,7 +72,7 @@ public class AuthServiceTest {
     // authenticate() — Edge Case: Invalid Credentials
 
     @Test
-    @DisplayName("authenticate() → throws BadCredentialsException when password is wrong")
+    @DisplayName("authenticate() -> throws BadCredentialsException when password is wrong")
     void authenticate_wrongPassword_throwsBadCredentialsException() {
         // Arrange — AuthenticationManager throws when credentials don't match
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
@@ -86,7 +89,7 @@ public class AuthServiceTest {
 
     // authenticate() — Edge Case: JWT Token Validation
     @Test
-    @DisplayName("authenticate() → token generated uses the correct identifier")
+    @DisplayName("authenticate() -> token generated uses the correct identifier")
     void authenticate_validCredentials_tokenGeneratedWithCorrectIdentifier() {
         // Ensures jwtService receives the identifier from the request, not a hardcoded value
         Authentication mockAuth = mock(Authentication.class);
@@ -103,7 +106,7 @@ public class AuthServiceTest {
 
     // register() — Happy Path (Phone Number)
     @Test
-    @DisplayName("register() → saves user and returns success message for valid phone number")
+    @DisplayName("register() -> saves user and returns success message for valid phone number")
     void register_validPhoneNumber_savesUserAndReturnsMessage() {
         // Arrange
         RegisterRequestDTO phoneRequest = new RegisterRequestDTO("03001234789", "password123");
@@ -116,4 +119,64 @@ public class AuthServiceTest {
         assertThat(result).contains("Registered Successfully");
         verify(authRepo).save(any(User.class));
     }
+
+    // register() — Happy Path (Email)
+    @Test
+    @DisplayName("register() -> saves user and returns success message for valid email")
+    void register_validEmail_savesUserAndReturnsMessage() {
+        // Arrange
+        RegisterRequestDTO emailRequest = new RegisterRequestDTO("safwan@test.com", "password123");
+        when(authRepo.existsByEmail("safwan@test.com")).thenReturn(false);
+
+        // Act
+        String result = authService.register(emailRequest);
+
+        // Assert
+        assertThat(result).contains("Registered Successfully");
+        assertThat(result).contains("safwan@test.com");
+        verify(authRepo).save(any(User.class));
+    }
+
+    // register() — Edge Case: Duplicate Email
+    @Test
+    @DisplayName("register() -> throws ConflictException when email already exists")
+    void register_duplicateEmail_throwsConflictException() {
+
+        RegisterRequestDTO duplicateEmailRequest = new RegisterRequestDTO("safwan@test.com", "password123");
+        when(authRepo.existsByEmail("safwan@test.com")).thenReturn(true);
+
+        assertThatThrownBy(() -> authService.register(duplicateEmailRequest))
+                .isInstanceOf(ConflictException.class)
+                .hasMessageContaining("Email already exists");
+
+        verify(authRepo, never()).save(any());
+    }
+
+    // register() — Edge Case: Duplicate Phone
+    @Test
+    @DisplayName("register() -> throws ConflictException when phone number already exists")
+    void register_duplicatePhone_throwsConflictException() {
+        RegisterRequestDTO duplicatePhoneRequest = new RegisterRequestDTO("03001234789", "password123");
+        when(authRepo.existsByPhoneNo("03001234789")).thenReturn(true);
+
+        assertThatThrownBy(() -> authService.register(duplicatePhoneRequest))
+                .isInstanceOf(ConflictException.class)
+                .hasMessageContaining("Phone no already exists");
+
+        verify(authRepo, never()).save(any());
+    }
+
+    // register() — Edge Case: Invalid Identifier
+    @Test
+    @DisplayName("register() -> throws BadRequestException for invalid identifier (not email or phone)")
+    void register_invalidIdentifier_throwsBadRequestException() {
+        RegisterRequestDTO badRequest = new RegisterRequestDTO("invalid_email_or_phone", "password123");
+
+        assertThatThrownBy(() -> authService.register(badRequest))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessageContaining("Invalid Email or Phone Number");
+
+        verify(authRepo, never()).save(any());
+    }
+
 }

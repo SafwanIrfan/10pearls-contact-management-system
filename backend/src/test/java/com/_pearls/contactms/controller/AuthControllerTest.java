@@ -40,13 +40,9 @@ class AuthControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @Autowired
-    AuthRepo authRepo;
-
     // Happy Path
-
     @Test
-    @DisplayName("POST /auth/login → 200 OK with JWT token when credentials are valid")
+    @DisplayName("POST /auth/login -> 200 OK with JWT token when credentials are valid")
     void login_validCredentials_returns200WithToken() throws Exception {
         // Arrange
         LoginRequestDTO request = new LoginRequestDTO("safwan123@gmail.com", "safwan@123");
@@ -62,9 +58,8 @@ class AuthControllerTest {
     }
 
     // Edge Case: Invalid Credentials
-
     @Test
-    @DisplayName("POST /auth/login → 401 UNAUTHORIZED when credentials are wrong")
+    @DisplayName("POST /auth/login -> 401 UNAUTHORIZED when credentials are wrong")
     void login_invalidCredentials_returns401() throws Exception {
         // Arrange
         LoginRequestDTO request = new LoginRequestDTO("user@example.com", "wrongPassword");
@@ -79,9 +74,8 @@ class AuthControllerTest {
     }
 
     // Edge Case: User Not Found
-
     @Test
-    @DisplayName("POST /auth/login → 401 UNAUTHORIZED when user does not exist")
+    @DisplayName("POST /auth/login -> 401 UNAUTHORIZED when user does not exist")
     void login_userNotFound_returns401() throws Exception {
         // Arrange — UserDetailsService throws UsernameNotFoundException internally,
         // which Spring Security wraps as BadCredentialsException by default.
@@ -97,9 +91,8 @@ class AuthControllerTest {
     }
 
     // Edge Case: Empty Body
-
     @Test
-    @DisplayName("POST /auth/login → 400 BAD REQUEST when request body is missing")
+    @DisplayName("POST /auth/login -> 400 BAD REQUEST when request body is missing")
     void login_emptyRequestBody_returns400() throws Exception {
         mockMvc.perform(post("/auth/login")
                     .contentType(MediaType.APPLICATION_JSON)
