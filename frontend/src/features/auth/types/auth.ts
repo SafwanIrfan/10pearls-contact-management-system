@@ -13,3 +13,7 @@ export interface SignUpRequestDTO {
 export interface AuthResponseDTO {
   token: string;
 }
+
+export type DecodedToken = {
+  expiration: number;
+};

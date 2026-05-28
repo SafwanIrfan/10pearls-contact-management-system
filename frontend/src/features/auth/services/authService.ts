@@ -1,6 +1,8 @@
+import { jwtDecode } from "jwt-decode";
 import api from "../../../services/api";
 import type {
   AuthResponseDTO,
+  DecodedToken,
   SignInRequestDTO,
   SignUpRequestDTO,
 } from "../types/auth";
@@ -35,4 +37,20 @@ export const signUp = async (
     payload,
   );
   return response.data;
+};
+
+export const isTokenExpired = (): boolean => {
+  const token = getToken();
+  if (!token) return true;
+  try {
+    const { expiration } = jwtDecode<DecodedToken>(token);
+    return Date.now() >= expiration * 1000;
+  } catch {
+    return true;
+  }
+};
+
+export const logout = () => {
+  removeToken();
+  window.location.href = "/signin";
 };
