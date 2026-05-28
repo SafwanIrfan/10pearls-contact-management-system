@@ -4,8 +4,6 @@ export interface SignInRequestDTO {
 }
 
 export interface SignUpRequestDTO {
-  firstName: string;
-  lastName: string;
   identifier: string;
   password: string;
 }

@@ -3,14 +3,25 @@ import MainLayout from "../layouts/MainLayout";
 import ContactsPage from "../features/contacts/pages/ContactsPage";
 import CreateContactPage from "../features/contacts/pages/CreateContactsPage";
 import ContactDetailsPage from "../features/contacts/pages/ContactDetailsPage";
+import SignInPage from "../features/auth/pages/SignInPage";
+import SignUpPage from "../features/auth/pages/SignUpPage";
+import { ProtectedRoute } from "../features/auth/components/ProtectedRoute";
 
 export const router = createBrowserRouter([
+  { path: "/signin", element: <SignInPage /> },
+  { path: "/signup", element: <SignUpPage /> },
+
   {
-    element: <MainLayout />,
+    element: <ProtectedRoute />,
     children: [
-      { path: "/", element: <ContactsPage /> },
-      { path: "/contact/add", element: <CreateContactPage /> },
-      { path: "/contact/:id", element: <ContactDetailsPage /> },
+      {
+        element: <MainLayout />,
+        children: [
+          { path: "/", element: <ContactsPage /> },
+          { path: "/contact/add", element: <CreateContactPage /> },
+          { path: "/contact/:id", element: <ContactDetailsPage /> },
+        ],
+      },
     ],
   },
 ]);

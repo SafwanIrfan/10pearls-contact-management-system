@@ -22,20 +22,16 @@ export const removeToken = () => localStorage.removeItem(TOKEN_KEY);
 export const signIn = async (
   payload: SignInRequestDTO,
 ): Promise<AuthResponseDTO> => {
-  const response = await api.post<AuthResponseDTO>(
-    API_ENDPOINTS.SIGNIN,
-    payload,
-  );
+  const endpoint = API_ENDPOINTS.SIGNIN;
+  const response = await api.post<AuthResponseDTO>(`${endpoint}`, payload);
   return response.data;
 };
 
 export const signUp = async (
   payload: SignUpRequestDTO,
 ): Promise<AuthResponseDTO> => {
-  const response = await api.post<AuthResponseDTO>(
-    API_ENDPOINTS.SIGNUP,
-    payload,
-  );
+  const endpoint = API_ENDPOINTS.SIGNUP;
+  const response = await api.post<AuthResponseDTO>(`${endpoint}`, payload);
   return response.data;
 };
 
