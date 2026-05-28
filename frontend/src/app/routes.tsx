@@ -8,8 +8,8 @@ import SignUpPage from "../features/auth/pages/SignUpPage";
 import { ProtectedRoute } from "../features/auth/components/ProtectedRoute";
 
 export const router = createBrowserRouter([
-  { path: "/signin", element: <SignInPage /> },
-  { path: "/signup", element: <SignUpPage /> },
+  { path: "/auth/signin", element: <SignInPage /> },
+  { path: "/auth/signup", element: <SignUpPage /> },
 
   {
     element: <ProtectedRoute />,

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Lock, Eye, EyeOff, AtSign } from "lucide-react";
-import type { SignUpRequestDTO } from "../types/auth";
+import type { SignInRequestDTO, SignUpRequestDTO } from "../types/auth";
 import { validateIdentifier, validatePassword } from "../utils/validation";
 import { useAuth } from "../hooks/useAuth";
 import Button from "../../../shared/components/Button";
@@ -29,10 +29,15 @@ export default function SignUpPage() {
     setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
-  const validate = (form: SignUpRequestDTO): FormErrors => ({
-    identifier: validateIdentifier(form.identifier),
-    password: validatePassword(form.password, true),
-  });
+  const validate = (form: SignInRequestDTO): FormErrors => {
+    const errors: FormErrors = {};
+    const identifierError = validateIdentifier(form.identifier);
+    const passwordError = validatePassword(form.password);
+    if (identifierError) errors.identifier = identifierError;
+    if (passwordError) errors.password = passwordError;
+
+    return errors;
+  };
 
   const handleSubmit = async () => {
     const validationErrors = validate(form);
@@ -60,7 +65,6 @@ export default function SignUpPage() {
             </p>
           </div>
 
-          {/* API Error */}
           {error && (
             <div className="px-4 py-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-500">
               {error}
@@ -120,7 +124,6 @@ export default function SignUpPage() {
             </div>
           </div>
 
-          {/* Submit */}
           <Button
             label={loading ? "Creating account..." : "Sign Up"}
             variant="primary"
@@ -129,11 +132,10 @@ export default function SignUpPage() {
             className="w-full justify-center"
           />
 
-          {/* Footer */}
           <p className="text-sm text-center text-gray-500">
             Already have an account?{" "}
             <Link
-              to="/signin"
+              to="/auth/signin"
               className="text-button font-medium hover:underline"
             >
               Sign in

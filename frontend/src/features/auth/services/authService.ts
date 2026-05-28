@@ -8,8 +8,8 @@ import type {
 } from "../types/auth";
 
 export const API_ENDPOINTS = {
-  SIGNIN: "/auth/signin",
-  SIGNUP: "/auth/signup",
+  SIGNIN: "/auth/login",
+  SIGNUP: "/auth/register",
 };
 
 export const TOKEN_KEY = "auth_token";
@@ -48,5 +48,5 @@ export const isTokenExpired = (): boolean => {
 
 export const logout = () => {
   removeToken();
-  window.location.href = "/signin";
+  window.location.href = "/auth/signin";
 };

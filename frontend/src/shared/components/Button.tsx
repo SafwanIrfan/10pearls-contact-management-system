@@ -15,6 +15,7 @@ export default function Button({
   variant = "outline",
   hideLabel = false,
   className = "",
+  type = "button",
   ...props
 }: ButtonProps) {
   const base = `
@@ -30,7 +31,11 @@ export default function Button({
   };
 
   return (
-    <button className={`${base} ${variants[variant]} ${className}`} {...props}>
+    <button
+      type={type}
+      className={`${base} ${variants[variant]} ${className}`}
+      {...props}
+    >
       {Icon && <Icon size={15} strokeWidth={1.8} />}
       <span className={hideLabel ? "hidden sm:inline" : ""}>{label}</span>
     </button>

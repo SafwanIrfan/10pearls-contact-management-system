@@ -8,7 +8,10 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) logout();
+    const isAuthRoute = error.config?.url?.includes("/auth/");
+    if (error.response?.status === 401 && !isAuthRoute) {
+      logout();
+    }
     return Promise.reject(error);
   },
 );

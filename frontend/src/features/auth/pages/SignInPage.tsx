@@ -26,16 +26,19 @@ export default function SignInPage() {
     setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
-  const validate = (form: SignInRequestDTO): FormErrors => ({
-    identifier: validateIdentifier(form.identifier),
-    password: validatePassword(form.password),
-  });
+  const validate = (form: SignInRequestDTO): FormErrors => {
+    const errors: FormErrors = {};
+    const identifierError = validateIdentifier(form.identifier);
+    const passwordError = validatePassword(form.password);
+    if (identifierError) errors.identifier = identifierError;
+    if (passwordError) errors.password = passwordError;
+
+    return errors;
+  };
 
   const handleSubmit = async () => {
     const validationErrors = validate(form);
     if (Object.keys(validationErrors).length > 0) {
-      console.log("INSIDE IF");
-      console.log(validationErrors);
       setErrors(validationErrors);
       return;
     }
@@ -57,7 +60,6 @@ export default function SignInPage() {
             </p>
           </div>
 
-          {/* API Error */}
           {error && (
             <div className="px-4 py-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-500">
               {error}
@@ -66,7 +68,7 @@ export default function SignInPage() {
 
           {/* Fields */}
           <div className="flex flex-col gap-4">
-            {/* Email */}
+            {/* Identifier */}
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium text-heading">
                 Email or Phone number
@@ -76,7 +78,7 @@ export default function SignInPage() {
               >
                 <AtSign size={15} className="text-gray-400 shrink-0" />
                 <input
-                  type="identifier"
+                  type="text"
                   value={form.identifier}
                   placeholder="Email or phone number"
                   onChange={(e) => update("identifier", e.target.value)}
@@ -105,7 +107,8 @@ export default function SignInPage() {
                   className="flex-1 text-sm text-text placeholder:text-gray-400 outline-none bg-transparent"
                 />
                 <button
-                  onClick={() => setShowPass((p) => !p)}
+                  type="button"
+                  onClick={() => setShowPass((pass) => !pass)}
                   className="text-gray-400 hover:text-text transition-colors cursor-pointer"
                 >
                   {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
@@ -117,8 +120,8 @@ export default function SignInPage() {
             </div>
           </div>
 
-          {/* Submit */}
           <Button
+            type="button"
             label={loading ? "Signing in..." : "Sign In"}
             variant="primary"
             onClick={handleSubmit}
@@ -126,11 +129,10 @@ export default function SignInPage() {
             className="w-full justify-center"
           />
 
-          {/* Footer */}
           <p className="text-sm text-center text-gray-500">
             Don't have an account?{" "}
             <Link
-              to="/signup"
+              to="/auth/signup"
               className="text-button font-medium hover:underline"
             >
               Sign up
