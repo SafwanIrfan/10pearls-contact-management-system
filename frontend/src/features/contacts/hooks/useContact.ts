@@ -32,8 +32,9 @@ export const useContacts = (
       const response = await fetchPaginatedContacts(page!, pageSize!, search);
       setContacts(response);
       console.log(response);
-    } catch (error) {
-      setError(error.message);
+    } catch (error: any) {
+      const message = error?.response?.data?.message;
+      setError(message);
     } finally {
       setLoading(false);
     }

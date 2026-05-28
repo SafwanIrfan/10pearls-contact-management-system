@@ -1,6 +1,3 @@
-// ─── ContactsTable.tsx ────────────────────────────────────────────────────────
-
-import { useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,
