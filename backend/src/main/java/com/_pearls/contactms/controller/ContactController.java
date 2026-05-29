@@ -55,7 +55,7 @@ public class ContactController {
         return ResponseEntity.ok().body(contact);
     }
 
-    @PostMapping("/contacts/add")
+    @PostMapping("/add")
     @Operation(summary = "Create new Contacts")
     public ResponseEntity<List<ContactResponseDTO>> addContact(@Validated({Default.class}) @RequestBody List<ContactRequestDTO> newContacts) {
         List<ContactResponseDTO> contacts = contactService.addContacts(newContacts);

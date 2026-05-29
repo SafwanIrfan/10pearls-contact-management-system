@@ -111,12 +111,13 @@ public class AuthServiceTest {
         // Arrange
         RegisterRequestDTO phoneRequest = new RegisterRequestDTO("03001234789", "password123");
         when(authRepo.existsByPhoneNo("03001234789")).thenReturn(false);
+        when(jwtService.generateToken("03001234789")).thenReturn("mocked.jwt.token");
 
         // Act
         String result = authService.register(phoneRequest);
 
         // Assert
-        assertThat(result).contains("Registered Successfully");
+        assertThat(result).isEqualTo("mocked.jwt.token");
         verify(authRepo).save(any(User.class));
     }
 
@@ -127,14 +128,16 @@ public class AuthServiceTest {
         // Arrange
         RegisterRequestDTO emailRequest = new RegisterRequestDTO("safwan@test.com", "password123");
         when(authRepo.existsByEmail("safwan@test.com")).thenReturn(false);
+        when(jwtService.generateToken("safwan@test.com")).thenReturn("mocked.jwt.token");
+
 
         // Act
         String result = authService.register(emailRequest);
 
         // Assert
-        assertThat(result).contains("Registered Successfully");
-        assertThat(result).contains("safwan@test.com");
+        assertThat(result).isEqualTo("mocked.jwt.token");
         verify(authRepo).save(any(User.class));
+        verify(jwtService).generateToken("safwan@test.com");
     }
 
     // register() — Edge Case: Duplicate Email
