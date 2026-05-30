@@ -11,4 +11,5 @@ public interface AuthRepo extends JpaRepository<User,Long> {
     boolean existsByPhoneNo(String phoneNo);
     Optional<User> findByEmail(String email);
     Optional<User> findByPhoneNo(String phoneNo);
+    Optional<User> findByEmailOrPhoneNo(String identifier);
 }

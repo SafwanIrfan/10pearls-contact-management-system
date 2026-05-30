@@ -12,10 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -45,4 +42,21 @@ public class AuthController {
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
+    @Operation(summary = "Verify Password")
+    @PostMapping("/password/verify")
+    public ResponseEntity<Boolean> verifyPassword(
+            @RequestBody String oldPassword
+    ) {
+        Boolean isPasswordMatched = authService.verifyPassword(oldPassword);
+        return ResponseEntity.ok(isPasswordMatched);
+    }
+
+    @Operation(summary = "Update Password")
+    @PostMapping("/password/update")
+    public ResponseEntity<Void> updatePassword(
+            @RequestBody String newPassword
+    ) {
+        authService.updatePassword(newPassword);
+        return ResponseEntity.ok().build();
+    }
 }
