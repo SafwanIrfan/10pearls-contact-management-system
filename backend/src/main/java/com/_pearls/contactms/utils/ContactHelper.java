@@ -1,12 +1,10 @@
 package com._pearls.contactms.utils;
 
-public class AuthHelper {
+public class ContactHelper {
 
     public static boolean isEmail(String input) {
-        return input.contains("@");
+        return input.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$");
     }
-
     public static boolean isPhoneNo(String input) {
-        return input.matches("0\\d{9,14}");
-    }
-}
+        return input.matches("\\+?\\d{7,15}");
+    }}

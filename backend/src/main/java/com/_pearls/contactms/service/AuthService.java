@@ -3,14 +3,13 @@ package com._pearls.contactms.service;
 import com._pearls.contactms.dto.authdto.ChangePasswordRequestDTO;
 import com._pearls.contactms.dto.authdto.LoginRequestDTO;
 import com._pearls.contactms.dto.authdto.RegisterRequestDTO;
-import com._pearls.contactms.dto.authdto.RegisterResponseDTO;
 import com._pearls.contactms.exception.BadRequestException;
 import com._pearls.contactms.exception.ConflictException;
 import com._pearls.contactms.exception.NotFoundException;
 import com._pearls.contactms.exception.UnauthorizedException;
 import com._pearls.contactms.model.User;
 import com._pearls.contactms.repo.AuthRepo;
-import com._pearls.contactms.utils.AuthHelper;
+import com._pearls.contactms.utils.ContactHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -49,13 +48,13 @@ public class AuthService {
 
         User user =  new User();
 
-        if(AuthHelper.isEmail(identifier)) {
+        if(ContactHelper.isEmail(identifier)) {
             if(authRepo.existsByEmail(identifier)) {
                 log.warn("Registration attempt with existing email: {}", identifier);
                 throw new ConflictException("Email already exists");
             }
             user.setEmail(identifier);
-        } else if (AuthHelper.isPhoneNo(identifier)) {
+        } else if (ContactHelper.isPhoneNo(identifier)) {
             if(authRepo.existsByPhoneNo(identifier)) {
                 log.warn("Registration attempt with existing phone: {}", identifier);
                 throw new ConflictException("Phone no already exists");

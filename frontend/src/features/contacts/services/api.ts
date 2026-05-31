@@ -11,7 +11,7 @@ export const API_ENDPOINTS = {
   },
   CONTACTS_BY_ID: (id: number) => `/contacts/contact/${id}`,
   CONTACTS_CREATE: "/contacts/contact/add",
-  CONTACTS_UPDATE: "/contacts/contact/update/:id",
+  CONTACTS_UPDATE: (id: number) => `/contacts/contact/update/${id}`,
   CONTACTS_DELETE: "/contacts/contact/delete/:id",
 };
 
@@ -49,5 +49,11 @@ export const fetchContactById = async (id: number) => {
     throw new Error("Failed to fetch contact with id: " + id);
   }
 
+  return response.data;
+};
+
+// services/contactService.ts
+export const updateContact = async (id: number, payload: ContactRequestDTO) => {
+  const response = await api.put(API_ENDPOINTS.CONTACTS_UPDATE(id), payload);
   return response.data;
 };
