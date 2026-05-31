@@ -1,5 +1,6 @@
 package com._pearls.contactms.service;
 
+import com._pearls.contactms.dto.authdto.ChangePasswordRequestDTO;
 import com._pearls.contactms.dto.authdto.LoginRequestDTO;
 import com._pearls.contactms.dto.authdto.RegisterRequestDTO;
 import com._pearls.contactms.dto.authdto.RegisterResponseDTO;
@@ -90,19 +91,18 @@ public class AuthService {
         String identifier = Objects.requireNonNull(
                 SecurityContextHolder.getContext().getAuthentication()
         ).getName();
-        return authRepo.findByEmailOrPhoneNo(identifier)
+        return authRepo.findByEmailOrPhoneNo(identifier, identifier)
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
-    public Boolean verifyPassword(String oldPassword) {
+    public void updatePassword(ChangePasswordRequestDTO changePassword) {
         User user = getAuthenticatedUser();
-        return encoder.matches(oldPassword, user.getPassword());
-    }
+        if (!encoder.matches(changePassword.getOldPassword(), user.getPassword())) {
+            throw new UnauthorizedException("Invalid current password");
+        }
 
-    public void updatePassword(String newPassword) {
-        User user = getAuthenticatedUser();
-        user.setPassword(encoder.encode(newPassword));
-        log.info("User password has been updated with this email: {}", user.getEmail() != null ? user.getEmail() : user.getPhoneNo());
+        user.setPassword(encoder.encode(changePassword.getNewPassword()));
         authRepo.save(user);
+        log.info("Password updated for user: {}", user.getEmail() != null ? user.getEmail() : user.getPhoneNo());
     }
 }
