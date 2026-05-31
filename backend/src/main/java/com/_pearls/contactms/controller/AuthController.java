@@ -1,9 +1,6 @@
 package com._pearls.contactms.controller;
 
-import com._pearls.contactms.dto.authdto.LoginRequestDTO;
-import com._pearls.contactms.dto.authdto.LoginResponseDTO;
-import com._pearls.contactms.dto.authdto.RegisterRequestDTO;
-import com._pearls.contactms.dto.authdto.RegisterResponseDTO;
+import com._pearls.contactms.dto.authdto.*;
 import com._pearls.contactms.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,10 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -45,4 +39,13 @@ public class AuthController {
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
+    @Operation(summary = "Update Password")
+    @PostMapping("/password/update")
+    public ResponseEntity<Void> updatePassword(
+            @RequestBody ChangePasswordRequestDTO changePassword
+    ) {
+        System.out.println("I AM INN");
+        authService.updatePassword(changePassword);
+        return ResponseEntity.ok().build();
+    }
 }

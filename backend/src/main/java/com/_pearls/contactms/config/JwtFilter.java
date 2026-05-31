@@ -1,12 +1,12 @@
 package com._pearls.contactms.config;
 
-import com._pearls.contactms.exception.GlobalExceptionHandler;
 import com._pearls.contactms.service.CustomUserDetailsService;
 import com._pearls.contactms.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,21 +24,21 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(JwtFilter.class);
+    private final JwtService jwtService;
+    private final ApplicationContext applicationContext;
 
-    @Autowired
-    private JwtService jwtService;
-
-    @Autowired
-    private ApplicationContext applicationContext;
-
+    public JwtFilter(JwtService jwtService, ApplicationContext applicationContext) {
+        this.jwtService = jwtService;
+        this.applicationContext = applicationContext;
+    }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         String path = request.getServletPath();
 
-        // 🔑 Skip JWT validation for auth endpoints
-        if (path.startsWith("/auth/")) {
+        // Skip JWT validation for authentication endpoints
+        if (path.equals("/auth/login") || path.equals("/auth/register")) {
             filterChain.doFilter(request, response);
             return;
         }
