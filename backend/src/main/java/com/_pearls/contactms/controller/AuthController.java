@@ -44,7 +44,6 @@ public class AuthController {
     public ResponseEntity<Void> updatePassword(
             @RequestBody ChangePasswordRequestDTO changePassword
     ) {
-        System.out.println("I AM INN");
         authService.updatePassword(changePassword);
         return ResponseEntity.ok().build();
     }

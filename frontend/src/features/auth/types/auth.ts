@@ -13,5 +13,5 @@ export interface AuthResponseDTO {
 }
 
 export type DecodedToken = {
-  expiration: number;
+  exp: number;
 };

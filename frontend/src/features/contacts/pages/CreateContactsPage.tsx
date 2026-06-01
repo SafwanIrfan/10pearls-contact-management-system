@@ -261,7 +261,7 @@ export default function CreateContactPage() {
                 icon={<Phone size={14} />}
                 value={p.phone}
                 label={p.label}
-                type="number"
+                type="text"
                 labels={PHONE_LABELS}
                 placeholder="+12345678900"
                 error={errors.phones?.[i]}
