@@ -1,19 +1,21 @@
 // ─── AddContactPage.tsx ───────────────────────────────────────────────────────
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Mail, Phone } from "lucide-react";
 import toast from "react-hot-toast";
 import type { ContactRequestDTO, Emails, Phones } from "../types/contact.types";
-import { createContact } from "../services/api";
+import { createContact, updateContact } from "../services/api";
 import Button from "../../../shared/components/Button";
 import AddContactsEntryRow from "../components/CreateContactsEntryRow";
 import CreateContactSection from "../components/CreateContactSection";
 import type { FormErrors } from "../types/contact-form-errors.types";
 import CreateContactInputField from "../components/CreateContactInputField";
+import { useContactById } from "../hooks/useContactById";
+import { Spinner } from "../../../shared/components/Spinner";
+import { isEmail, isPhone } from "../../auth/utils/validation";
 
 // Constants
-
 const EMAIL_LABELS = ["Work", "Personal", "Other"];
 const PHONE_LABELS = ["Mobile", "Work", "Home"];
 const MAX_ENTRIES = 3;
@@ -36,16 +38,14 @@ const validate = (
 
   const emailErrors = emails.map((e) => {
     if (!e.email.trim()) return "Email is required.";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.email))
-      return "Enter a valid email.";
+    if (!isEmail(e.email)) return "Enter a valid email.";
     return "";
   });
   if (emailErrors.some(Boolean)) errors.emails = emailErrors;
 
   const phoneErrors = phones.map((p) => {
     if (!p.phone.trim()) return "Phone is required.";
-    if (!/^\+?[\d\s\-()]{7,15}$/.test(p.phone))
-      return "Enter a valid phone number.";
+    if (!isPhone(p.phone)) return "Enter a valid phone number.";
     return "";
   });
   if (phoneErrors.some(Boolean)) errors.phones = phoneErrors;
@@ -57,6 +57,14 @@ const validate = (
 
 export default function CreateContactPage() {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+
+  const isEditMode = Boolean(id);
+  const contactId = Number(id);
+
+  const { contact, loading: contactLoading } = useContactById(
+    isEditMode ? contactId : null,
+  );
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -65,6 +73,16 @@ export default function CreateContactPage() {
   const [phones, setPhones] = useState<Phones[]>([EMPTY_PHONE()]);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (contact) {
+      setFirstName(contact.firstName);
+      setLastName(contact.lastName);
+      setTitle(contact.title ?? "");
+      setEmails(contact.emails?.length > 0 ? contact.emails : [EMPTY_EMAIL()]);
+      setPhones(contact.phones?.length > 0 ? contact.phones : [EMPTY_PHONE()]);
+    }
+  }, [contact]);
 
   // Email helpers
   const updateEmail = (i: number, field: keyof Emails, val: string) =>
@@ -113,8 +131,13 @@ export default function CreateContactPage() {
 
     try {
       setSubmitting(true);
-      await createContact(payload);
-      toast.success("Contact added successfully!");
+      if (isEditMode) {
+        await updateContact(contactId, payload);
+        toast.success("Contact updated successfully!");
+      } else {
+        await createContact(payload);
+        toast.success("Contact added successfully!");
+      }
       navigate(-1);
     } catch {
       toast.error("Something went wrong. Please try again.");
@@ -122,6 +145,13 @@ export default function CreateContactPage() {
       setSubmitting(false);
     }
   };
+
+  if (isEditMode && contactLoading)
+    return (
+      <div className="flex justify-center">
+        <Spinner size={24} />
+      </div>
+    );
 
   return (
     <div className="h-full flex flex-col px-4 py-6 font-poppins">
@@ -134,11 +164,14 @@ export default function CreateContactPage() {
           <ArrowLeft size={18} />
         </button>
         <div>
-          <h1 className="text-xl sm:text-3xl font-semibold text-heading">
-            Add Contact
+          {/* Header */}
+          <h1 className="text-xl font-semibold text-heading">
+            {isEditMode ? "Edit Contact" : "Add Contact"}
           </h1>
           <p className="text-xs text-gray-500 mt-0.5">
-            Fill in the details below to create a new contact.
+            {isEditMode
+              ? "Update the contact details below."
+              : "Fill in the details below to create a new contact."}
           </p>
         </div>
       </div>
@@ -228,7 +261,7 @@ export default function CreateContactPage() {
                 icon={<Phone size={14} />}
                 value={p.phone}
                 label={p.label}
-                type="number"
+                type="text"
                 labels={PHONE_LABELS}
                 placeholder="+12345678900"
                 error={errors.phones?.[i]}
@@ -248,7 +281,13 @@ export default function CreateContactPage() {
       {/* Actions */}
       <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-100 mt-4">
         <Button
-          label={submitting ? "Saving..." : "Save Contact"}
+          label={
+            submitting
+              ? "Saving..."
+              : isEditMode
+                ? "Update Contact"
+                : "Save Contact"
+          }
           variant="primary"
           onClick={handleSubmit}
           disabled={submitting}

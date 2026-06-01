@@ -1,9 +1,10 @@
 package com._pearls.contactms.service;
 
 import com._pearls.contactms.exception.NotFoundException;
+import com._pearls.contactms.exception.UnauthorizedException;
 import com._pearls.contactms.model.User;
 import com._pearls.contactms.repo.AuthRepo;
-import com._pearls.contactms.utils.AuthHelper;
+import com._pearls.contactms.utils.ContactHelper;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,13 +27,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         User user;
 
-        if (AuthHelper.isEmail(identifier)) {
+        if (ContactHelper.isEmail(identifier)) {
             user = authRepo.findByEmail(identifier)
-                    .orElseThrow(() -> new NotFoundException("User not found with this email: "+ identifier));
+                    .orElseThrow(() -> new UnauthorizedException("Invalid Credentials"));
 
-        } else if (AuthHelper.isPhoneNo(identifier)) {
+        } else if (ContactHelper.isPhoneNo(identifier)) {
             user = authRepo.findByPhoneNo(identifier)
-                    .orElseThrow(() -> new NotFoundException("User not found with phone number: "+ identifier));
+                    .orElseThrow(() -> new UnauthorizedException("Invalid Credentials"));
 
         } else {
             throw new NotFoundException("Invalid email or phone number");

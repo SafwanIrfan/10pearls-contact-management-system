@@ -59,7 +59,7 @@ export default function ContactDetailsPage() {
 
   const fullName = contact ? `${contact.firstName} ${contact.lastName}` : "";
 
-  const handleEdit = () => navigate(`/contacts/edit/${id}`);
+  const handleEdit = () => navigate(`/contact/update/${id}`);
 
   const handleDelete = async () => {
     try {

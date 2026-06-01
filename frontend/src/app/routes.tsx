@@ -20,6 +20,7 @@ export const router = createBrowserRouter([
           { path: "/", element: <ContactsPage /> },
           { path: "/contact/add", element: <CreateContactPage /> },
           { path: "/contact/:id", element: <ContactDetailsPage /> },
+          { path: "/contact/update/:id", element: <CreateContactPage /> },
         ],
       },
     ],
