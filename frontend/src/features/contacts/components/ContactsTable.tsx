@@ -19,9 +19,9 @@ import { useNavigate } from "react-router-dom";
 const EmptyState = () => (
   <tr>
     <td colSpan={4} className="py-16 text-center">
-      <UserCircle2 size={40} className="mx-auto mb-3 text-gray-200" />
+      <UserCircle2 size={40} className="mx-auto mb-3 text-gray-400" />
       <p className="text-sm font-medium text-gray-400">No contacts found</p>
-      <p className="text-xs text-gray-300 mt-1">
+      <p className="text-xs text-gray-400 mt-1">
         Try adjusting your search or filters
       </p>
     </td>
@@ -190,7 +190,7 @@ export default function ContactsTable({
               {COLUMNS.map((col) => (
                 <th
                   key={col}
-                  className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wide"
+                  className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide"
                 >
                   {col}
                 </th>
