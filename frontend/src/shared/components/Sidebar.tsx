@@ -1,9 +1,16 @@
-import { PanelLeftClose, PanelLeftOpen, Users } from "lucide-react";
-import { useEffect, useState } from "react";
+import {
+  PanelLeftClose,
+  PanelLeftOpen,
+  UserCircle2,
+  Users,
+} from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useContacts } from "../../features/contacts/hooks/useContact";
 
-const NAV_ITEMS = [{ label: "Contacts", icon: Users, path: "/" }];
+const NAV_ITEMS = [
+  { label: "Contacts", icon: Users, path: "/" },
+  { label: "Profile", icon: UserCircle2, path: "/profile" },
+];
 
 const Sidebar = () => {
   const location = useLocation();

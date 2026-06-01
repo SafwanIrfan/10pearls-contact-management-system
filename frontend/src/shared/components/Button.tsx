@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 
-type ButtonVariant = "primary" | "outline";
+type ButtonVariant = "primary" | "outline" | "danger";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
@@ -28,6 +28,7 @@ export default function Button({
     primary: "bg-button text-white shadow-sm hover:bg-button/90",
     outline:
       "bg-white text-text border border-gray-200 shadow-sm hover:bg-gray-50 hover:border-gray-300",
+    danger: "bg-red-500 text-white shadow-sm hover:bg-red-600",
   };
 
   return (

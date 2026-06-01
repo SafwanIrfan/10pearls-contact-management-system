@@ -1,7 +1,6 @@
 import { Download, Upload, UserPlus } from "lucide-react";
 import Button from "../../../shared/components/Button";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../auth/services/authService";
 
 const ContactPageHeader = () => {
   const navigate = useNavigate();
@@ -14,8 +13,6 @@ const ContactPageHeader = () => {
 
       {/* Actions */}
       <div className="flex items-center gap-2 flex-wrap">
-        {/* testing logout */}
-        <Button onClick={logout} label="Logout" />
         <Button icon={Upload} label="Import" />
         <Button icon={Download} label="Export" />
         <Button

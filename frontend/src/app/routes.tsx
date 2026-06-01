@@ -6,6 +6,7 @@ import ContactDetailsPage from "../features/contacts/pages/ContactDetailsPage";
 import SignInPage from "../features/auth/pages/SignInPage";
 import SignUpPage from "../features/auth/pages/SignUpPage";
 import { ProtectedRoute } from "../features/auth/components/ProtectedRoute";
+import ProfilePage from "../features/user/pages/ProfilePage";
 
 export const router = createBrowserRouter([
   { path: "/auth/signin", element: <SignInPage /> },
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
           { path: "/contact/add", element: <CreateContactPage /> },
           { path: "/contact/:id", element: <ContactDetailsPage /> },
           { path: "/contact/update/:id", element: <CreateContactPage /> },
+          { path: "/profile", element: <ProfilePage /> },
         ],
       },
     ],

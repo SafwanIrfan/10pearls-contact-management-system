@@ -23,11 +23,7 @@ export const ConfirmationModal = ({
   onConfirm,
   onCancel,
 }: ConfirmationModalProps) => {
-  const confirmStyles = {
-    danger: "bg-red-500 hover:bg-red-600 text-white",
-    primary: "bg-button hover:bg-button/90 text-white",
-  };
-
+  const primary = "bg-button hover:bg-button/90 text-white";
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div
@@ -46,13 +42,13 @@ export const ConfirmationModal = ({
             onClick={onCancel}
             disabled={loading}
           />
-          <button
+          <Button
+            variant={variant}
+            label={loading ? "Please wait..." : confirmLabel}
             onClick={onConfirm}
             disabled={loading}
-            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-xl transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none ${confirmStyles[variant]}`}
-          >
-            {loading ? "Please wait..." : confirmLabel}
-          </button>
+            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-xl transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none ${variant === "primary" ? primary : ""}`}
+          />
         </div>
       </div>
     </div>

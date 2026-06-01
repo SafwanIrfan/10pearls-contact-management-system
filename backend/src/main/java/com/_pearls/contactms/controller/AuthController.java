@@ -40,7 +40,7 @@ public class AuthController {
     }
 
     @Operation(summary = "Update Password")
-    @PostMapping("/password/update")
+    @PutMapping("/password/update")
     public ResponseEntity<Void> updatePassword(
             @RequestBody ChangePasswordRequestDTO changePassword
     ) {

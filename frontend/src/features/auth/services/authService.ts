@@ -6,6 +6,7 @@ import type {
   SignInRequestDTO,
   SignUpRequestDTO,
 } from "../types/auth";
+import toast from "react-hot-toast";
 
 export const API_ENDPOINTS = {
   SIGNIN: "/auth/login",
@@ -48,5 +49,6 @@ export const isTokenExpired = (): boolean => {
 
 export const logout = () => {
   removeToken();
+  toast.success("Successfully logout");
   window.location.href = "/auth/signin";
 };
