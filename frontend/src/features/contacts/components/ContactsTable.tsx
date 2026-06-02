@@ -103,7 +103,7 @@ const Pagination = ({
       <button
         onClick={() => onPageChange(1)}
         disabled={page === 1}
-        className="px-2 py-1.5 text-xs text-gray-400 rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:pointer-events-none transition-all"
+        className="px-2 py-1.5 text-xs text-text rounded-lg hover:bg-gray-100 disabled:opacity-80 disabled:pointer-events-none transition-all"
       >
         First
       </button>
@@ -144,7 +144,7 @@ const Pagination = ({
       <button
         onClick={() => onPageChange(totalPages)}
         disabled={page === totalPages}
-        className="px-2 py-1.5 text-xs text-gray-400 rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:pointer-events-none transition-all"
+        className="px-2 py-1.5 text-xs text-text rounded-lg hover:bg-gray-100 disabled:opacity-80 disabled:pointer-events-none transition-all"
       >
         Last
       </button>
