@@ -1,5 +1,6 @@
 package com._pearls.contactms.controller;
 
+import com._pearls.contactms.dto.authdto.ChangePasswordRequestDTO;
 import com._pearls.contactms.dto.authdto.LoginRequestDTO;
 import com._pearls.contactms.dto.authdto.RegisterRequestDTO;
 import com._pearls.contactms.exception.BadRequestException;
@@ -19,6 +20,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -181,6 +183,39 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
+    }
+
+    // Happy Path
+    @Test
+    @DisplayName("PUT /auth/password/update → 200 OK when password updated successfully")
+    void updatePassword_validRequest_returns200() throws Exception {
+        ChangePasswordRequestDTO request = new ChangePasswordRequestDTO();
+        request.setOldPassword("oldPass123");
+        request.setNewPassword("newPass123");
+
+        doNothing().when(authService).updatePassword(any(ChangePasswordRequestDTO.class));
+
+        mockMvc.perform(put("/auth/password/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+    }
+
+    // Edge Case: Invalid current password
+    @Test
+    @DisplayName("PUT /auth/password/update → 401 when old password is wrong")
+    void updatePassword_wrongOldPassword_returns401() throws Exception {
+        ChangePasswordRequestDTO request = new ChangePasswordRequestDTO();
+        request.setOldPassword("wrongPass");
+        request.setNewPassword("newPass123");
+
+        doThrow(new UnauthorizedException("Invalid current password"))
+                .when(authService).updatePassword(any(ChangePasswordRequestDTO.class));
+
+        mockMvc.perform(put("/auth/password/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isUnauthorized());
     }
 
 }

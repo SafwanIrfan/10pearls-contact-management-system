@@ -7,33 +7,53 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ContactHelperTest {
 
+    //isEmail()
     @Test
-    @DisplayName("isEmail() -> returns true for valid email")
+    @DisplayName("isEmail() → returns true for valid email")
     void isEmail_validEmail_returnsTrue() {
-        assertThat(ContactHelper.isEmail("user@example.com")).isTrue();
+        assertThat(ContactHelper.isEmail("safwan@test.com")).isTrue();
     }
 
     @Test
-    @DisplayName("isEmail() -> returns false for phone number")
+    @DisplayName("isEmail() → returns false for email without dot in domain")
+    void isEmail_noDotInDomain_returnsFalse() {
+        assertThat(ContactHelper.isEmail("safwan@testcom")).isFalse();
+    }
+
+    @Test
+    @DisplayName("isEmail() → returns false for email with spaces")
+    void isEmail_withSpaces_returnsFalse() {
+        assertThat(ContactHelper.isEmail("safwan @test.com")).isFalse();
+    }
+
+    @Test
+    @DisplayName("isEmail() → returns false for phone number")
     void isEmail_phoneNumber_returnsFalse() {
         assertThat(ContactHelper.isEmail("03001234567")).isFalse();
     }
 
+    //isPhoneNo()
     @Test
-    @DisplayName("isPhoneNo() -> returns true for valid phone")
-    void isPhoneNo_validPhone_returnsTrue() {
+    @DisplayName("isPhoneNo() → returns true for local number")
+    void isPhoneNo_localNumber_returnsTrue() {
         assertThat(ContactHelper.isPhoneNo("03001234567")).isTrue();
     }
 
     @Test
-    @DisplayName("isPhoneNo() -> returns false for email")
-    void isPhoneNo_email_returnsFalse() {
-        assertThat(ContactHelper.isPhoneNo("user@example.com")).isFalse();
+    @DisplayName("isPhoneNo() → returns true for international number with +")
+    void isPhoneNo_internationalNumber_returnsTrue() {
+        assertThat(ContactHelper.isPhoneNo("+923001234567")).isTrue();
     }
 
     @Test
-    @DisplayName("isPhoneNo() -> returns false for invalid format")
-    void isPhoneNo_invalidFormat_returnsFalse() {
-        assertThat(ContactHelper.isPhoneNo("+923301234567")).isFalse();
+    @DisplayName("isPhoneNo() → returns false for number less than 7 digits")
+    void isPhoneNo_tooShort_returnsFalse() {
+        assertThat(ContactHelper.isPhoneNo("12345")).isFalse();
+    }
+
+    @Test
+    @DisplayName("isPhoneNo() → returns false for email")
+    void isPhoneNo_email_returnsFalse() {
+        assertThat(ContactHelper.isPhoneNo("safwan@test.com")).isFalse();
     }
 }
