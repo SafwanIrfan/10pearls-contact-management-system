@@ -87,14 +87,14 @@ public class ContactService {
 
         List<Contact> contacts = contactRequestDTOs.stream()
                 .map(this::addContactHelperFunction)
-                .collect(Collectors.toList());
+                .toList();
 
         contactRepo.saveAll(contacts);
         log.info("Added {} contacts", contacts.size());
 
         return contacts.stream()
                 .map(ContactMapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public ContactResponseDTO updateContact(Long id, ContactRequestDTO updatedContact) {
@@ -125,8 +125,9 @@ public class ContactService {
     }
 
     public void deleteContact(Long id) {
-        ContactResponseDTO contact = getContactById(id);
-        contactRepo.deleteById(id);
-        log.info("Delete contact with id: {}", id);
+        Contact contact = contactRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Contact not found with id: " + id));
+        contactRepo.deleteById(contact.getId());
+        log.info("Deleted contact with id: {}", id);
     }
 }

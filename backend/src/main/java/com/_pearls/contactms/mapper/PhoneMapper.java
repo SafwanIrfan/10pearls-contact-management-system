@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 public class PhoneMapper {
 
+    private PhoneMapper() {}
+
     public static List<PhoneContact> mapPhonesToModel(
             List<PhoneRequestDTO> phoneRequestDTOS, Contact contact) {
 
@@ -21,8 +23,7 @@ public class PhoneMapper {
                     phoneContact.setLabel(dto.getLabel());
                     phoneContact.setContact(contact);
                     return phoneContact;
-                }).collect(Collectors.toList());
-        //.collect(Collectors.toList()) is mutable
+                }).toList();
     }
 
     public static List<PhoneResponseDTO> mapPhonesToDTO(List<PhoneContact> phoneContacts) {

@@ -9,6 +9,8 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class ContactSpecification {
 
+    private ContactSpecification() {}
+
     public static Specification<Contact> search(String keyword) {
         return (root, query, cb) -> {
             if (keyword == null || keyword.isBlank()) return null;

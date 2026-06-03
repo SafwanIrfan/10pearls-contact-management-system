@@ -138,7 +138,7 @@ class ContactControllerTest {
                 .andExpect(jsonPath("$.totalElements").value(0));
     }
 
-    // GET /contacts/contact/{id}
+    // GET /contacts/contact/id
     @Test
     @DisplayName("GET /contacts/contact/{id} → 200 OK when contact exists")
     void getContactById_validId_returns200() throws Exception {
@@ -227,7 +227,7 @@ class ContactControllerTest {
                 .andExpect(jsonPath("$[0].firstName").value("Safwan"));
     }
 
-    // PUT /contacts/contact/update/{id}
+    // PUT /contacts/contact/update/id
     @Test
     @DisplayName("PUT /contacts/contact/update/{id} → 200 OK when contact updated")
     void updateContact_validRequest_returns200() throws Exception {
@@ -253,7 +253,7 @@ class ContactControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    // DELETE /contacts/contact/delete/{id}
+    // DELETE /contacts/contact/delete/id
     @Test
     @DisplayName("DELETE /contacts/contact/delete/{id} → 204 NO CONTENT when deleted")
     void deleteContact_validId_returns204() throws Exception {

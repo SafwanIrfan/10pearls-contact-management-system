@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 public class EmailMapper {
 
+    private EmailMapper() {}
+
     public static List<EmailContact> mapEmailsToModel(
             List<EmailRequestDTO> emailRequestDTOS, Contact contact) {
 
@@ -21,8 +23,7 @@ public class EmailMapper {
                     emailContact.setLabel(dto.getLabel());
                     emailContact.setContact(contact);
                     return emailContact;
-                }).collect(Collectors.toList());
-        //.collect(Collectors.toList()) is mutable
+                }).toList();
     }
 
     public static List<EmailResponseDTO> mapEmailsToDTO(List<EmailContact> emailContacts) {

@@ -13,6 +13,8 @@ import java.util.List;
 
 public class ContactMapper {
 
+    private ContactMapper() {}
+
     public static ContactResponseDTO toDTO(Contact contact) {
         ContactResponseDTO contactDTO = new ContactResponseDTO();
         contactDTO.setId(contact.getId());

@@ -7,6 +7,9 @@ import com._pearls.contactms.specification.ContactSpecification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.data.domain.Page;
@@ -15,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -79,49 +83,24 @@ class ContactRepoTest {
         assertThat(result.getContent().getFirst().getLastName()).isEqualTo("Irfan");
     }
 
-    @Test
-    @DisplayName("search() → returns contact when keyword matches email")
-    void search_matchesEmail_returnsContact() {
+    @ParameterizedTest
+    @DisplayName("search() → returns correct results for various keywords")
+    @MethodSource("searchKeywordProvider")
+    void search_variousKeywords_returnsExpectedResults(String keyword, int expectedSize) {
         Page<Contact> result = contactRepo.findAll(
-                ContactSpecification.search("safwan@test.com"), PageRequest.of(0, 10));
+                ContactSpecification.search(keyword), PageRequest.of(0, 10));
 
-        assertThat(result.getContent()).hasSize(1);
+        assertThat(result.getContent()).hasSize(expectedSize);
     }
 
-    @Test
-    @DisplayName("search() → returns contact when keyword matches phone")
-    void search_matchesPhone_returnsContact() {
-        Page<Contact> result = contactRepo.findAll(
-                ContactSpecification.search("03001234567"), PageRequest.of(0, 10));
-
-        assertThat(result.getContent()).hasSize(1);
-    }
-
-    @Test
-    @DisplayName("search() → returns empty when keyword does not match anything")
-    void search_noMatch_returnsEmpty() {
-        Page<Contact> result = contactRepo.findAll(
-                ContactSpecification.search("unknown"), PageRequest.of(0, 10));
-
-        assertThat(result.getContent()).isEmpty();
-    }
-
-    @Test
-    @DisplayName("search() → returns all contacts when keyword is null")
-    void search_nullKeyword_returnsAll() {
-        Page<Contact> result = contactRepo.findAll(
-                ContactSpecification.search(null), PageRequest.of(0, 10));
-
-        assertThat(result.getContent()).hasSize(1);
-    }
-
-    @Test
-    @DisplayName("search() → returns all contacts when keyword is blank")
-    void search_blankKeyword_returnsAll() {
-        Page<Contact> result = contactRepo.findAll(
-                ContactSpecification.search("  "), PageRequest.of(0, 10));
-
-        assertThat(result.getContent()).hasSize(1);
+    static Stream<Arguments> searchKeywordProvider() {
+        return Stream.of(
+                Arguments.of("safwan@test.com", 1),  // matches email
+                Arguments.of("03001234567",     1),  // matches phone
+                Arguments.of("unknown",         0),  // no match
+                Arguments.of(null,              1),  // null keyword -> all
+                Arguments.of("  ",             1)   // blank keyword -> all
+        );
     }
 
     // deleteById()

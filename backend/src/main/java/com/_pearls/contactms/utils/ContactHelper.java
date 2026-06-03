@@ -2,6 +2,8 @@ package com._pearls.contactms.utils;
 
 public class ContactHelper {
 
+    private ContactHelper() {}
+
     public static boolean isEmail(String input) {
         return input.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$");
     }

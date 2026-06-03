@@ -106,7 +106,7 @@ class ContactServiceTest {
         PaginatedResponseDTO<ContactResponseDTO> result = contactService.getContacts("unknown", 1, 10);
 
         assertThat(result.getData()).isEmpty();
-        assertThat(result.getTotalElements()).isEqualTo(0);
+        assertThat(result.getTotalElements()).isZero();
     }
 
     // getContactById()

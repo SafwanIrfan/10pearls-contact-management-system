@@ -1,5 +1,6 @@
 package com._pearls.contactms.service;
 
+import com._pearls.contactms.exception.JwtInitializationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -24,7 +25,7 @@ public class JwtService {
             byte[] keyBytes = Decoders.BASE64.decode(base64Secret);
             this.secretKey = Keys.hmacShaKeyFor(keyBytes);
         } catch(RuntimeException e){
-            throw new RuntimeException(e);
+            throw new JwtInitializationException("Failed to initialize JWT secret key", e);
         }
     }
 
