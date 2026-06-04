@@ -63,7 +63,6 @@ public class ContactService {
 
     public Contact addContactHelperFunction(ContactRequestDTO contactRequestDTO){
         Contact contact = ContactMapper.toModel(contactRequestDTO);
-        contact.setCreatedAt(LocalDateTime.now());
 
         //map emails to Model
         List<EmailContact> emails = EmailMapper.mapEmailsToModel(contactRequestDTO.getEmails(), contact);

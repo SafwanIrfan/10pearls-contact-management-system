@@ -36,7 +36,6 @@ class ContactRepoTest {
         contact.setFirstName("Safwan");
         contact.setLastName("Irfan");
         contact.setTitle("Software Engineer");
-        contact.setCreatedAt(LocalDateTime.now());
 
         EmailContact email = new EmailContact();
         email.setEmail("safwan@test.com");

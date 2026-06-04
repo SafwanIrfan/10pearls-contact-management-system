@@ -28,7 +28,6 @@ public class ContactMapper {
 
         contactDTO.setEmails(emailResponseDTOS);
         contactDTO.setPhones(phoneResponseDTOS);
-        contactDTO.setCreatedAt(contact.getCreatedAt());
         return contactDTO;
     }
 

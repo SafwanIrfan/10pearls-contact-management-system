@@ -48,14 +48,6 @@ public class ContactResponseDTO {
         this.title = title;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public List<EmailResponseDTO> getEmails() {
         return emails;
     }
