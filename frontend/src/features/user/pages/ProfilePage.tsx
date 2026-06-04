@@ -51,7 +51,7 @@ export default function ProfilePage() {
 
         <div className="flex flex-col  justify-center gap-4 max-w-md">
           {/* User Card */}
-          <div className="bg-white border rounded-2xl shadow-sm p-6 flex items-center gap-4">
+          <div className="bg-white rounded-2xl shadow-sm p-6 flex items-center gap-4">
             <div className="w-14 h-14 rounded-full bg-button/10 flex items-center justify-center shrink-0">
               <UserCircle2 size={28} className="text-button" />
             </div>
@@ -66,7 +66,7 @@ export default function ProfilePage() {
           </div>
 
           {/* Actions Card */}
-          <div className="flex flex-col p-2 gap-2 bg-white border rounded-2xl shadow-sm">
+          <div className="flex flex-col p-4 gap-4 bg-white rounded-2xl  shadow-sm">
             <ActionButton
               title="Change Password"
               onClick={() => setShowChangePassword(true)}

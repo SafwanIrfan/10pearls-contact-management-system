@@ -15,9 +15,11 @@ const ActionButton = ({
   variant = "danger",
 }: ActionButtonProps) => {
   const confirmStyles = {
-    danger: "bg-red-300 hover:bg-red-200 text-text",
-    primary: "hover:bg-gray-50 text-text",
+    danger:
+      "text-text border border-red-200 hover:bg-red-50 hover:border-red-300",
+    primary: "hover:bg-gray-50 border border-gray-200 text-text",
   };
+
   return (
     <button
       onClick={onClick}
