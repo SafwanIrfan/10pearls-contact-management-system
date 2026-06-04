@@ -61,7 +61,6 @@ class ContactServiceTest {
         mockContact.setFirstName("Safwan");
         mockContact.setLastName("Irfan");
         mockContact.setTitle("Software Engineer");
-        mockContact.setCreatedAt(LocalDateTime.now());
         mockContact.setEmail(new ArrayList<>(List.of(emailContact)));
         mockContact.setPhone(new ArrayList<>(List.of(phoneContact)));
 

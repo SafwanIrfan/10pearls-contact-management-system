@@ -22,7 +22,6 @@ public class Contact {
     @NotNull
     private String title;
 
-    @NotNull
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -31,9 +30,12 @@ public class Contact {
     @OneToMany(mappedBy = "contact",  cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PhoneContact> phone;
 
-    public @NotNull LocalDateTime getCreatedAt() { return createdAt;}
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 
-    public void setCreatedAt(@NotNull LocalDateTime createdAt) {this.createdAt = createdAt;}
+    public @NotNull LocalDateTime getCreatedAt() { return createdAt;}
 
     public @NotNull String getTitle() {
         return title;

@@ -2,7 +2,23 @@ import { Download, Upload, UserPlus } from "lucide-react";
 import Button from "../../../shared/components/Button";
 import { useNavigate } from "react-router-dom";
 
-const ContactPageHeader = () => {
+interface ContactPageHeaderProps {
+  onImport: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onExport: () => void;
+  openFilePicker: () => void;
+  fileInputRef: React.RefObject<HTMLInputElement>;
+  importing: boolean;
+  exporting: boolean;
+}
+
+const ContactPageHeader = ({
+  onImport,
+  onExport,
+  openFilePicker,
+  fileInputRef,
+  importing,
+  exporting,
+}: ContactPageHeaderProps) => {
   const navigate = useNavigate();
 
   return (
@@ -11,15 +27,33 @@ const ContactPageHeader = () => {
         Contact List
       </h1>
 
-      {/* Actions */}
       <div className="flex items-center gap-2 flex-wrap">
-        <Button icon={Upload} label="Import" />
-        <Button icon={Download} label="Export" />
+        {/* Hidden file input */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".csv"
+          onChange={onImport}
+          className="hidden"
+        />
+
         <Button
-          onClick={() => navigate("/contact/add")}
+          icon={Upload}
+          label={importing ? "Importing..." : "Import"}
+          onClick={openFilePicker}
+          disabled={importing}
+        />
+        <Button
+          icon={Download}
+          label={exporting ? "Exporting..." : "Export"}
+          onClick={onExport}
+          disabled={exporting}
+        />
+        <Button
           icon={UserPlus}
           label="Add Contact"
           variant="primary"
+          onClick={() => navigate("/contact/add")}
         />
       </div>
     </section>
