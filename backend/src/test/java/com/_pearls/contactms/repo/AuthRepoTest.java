@@ -94,4 +94,33 @@ class AuthRepoTest {
 
         assertThat(result).isEmpty();
     }
+
+    // Happy Path: find by email
+    @Test
+    @DisplayName("findByEmailOrPhoneNo() → returns user when email matches")
+    void findByEmailOrPhoneNo_emailMatches_returnsUser() {
+        Optional<User> result = authRepo.findByEmailOrPhoneNo("safwan_exists@example.com", "safwan_exists@example.com");
+
+        assertThat(result).isPresent();
+        assertThat(result.get().getEmail()).isEqualTo("safwan_exists@example.com");
+    }
+
+    // Happy Path: find by phone
+    @Test
+    @DisplayName("findByEmailOrPhoneNo() → returns user when phone matches")
+    void findByEmailOrPhoneNo_phoneMatches_returnsUser() {
+        Optional<User> result = authRepo.findByEmailOrPhoneNo("03001234567", "03001234567");
+
+        assertThat(result).isPresent();
+        assertThat(result.get().getPhoneNo()).isEqualTo("03001234567");
+    }
+
+    // Edge Case: not found
+    @Test
+    @DisplayName("findByEmailOrPhoneNo() → returns empty when neither matches")
+    void findByEmailOrPhoneNo_noMatch_returnsEmpty() {
+        Optional<User> result = authRepo.findByEmailOrPhoneNo("safwanNotFound@test.com", "safwanNotFound@test.com");
+
+        assertThat(result).isEmpty();
+    }
 }

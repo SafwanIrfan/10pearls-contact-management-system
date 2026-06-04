@@ -1,12 +1,15 @@
 package com._pearls.contactms.service;
 
+import com._pearls.contactms.dto.authdto.ChangePasswordRequestDTO;
 import com._pearls.contactms.dto.authdto.LoginRequestDTO;
 import com._pearls.contactms.dto.authdto.RegisterRequestDTO;
 import com._pearls.contactms.exception.BadRequestException;
 import com._pearls.contactms.exception.ConflictException;
+import com._pearls.contactms.exception.NotFoundException;
 import com._pearls.contactms.exception.UnauthorizedException;
 import com._pearls.contactms.model.User;
 import com._pearls.contactms.repo.AuthRepo;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +20,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -46,6 +53,11 @@ class AuthServiceTest {
     @BeforeEach
     void setUp() {
         validLoginRequest = new LoginRequestDTO("safwan123@gmail.com", "safwan@123");
+    }
+
+    @AfterEach
+    void tearDown() {
+        SecurityContextHolder.clearContext();
     }
 
     // authenticate() — Happy Path
@@ -177,6 +189,88 @@ class AuthServiceTest {
         assertThatThrownBy(() -> authService.register(badRequest))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining("Invalid Email or Phone Number");
+
+        verify(authRepo, never()).save(any());
+    }
+
+    // Happy Path
+    @Test
+    @DisplayName("updatePassword() → updates password when old password is correct")
+    void updatePassword_validOldPassword_updatesPassword() {
+        User user = new User();
+        user.setEmail("safwan@test.com");
+        user.setPassword("encodedOldPassword");
+
+        ChangePasswordRequestDTO request = new ChangePasswordRequestDTO();
+        request.setOldPassword("oldPassword");
+        request.setNewPassword("newPassword");
+
+        // mock SecurityContextHolder
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("safwan@test.com");
+        SecurityContextHolder.setContext(securityContext);
+
+        when(authRepo.findByEmailOrPhoneNo("safwan@test.com", "safwan@test.com"))
+                .thenReturn(Optional.of(user));
+        when(encoder.matches("oldPassword", "encodedOldPassword")).thenReturn(true);
+        when(encoder.encode("newPassword")).thenReturn("encodedNewPassword");
+
+        authService.updatePassword(request);
+
+        verify(authRepo).save(argThat(u -> u.getPassword().equals("encodedNewPassword")));
+    }
+
+    // Edge Case: Wrong old password
+    @Test
+    @DisplayName("updatePassword() → throws UnauthorizedException when old password is wrong")
+    void updatePassword_wrongOldPassword_throwsUnauthorizedException() {
+        User user = new User();
+        user.setEmail("safwan@test.com");
+        user.setPassword("encodedOldPassword");
+
+        ChangePasswordRequestDTO request = new ChangePasswordRequestDTO();
+        request.setOldPassword("wrongPassword");
+        request.setNewPassword("newPassword");
+
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("safwan@test.com");
+        SecurityContextHolder.setContext(securityContext);
+
+        when(authRepo.findByEmailOrPhoneNo("safwan@test.com", "safwan@test.com"))
+                .thenReturn(Optional.of(user));
+        when(encoder.matches("wrongPassword", "encodedOldPassword")).thenReturn(false);
+
+        assertThatThrownBy(() -> authService.updatePassword(request))
+                .isInstanceOf(UnauthorizedException.class)
+                .hasMessageContaining("Invalid current password");
+
+        verify(authRepo, never()).save(any());
+    }
+
+    // Edge Case: User not found
+    @Test
+    @DisplayName("updatePassword() → throws NotFoundException when user not found")
+    void updatePassword_userNotFound_throwsNotFoundException() {
+        ChangePasswordRequestDTO request = new ChangePasswordRequestDTO();
+        request.setOldPassword("oldPassword");
+        request.setNewPassword("newPassword");
+
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("safwanNotFound@test.com");
+        SecurityContextHolder.setContext(securityContext);
+
+        when(authRepo.findByEmailOrPhoneNo("safwanNotFound@test.com", "safwanNotFound@test.com"))
+                .thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> authService.updatePassword(request))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessageContaining("User not found");
 
         verify(authRepo, never()).save(any());
     }
