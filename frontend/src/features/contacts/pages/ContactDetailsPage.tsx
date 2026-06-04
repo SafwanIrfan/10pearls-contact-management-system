@@ -11,6 +11,7 @@ import { Spinner } from "../../../shared/components/Spinner";
 import Avatar from "../components/Avatar";
 import { ConfirmationModal } from "../../../shared/components/ConfirmationModal";
 import { useContacts } from "../hooks/useContact";
+import { deleteContact } from "../services/api";
 
 //  Info Card
 interface InfoCardProps {
@@ -51,8 +52,9 @@ export default function ContactDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { collapsed } = useContacts();
+  const numberId = Number(id!);
 
-  const { contact, loading, error } = useContactById(Number(id!));
+  const { contact, loading, error } = useContactById(numberId);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -64,7 +66,7 @@ export default function ContactDetailsPage() {
   const handleDelete = async () => {
     try {
       setDeleting(true);
-      //   await deleteContact(id!);
+      await deleteContact(numberId);
       toast.success("Contact deleted successfully.");
       navigate(-1);
     } catch {
@@ -144,7 +146,7 @@ export default function ContactDetailsPage() {
               icon={Trash2}
               variant="outline"
               onClick={() => setShowDeleteModal(true)}
-              className="text-red-400 border-red-200 hover:bg-red-50 hover:border-red-300"
+              className="text-text border-red-200 hover:bg-red-50 hover:border-red-300"
             />
           </div>
         </div>

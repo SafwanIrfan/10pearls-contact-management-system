@@ -12,7 +12,7 @@ export const API_ENDPOINTS = {
   CONTACTS_BY_ID: (id: number) => `/contacts/contact/${id}`,
   CONTACTS_CREATE: "/contacts/contact/add",
   CONTACTS_UPDATE: (id: number) => `/contacts/contact/update/${id}`,
-  CONTACTS_DELETE: "/contacts/contact/delete/:id",
+  CONTACTS_DELETE: (id: number) => `/contacts/contact/delete/${id}`,
 };
 
 export const fetchPaginatedContacts = async (
@@ -54,5 +54,10 @@ export const fetchContactById = async (id: number) => {
 
 export const updateContact = async (id: number, payload: ContactRequestDTO) => {
   const response = await api.put(API_ENDPOINTS.CONTACTS_UPDATE(id), payload);
+  return response.data;
+};
+
+export const deleteContact = async (id: number) => {
+  const response = await api.delete(API_ENDPOINTS.CONTACTS_DELETE(id));
   return response.data;
 };
