@@ -21,6 +21,7 @@ public class ContactMapper {
         contactDTO.setTitle(contact.getTitle());
         contactDTO.setFirstName(contact.getFirstName());
         contactDTO.setLastName(contact.getLastName());
+        contactDTO.setCreatedAt(contact.getCreatedAt());
 
         List<EmailResponseDTO> emailResponseDTOS = EmailMapper.mapEmailsToDTO(contact.getEmail());
 

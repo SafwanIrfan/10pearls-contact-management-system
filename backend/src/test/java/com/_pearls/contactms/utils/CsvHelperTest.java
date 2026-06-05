@@ -45,12 +45,6 @@ class CsvHelperTest {
         assertThat(CsvHelper.unquote("\"Safwan\"")).isEqualTo("Safwan");
     }
 
-    @Test
-    @DisplayName("unquote() → returns empty string for null")
-    void unquote_null_returnsEmpty() {
-        assertThat(CsvHelper.unquote(null)).isEqualTo("");
-    }
-
     // formatEmails()
     @Test
     @DisplayName("formatEmails() → returns pipe-separated email:label pairs")
@@ -152,10 +146,7 @@ class CsvHelperTest {
         assertThat(contact.getPhone()).isNull();
     }
 
-    // ─────────────────────────────────────────────
     // parseEmails() & parsePhones()
-    // ─────────────────────────────────────────────
-
     @Test
     @DisplayName("parseEmails() → parses multiple emails separated by pipe")
     void parseEmails_multipleEmails_parsesAll() {

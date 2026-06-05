@@ -1,4 +1,5 @@
 package com._pearls.contactms.utils;
+import com._pearls.contactms.exception.CsvProcessingException;
 import com._pearls.contactms.model.Contact;
 import com._pearls.contactms.model.EmailContact;
 import com._pearls.contactms.model.PhoneContact;
@@ -52,10 +53,10 @@ public class CsvHelper {
     }
 
     public static void validateCsvFile(MultipartFile file) {
-        if (file.isEmpty()) throw new RuntimeException("File is empty.");
+        if (file.isEmpty()) throw new CsvProcessingException("File is empty.");
         String filename = file.getOriginalFilename();
         if (filename == null || !filename.endsWith(".csv")) {
-            throw new RuntimeException("Only CSV files are supported.");
+            throw new CsvProcessingException("Only CSV files are supported.");
         }
     }
 

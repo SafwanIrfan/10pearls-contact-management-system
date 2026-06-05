@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @WebMvcTest(controllers = ContactController.class)
@@ -59,6 +60,7 @@ class ContactControllerTest {
         mockResponse.setTitle("Software Engineer");
         mockResponse.setEmails(List.of());
         mockResponse.setPhones(List.of());
+        mockResponse.setCreatedAt(LocalDateTime.now(ZoneId.of("UTC")));
 
         // reusable mock request
         EmailRequestDTO email = new EmailRequestDTO();

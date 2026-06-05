@@ -70,4 +70,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
     }
+
+    @ExceptionHandler(CsvProcessingException.class)
+    public ResponseEntity<String> handleCsvProcessing(CsvProcessingException ex) {
+        return ResponseEntity.status(422).body(ex.getMessage());
+    }
 }

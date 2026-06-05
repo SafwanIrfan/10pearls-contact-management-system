@@ -1,5 +1,6 @@
 package com._pearls.contactms.service;
 
+import com._pearls.contactms.exception.CsvProcessingException;
 import com._pearls.contactms.model.Contact;
 import com._pearls.contactms.model.EmailContact;
 import com._pearls.contactms.model.PhoneContact;
@@ -151,7 +152,7 @@ class ContactExportImportServiceTest {
         );
 
         assertThatThrownBy(() -> exportImportService.importContactsFromCSV(file))
-                .isInstanceOf(RuntimeException.class)
+                .isInstanceOf(CsvProcessingException.class)
                 .hasMessageContaining("File is empty");
     }
 
@@ -164,7 +165,7 @@ class ContactExportImportServiceTest {
         );
 
         assertThatThrownBy(() -> exportImportService.importContactsFromCSV(file))
-                .isInstanceOf(RuntimeException.class)
+                .isInstanceOf(CsvProcessingException.class)
                 .hasMessageContaining("Only CSV files are supported");
     }
 }

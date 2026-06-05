@@ -47,14 +47,16 @@ public class ContactExportImportService {
                 new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
 
             String line;
-            boolean isHeader  = true;
+            boolean isHeader = true;
             int importedCount = 0;
 
             while ((line = reader.readLine()) != null) {
-                if (isHeader) { isHeader = false; continue; }
-                if (line.isBlank()) continue;
-                contactRepo.save(CsvHelper.parseCSVLine(line));
-                importedCount++;
+                if (isHeader) {
+                    isHeader = false;
+                } else if (!line.isBlank()) {
+                    contactRepo.save(CsvHelper.parseCSVLine(line));
+                    importedCount++;
+                }
             }
 
             log.info("Imported {} contacts from CSV", importedCount);

@@ -1,5 +1,6 @@
 package com._pearls.contactms.controller;
 
+import com._pearls.contactms.exception.CsvProcessingException;
 import com._pearls.contactms.service.ContactExportImportService;
 import com._pearls.contactms.service.JwtService;
 import org.junit.jupiter.api.DisplayName;
@@ -74,16 +75,16 @@ class ContactExportImportControllerTest {
     }
 
     @Test
-    @DisplayName("POST /contacts/import → 500 when service throws RuntimeException")
-    void importContacts_serviceThrows_returns500() throws Exception {
+    @DisplayName("POST /contacts/import → 422 when service throws CsvProcessingException")
+    void importContacts_serviceThrows_returns422() throws Exception {
         MockMultipartFile file = new MockMultipartFile(
                 "file", "contacts.csv", "text/csv",
                 "bad content".getBytes()
         );
-        doThrow(new RuntimeException("Failed to read CSV file."))
+        doThrow(new CsvProcessingException("Failed to read CSV file."))
                 .when(exportImportService).importContactsFromCSV(any());
 
         mockMvc.perform(multipart("/contacts/import").file(file))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().is(422));
     }
 }

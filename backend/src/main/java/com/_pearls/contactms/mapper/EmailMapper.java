@@ -6,7 +6,6 @@ import com._pearls.contactms.model.Contact;
 import com._pearls.contactms.model.EmailContact;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class EmailMapper {
 
