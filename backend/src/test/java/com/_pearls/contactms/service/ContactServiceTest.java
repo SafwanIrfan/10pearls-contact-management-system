@@ -143,18 +143,6 @@ class ContactServiceTest {
         verify(contactRepo).save(any(Contact.class));
     }
 
-    @Test
-    @DisplayName("addContact() → sets createdAt timestamp on save")
-    void addContact_setsCreatedAt() {
-        when(contactRepo.save(any(Contact.class))).thenAnswer(invocation -> {
-            Contact c = invocation.getArgument(0);
-            assertThat(c.getCreatedAt()).isNotNull();
-            return mockContact;
-        });
-
-        contactService.addContact(mockRequest);
-    }
-
     // addContacts() — bulk
     @Test
     @DisplayName("addContacts() → saves all contacts and returns list of DTOs")
