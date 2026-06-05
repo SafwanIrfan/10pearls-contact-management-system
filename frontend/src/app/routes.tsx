@@ -7,6 +7,7 @@ import SignInPage from "../features/auth/pages/SignInPage";
 import SignUpPage from "../features/auth/pages/SignUpPage";
 import { ProtectedRoute } from "../features/auth/components/ProtectedRoute";
 import ProfilePage from "../features/user/pages/ProfilePage";
+import NotFoundPage from "../shared/pages/NotFoundPage";
 
 export const router = createBrowserRouter([
   { path: "/auth/signin", element: <SignInPage /> },
@@ -27,4 +28,6 @@ export const router = createBrowserRouter([
       },
     ],
   },
+
+  { path: "*", element: <NotFoundPage /> },
 ]);
