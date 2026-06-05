@@ -68,7 +68,7 @@ public class AuthService {
         user.setPassword(encoder.encode(registerRequestDTO.getPassword()));
         authRepo.save(user);
 
-        log.info("User {} has been registered", registerRequestDTO.getIdentifier());
+        log.info("User {} has been registered", ContactHelper.sanitize(registerRequestDTO.getIdentifier()));
         return jwtService.generateToken(registerRequestDTO.getIdentifier());
     }
 
@@ -79,7 +79,7 @@ public class AuthService {
                             loginRequestDTO.getIdentifier(), loginRequestDTO.getPassword()
                     ));
         } catch (BadCredentialsException e) {
-            log.warn("Failed authentication attempt for: {}", loginRequestDTO.getIdentifier());
+            log.warn("Failed authentication attempt for: {}", ContactHelper.sanitize((loginRequestDTO.getIdentifier())));
             throw new UnauthorizedException("Invalid Credentials");
         }
         log.info("User {} has been authenticated", loginRequestDTO.getIdentifier());
@@ -102,6 +102,6 @@ public class AuthService {
 
         user.setPassword(encoder.encode(changePassword.getNewPassword()));
         authRepo.save(user);
-        log.info("Password updated for user: {}", user.getEmail() != null ? user.getEmail() : user.getPhoneNo());
+        log.info("Password updated for user: {}", ContactHelper.sanitize((user.getEmail() != null ? user.getEmail() : user.getPhoneNo())));
     }
 }

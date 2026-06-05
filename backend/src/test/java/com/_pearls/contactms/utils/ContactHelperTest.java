@@ -56,4 +56,19 @@ class ContactHelperTest {
     void isPhoneNo_email_returnsFalse() {
         assertThat(ContactHelper.isPhoneNo("safwan@test.com")).isFalse();
     }
+
+    //sanitize
+    @Test
+    @DisplayName("sanitize() → replaces newline, carriage return and tab with underscore")
+    void sanitize_maliciousInput_replacesSpecialChars() {
+        assertThat(ContactHelper.sanitize("hello\nworld")).isEqualTo("hello_world");
+        assertThat(ContactHelper.sanitize("hello\r")).isEqualTo("hello_");
+        assertThat(ContactHelper.sanitize("hello\tworld")).isEqualTo("hello_world");
+    }
+
+    @Test
+    @DisplayName("sanitize() → returns empty string for null")
+    void sanitize_null_returnsEmpty() {
+        assertThat(ContactHelper.sanitize(null)).isEqualTo("");
+    }
 }

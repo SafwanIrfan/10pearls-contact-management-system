@@ -4,6 +4,7 @@ import com._pearls.contactms.model.EmailContact;
 import com._pearls.contactms.model.PhoneContact;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,8 +24,7 @@ public class CsvHelper {
     }
 
     public static String unquote(String value) {
-        if (value == null) return "";
-        return value.trim().replaceAll("^\"|\"$", "");
+        return value.trim().replaceAll("(^\"|\"$)", "");
     }
 
     public static String cleanField(String[] fields, int index) {
@@ -33,7 +33,22 @@ public class CsvHelper {
     }
 
     public static String[] splitCsvLine(String line) {
-        return line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+        List<String> fields = new ArrayList<>();
+        StringBuilder current = new StringBuilder();
+        boolean inQuotes = false;
+
+        for (char c : line.toCharArray()) {
+            if (c == '"') {
+                inQuotes = !inQuotes;
+            } else if (c == ',' && !inQuotes) {
+                fields.add(current.toString());
+                current.setLength(0);
+            } else {
+                current.append(c);
+            }
+        }
+        fields.add(current.toString());
+        return fields.toArray(new String[0]);
     }
 
     public static void validateCsvFile(MultipartFile file) {

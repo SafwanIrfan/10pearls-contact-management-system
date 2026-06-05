@@ -2,8 +2,8 @@ package com._pearls.contactms.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Entity
@@ -32,7 +32,7 @@ public class Contact {
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now(ZoneId.of("UTC"));
     }
 
     public @NotNull LocalDateTime getCreatedAt() { return createdAt;}

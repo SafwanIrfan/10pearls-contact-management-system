@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 @RestController
 @RequestMapping("/contacts")
@@ -26,7 +27,7 @@ public class ContactExportImportController {
     @Operation(summary = "Export all contacts as CSV")
     public ResponseEntity<byte[]> exportContacts() {
         byte[] csvBytes = exportImportService.exportContactsToCSV();
-        String filename = "contacts_" + LocalDate.now() + ".csv";
+        String filename = "contacts_" + LocalDate.now(ZoneId.of("UTC")) + ".csv";
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
