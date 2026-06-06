@@ -50,7 +50,13 @@ export default function SignUpPage() {
 
   return (
     <div className="min-h-screen bg-bg flex items-center justify-center px-4 font-poppins">
-      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm w-full max-w-md">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+        className="bg-white border border-gray-100 rounded-2xl shadow-sm w-full max-w-md"
+      >
         <div className="flex justify-center items-center p-4 bg-secondary rounded-t-2xl">
           <img src={appLogo} alt="appLogo" className="h-8 w-auto" />
         </div>
@@ -125,6 +131,7 @@ export default function SignUpPage() {
           </div>
 
           <Button
+            type="submit"
             label={loading ? "Creating account..." : "Sign Up"}
             variant="primary"
             onClick={handleSubmit}
@@ -142,7 +149,7 @@ export default function SignUpPage() {
             </Link>
           </p>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
