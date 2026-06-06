@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 export const useExportImport = (onImportSuccess: () => void) => {
   const [importing, setImporting] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [showExportConfirm, setShowExportConfirm] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleExport = async () => {
@@ -19,6 +20,7 @@ export const useExportImport = (onImportSuccess: () => void) => {
       toast.error("Failed to export contacts. Please try again.");
     } finally {
       setExporting(false);
+      setShowExportConfirm(false);
     }
   };
 
@@ -52,5 +54,7 @@ export const useExportImport = (onImportSuccess: () => void) => {
     fileInputRef,
     importing,
     exporting,
+    showExportConfirm,
+    setShowExportConfirm,
   };
 };

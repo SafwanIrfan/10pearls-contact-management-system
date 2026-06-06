@@ -20,6 +20,7 @@ const CreateContactSection = ({
     {children}
     {canAdd && (
       <button
+        type="button"
         onClick={onAdd}
         className="self-start flex items-center gap-1.5 text-sm text-button font-medium hover:underline transition-all"
       >

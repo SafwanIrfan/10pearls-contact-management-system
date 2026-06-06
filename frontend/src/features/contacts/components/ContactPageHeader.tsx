@@ -42,18 +42,21 @@ const ContactPageHeader = ({
           label={importing ? "Importing..." : "Import"}
           onClick={openFilePicker}
           disabled={importing}
+          hideLabel={true}
         />
         <Button
           icon={Download}
           label={exporting ? "Exporting..." : "Export"}
           onClick={onExport}
           disabled={exporting}
+          hideLabel={true}
         />
         <Button
           icon={UserPlus}
           label="Add Contact"
           variant="primary"
           onClick={() => navigate("/contact/add")}
+          hideLabel={true}
         />
       </div>
     </section>
