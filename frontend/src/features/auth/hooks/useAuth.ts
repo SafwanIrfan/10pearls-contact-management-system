@@ -16,6 +16,7 @@ export const useAuth = () => {
       setError(null);
       const { token } = await signIn(payload);
       saveToken(token);
+      toast.success("Welcome back to Leadly!");
       navigate("/");
     } catch (err: any) {
       const message = err?.response?.data?.message;
@@ -36,6 +37,7 @@ export const useAuth = () => {
       const { token } = await signUp(payload);
       saveToken(token);
       navigate("/");
+      toast.success("Welcome to Leadly! Let's get started.");
     } catch (err: any) {
       const message = err?.response?.data?.message;
       if (err?.response?.status === 400 || err?.response?.status === 401) {

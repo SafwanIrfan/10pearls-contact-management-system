@@ -46,6 +46,12 @@ const CreateContactsEntryRow = ({
           value={value}
           placeholder={placeholder}
           onChange={(e) => onValueChange(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              e.currentTarget.closest("form")?.requestSubmit();
+            }
+          }}
           className="flex-1 text-sm text-text placeholder:text-gray-400 outline-none font-poppins bg-transparent"
         />
       </div>
@@ -64,6 +70,7 @@ const CreateContactsEntryRow = ({
 
       {showRemove && (
         <button
+          type="button"
           onClick={onRemove}
           className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-50 rounded-xl transition-all"
         >

@@ -177,7 +177,13 @@ export default function CreateContactPage() {
       </div>
 
       {/* Form Card */}
-      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 flex flex-col flex-1 overflow-hidden">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+        className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 flex flex-col flex-1 overflow-hidden"
+      >
         <div className="flex flex-col gap-6 overflow-y-auto flex-1 pr-1">
           <div className="flex flex-col gap-4">
             <h2 className="text-md sm:text-xl font-semibold text-heading">
@@ -276,23 +282,23 @@ export default function CreateContactPage() {
             ))}
           </CreateContactSection>
         </div>
-      </div>
 
-      {/* Actions */}
-      <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-100 mt-4">
-        <Button
-          label={
-            submitting
-              ? "Saving..."
-              : isEditMode
-                ? "Update Contact"
-                : "Save Contact"
-          }
-          variant="primary"
-          onClick={handleSubmit}
-          disabled={submitting}
-        />
-      </div>
+        {/* Actions */}
+        <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-100 mt-4">
+          <Button
+            type="submit"
+            label={
+              submitting
+                ? "Saving..."
+                : isEditMode
+                  ? "Update Contact"
+                  : "Save Contact"
+            }
+            variant="primary"
+            disabled={submitting}
+          />
+        </div>
+      </form>
     </div>
   );
 }

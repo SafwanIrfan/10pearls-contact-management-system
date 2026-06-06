@@ -51,7 +51,13 @@ export default function SignInPage() {
         <div className="flex justify-center items-center p-4 bg-secondary rounded-t-2xl">
           <img src={appLogo} alt="appLogo" className="h-8 w-auto" />
         </div>
-        <div className="p-8 flex flex-col gap-6">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
+          className="p-8 flex flex-col gap-6"
+        >
           {/* Header */}
           <div className="flex flex-col gap-1">
             <h1 className="text-xl font-semibold text-heading">Welcome back</h1>
@@ -121,7 +127,7 @@ export default function SignInPage() {
           </div>
 
           <Button
-            type="button"
+            type="submit"
             label={loading ? "Signing in..." : "Sign In"}
             variant="primary"
             onClick={handleSubmit}
@@ -138,7 +144,7 @@ export default function SignInPage() {
               Sign up
             </Link>
           </p>
-        </div>
+        </form>
       </div>
     </div>
   );
