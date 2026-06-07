@@ -14,7 +14,6 @@ public class LoginRequestDTO {
     private String identifier;
 
     @NotBlank(message = "Password is required")
-    @Size(min = 6, message = "Password must have atleast 6 digit")
     private String password;
 
     public @NotBlank(message = "Email or Phone no is required") String getIdentifier() {
@@ -25,11 +24,11 @@ public class LoginRequestDTO {
         this.identifier = identifier;
     }
 
-    public @NotBlank(message = "Password is required") @Size(min = 6, message = "Password must have atleast 6 digit") String getPassword() {
+    public @NotBlank(message = "Password is required") String getPassword() {
         return password;
     }
 
-    public void setPassword(@NotBlank(message = "Password is required") @Size(min = 6, message = "Password must have atleast 6 digit") String password) {
+    public void setPassword(@NotBlank(message = "Password is required") String password) {
         this.password = password;
     }
 }
