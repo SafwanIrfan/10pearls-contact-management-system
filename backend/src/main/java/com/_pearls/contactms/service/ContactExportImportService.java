@@ -1,5 +1,6 @@
 package com._pearls.contactms.service;
 
+import com._pearls.contactms.exception.CsvProcessingException;
 import com._pearls.contactms.model.Contact;
 import com._pearls.contactms.repo.ContactRepo;
 import com._pearls.contactms.utils.CsvHelper;
@@ -63,7 +64,7 @@ public class ContactExportImportService {
 
         } catch (IOException e) {
             log.error("Failed to import contacts from CSV", e);
-            throw new RuntimeException("Failed to read CSV file.");
+            throw new CsvProcessingException("Failed to read CSV file.");
         }
     }
 }

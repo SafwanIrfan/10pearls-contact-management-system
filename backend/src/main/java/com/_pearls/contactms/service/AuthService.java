@@ -68,7 +68,9 @@ public class AuthService {
         user.setPassword(encoder.encode(registerRequestDTO.getPassword()));
         authRepo.save(user);
 
-        log.info("User {} has been registered", ContactHelper.sanitize(registerRequestDTO.getIdentifier()));
+        if (log.isInfoEnabled()) {
+            log.info("User {} has been registered", ContactHelper.sanitize(registerRequestDTO.getIdentifier()));
+        }
         return jwtService.generateToken(registerRequestDTO.getIdentifier());
     }
 
@@ -102,6 +104,8 @@ public class AuthService {
 
         user.setPassword(encoder.encode(changePassword.getNewPassword()));
         authRepo.save(user);
-        log.info("Password updated for user: {}", ContactHelper.sanitize((user.getEmail() != null ? user.getEmail() : user.getPhoneNo())));
+        if (log.isInfoEnabled()) {
+            log.info("Password updated for user: {}", ContactHelper.sanitize((user.getEmail() != null ? user.getEmail() : user.getPhoneNo())));
+        }
     }
 }

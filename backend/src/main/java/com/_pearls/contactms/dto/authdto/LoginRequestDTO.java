@@ -1,7 +1,6 @@
 package com._pearls.contactms.dto.authdto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 public class LoginRequestDTO {
 

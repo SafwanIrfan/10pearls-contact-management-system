@@ -20,23 +20,24 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ContactService {
 
     private static final Logger log = LoggerFactory.getLogger(ContactService.class);
     private final ContactRepo contactRepo;
+    private static final String CONTACT_NOT_FOUND = "Contact not found with id: ";
 
     public ContactService(ContactRepo contactRepo) {
         this.contactRepo = contactRepo;
     }
 
     public PaginatedResponseDTO<ContactResponseDTO> getContacts(String keyword, int page, int size) {
-        log.info("Incoming request - keyword: {}, page: {}, size: {}",
-                ContactHelper.sanitize(keyword), page, size);
+        if (log.isInfoEnabled()) {
+            log.info("Incoming request - keyword: {}, page: {}, size: {}",
+                    ContactHelper.sanitize(keyword), page, size);
+        }
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Contact> contactPage = contactRepo.findAll(ContactSpecification.search(keyword), pageable);
 
@@ -57,7 +58,7 @@ public class ContactService {
 
     public ContactResponseDTO getContactById(Long id) {
         Contact contact = contactRepo.findById(id)
-                .orElseThrow(() -> new NotFoundException("Contact not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException(CONTACT_NOT_FOUND + id));
         log.info("Contact fetched with id: {}", id);
         return ContactMapper.toDTO(contact);
     }
@@ -100,7 +101,7 @@ public class ContactService {
     public ContactResponseDTO updateContact(Long id, ContactRequestDTO updatedContact) {
 
         Contact contact = contactRepo.findById(id)
-                .orElseThrow(() -> new NotFoundException("Contact not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException(CONTACT_NOT_FOUND + id));
 
         contact.setTitle(updatedContact.getTitle());
         contact.setLastName(updatedContact.getLastName());
@@ -126,7 +127,7 @@ public class ContactService {
 
     public void deleteContact(Long id) {
         Contact contact = contactRepo.findById(id)
-                .orElseThrow(() -> new NotFoundException("Contact not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException(CONTACT_NOT_FOUND + id));
         contactRepo.deleteById(contact.getId());
         log.info("Deleted contact with id: {}", id);
     }
