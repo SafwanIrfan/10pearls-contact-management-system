@@ -41,10 +41,7 @@ public class ContactService {
         }
         PageRequest pageRequest = PageRequest.of(
                 page - 1,
-                size,
-                Sort.by(Sort.Direction.ASC, "createdAt")
-                        .and(Sort.by(Sort.Direction.ASC, "id"))
-
+                size
         );
         Page<Contact> contactPage = contactRepo.findAll(ContactSpecification.search(keyword), pageRequest);
 

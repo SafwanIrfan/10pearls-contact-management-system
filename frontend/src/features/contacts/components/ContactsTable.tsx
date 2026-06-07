@@ -104,7 +104,7 @@ const Pagination = ({
       <button
         onClick={() => onPageChange(1)}
         disabled={page === 1}
-        className="px-2 py-1.5 cursor-pointer text-xs text-text rounded-lg hover:bg-gray-100 disabled:opacity-80 disabled:pointer-events-none transition-all"
+        className="hidden sm:block px-2 py-1.5 cursor-pointer text-xs text-text rounded-lg hover:bg-gray-100 disabled:opacity-80 disabled:pointer-events-none transition-all"
       >
         First
       </button>
@@ -142,7 +142,23 @@ const Pagination = ({
       <button
         onClick={() => onPageChange(totalPages)}
         disabled={page === totalPages}
-        className="px-2 py-1.5 text-xs cursor-pointer text-text rounded-lg hover:bg-gray-100 disabled:opacity-80 disabled:pointer-events-none transition-all"
+        className="hidden sm:block px-2 py-1.5 b text-xs cursor-pointer text-text rounded-lg hover:bg-gray-100 disabled:opacity-80 disabled:pointer-events-none transition-all"
+      >
+        Last
+      </button>
+    </div>
+    <div className="flex sm:hidden gap-2">
+      <button
+        onClick={() => onPageChange(1)}
+        disabled={page === 1}
+        className="block sm:hidden px-2 py-1.5 cursor-pointer text-xs text-text rounded-lg hover:bg-gray-100 disabled:opacity-80 disabled:pointer-events-none transition-all"
+      >
+        First
+      </button>
+      <button
+        onClick={() => onPageChange(totalPages)}
+        disabled={page === totalPages}
+        className="block sm:hidden px-2 py-1.5 b text-xs cursor-pointer text-text rounded-lg hover:bg-gray-100 disabled:opacity-80 disabled:pointer-events-none transition-all"
       >
         Last
       </button>

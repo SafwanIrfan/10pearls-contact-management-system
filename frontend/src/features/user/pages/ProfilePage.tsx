@@ -49,23 +49,38 @@ export default function ProfilePage() {
           </p>
         </div>
 
-        <div className="flex flex-col  justify-center gap-4 max-w-md">
+        <div>
           {/* User Card */}
-          <div className="bg-white rounded-2xl shadow-sm p-6 flex items-center gap-4">
-            <div className="w-14 h-14 rounded-full bg-button/10 flex items-center justify-center shrink-0">
-              <UserCircle2 size={28} className="text-button" />
+          <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 shrink-0">
+              <div className="w-14 h-14 rounded-full bg-button/10 flex items-center justify-center shrink-0">
+                <UserCircle2 size={28} className="text-button" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm text-gray-400 uppercase text-center sm:text-left tracking-wide mb-1">
+                  {isEmail ? "Email" : "Phone"}
+                </p>
+                <p className="text-sm font-medium text-heading truncate">
+                  {user?.sub ?? "—"}
+                </p>
+              </div>
             </div>
-            <div className="min-w-0">
-              <p className="text-sm text-gray-400 uppercase tracking-wide mb-1">
-                {isEmail ? "Email" : "Phone"}
-              </p>
-              <p className="text-sm font-medium text-heading truncate">
-                {user?.sub ?? "—"}
-              </p>
+            <div className="flex flex-col sm:flex-row gap-4 mt-4">
+              <ActionButton
+                title="Change Password"
+                onClick={() => setShowChangePassword(true)}
+                icon={KeyRound}
+                variant="primary"
+              />
+              <ActionButton
+                title="Log Out"
+                onClick={() => setShowLogoutModal(true)}
+                icon={LogOut}
+              />
             </div>
           </div>
 
-          {/* Actions Card */}
+          {/* Actions Card
           <div className="flex flex-col p-4 gap-4 bg-white rounded-2xl  shadow-sm">
             <ActionButton
               title="Change Password"
@@ -78,7 +93,7 @@ export default function ProfilePage() {
               onClick={() => setShowLogoutModal(true)}
               icon={LogOut}
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </>
