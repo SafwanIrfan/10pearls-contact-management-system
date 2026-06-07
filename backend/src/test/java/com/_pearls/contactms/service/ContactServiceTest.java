@@ -87,8 +87,7 @@ class ContactServiceTest {
     void getContacts_returnsPagedResponse() {
         Page<Contact> page = new PageImpl<>(
                 List.of(mockContact),
-                PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "createdAt")
-                        .and(Sort.by(Sort.Direction.ASC, "id"))),
+                PageRequest.of(0, 10),
                 1
         );        when(contactRepo.findAll(ArgumentMatchers.<Specification<Contact>>any(), any(PageRequest.class))).thenReturn(page);
 
@@ -105,8 +104,7 @@ class ContactServiceTest {
     void getContacts_withKeyword_noMatch_returnsEmpty() {
         Page<Contact> emptyPage = new PageImpl<>(
                 List.of(),
-                PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "createdAt")
-                        .and(Sort.by(Sort.Direction.ASC, "id"))),
+                PageRequest.of(0, 10),
                 0
         );        when(contactRepo.findAll(ArgumentMatchers.<Specification<Contact>>any(), any(PageRequest.class))).thenReturn(emptyPage);
 

@@ -21,7 +21,7 @@ public class ContactSpecification {
                         cb.asc(root.get("id"))
                 );
             }
-            
+
             if (keyword == null || keyword.isBlank()) return null;
 
             query.distinct(true); // avoid duplicate results from joins
