@@ -1,4 +1,13 @@
-export const isEmail = (val: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+export const isEmail = (val: string) => {
+  const parts = val.split("@");
+  if (parts.length !== 2) return false;
+  const [local, domain] = parts;
+  return (
+    local.length > 0 &&
+    domain.includes(".") &&
+    domain.split(".").every((p) => p.length > 0)
+  );
+};
 export const isPhone = (val: string) => /^\+?\d{7,15}$/.test(val);
 
 export const validateIdentifier = (val: string): string | undefined => {
