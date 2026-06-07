@@ -77,7 +77,7 @@ class ContactExportImportServiceTest {
         byte[] result = exportImportService.exportContactsToCSV();
         String csv = new String(result, StandardCharsets.UTF_8);
 
-        assertThat(csv).isEqualTo("firstName,lastName,title,emails,phones\n");
+        assertThat(csv).isEqualTo("First name,Last name,Title,Emails,Phones\n");
     }
 
     @Test
