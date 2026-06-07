@@ -172,9 +172,9 @@ export default function ContactDetailsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <InfoCard title="Email Addresses">
               {contact.emails?.length > 0 ? (
-                contact.emails.map((e: Emails, i: number) => (
+                contact.emails.map((e: Emails) => (
                   <EntryItem
-                    key={i}
+                    key={e.id}
                     icon={<Mail size={14} />}
                     value={e.email}
                     label={e.label}
@@ -187,9 +187,9 @@ export default function ContactDetailsPage() {
 
             <InfoCard title="Phone Numbers">
               {contact.phones?.length > 0 ? (
-                contact.phones.map((p: Phones, i: number) => (
+                contact.phones.map((p: Phones) => (
                   <EntryItem
-                    key={i}
+                    key={p.id}
                     icon={<Phone size={14} />}
                     value={p.phone}
                     label={p.label}

@@ -5,7 +5,7 @@ import type { SearchBarProps } from "../types/search.type";
 export default function SearchBar({
   placeholder = "Search contacts...",
   onSearch,
-}: SearchBarProps) {
+}: Readonly<SearchBarProps>) {
   const [search, setSearch] = useState("");
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);

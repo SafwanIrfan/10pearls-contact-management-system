@@ -16,8 +16,8 @@ export const API_ENDPOINTS = {
 };
 
 export const fetchPaginatedContacts = async (
-  page?: number,
-  size?: number,
+  page: number,
+  size: number,
   search?: string,
 ) => {
   const endpoint = API_ENDPOINTS.CONTACTS(page, size, search);

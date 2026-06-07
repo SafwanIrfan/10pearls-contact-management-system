@@ -51,7 +51,8 @@ const getPageNumbers = (current: number, total: number): (number | "...")[] =>
   Array.from({ length: total }, (_, i) => i + 1)
     .filter((p) => p === 1 || p === total || Math.abs(p - current) <= 1)
     .reduce<(number | "...")[]>((acc, p, i, arr) => {
-      if (i > 0 && p - (arr[i - 1] as number) > 1) acc.push("...");
+      const prev = arr[i - 1];
+      if (i > 0 && typeof prev === "number" && p - prev > 1) acc.push("...");
       acc.push(p);
       return acc;
     }, []);
@@ -103,31 +104,28 @@ const Pagination = ({
       <button
         onClick={() => onPageChange(1)}
         disabled={page === 1}
-        className="px-2 py-1.5 text-xs text-text rounded-lg hover:bg-gray-100 disabled:opacity-80 disabled:pointer-events-none transition-all"
+        className="px-2 py-1.5 cursor-pointer text-xs text-text rounded-lg hover:bg-gray-100 disabled:opacity-80 disabled:pointer-events-none transition-all"
       >
         First
       </button>
       <button
         onClick={() => onPageChange(page - 1)}
         disabled={page === 1}
-        className="p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 disabled:opacity-30 disabled:pointer-events-none transition-all"
+        className="p-1.5 rounded-lg cursor-pointer text-gray-400 hover:bg-gray-100 disabled:opacity-30 disabled:pointer-events-none transition-all"
       >
         <ChevronLeft size={14} />
       </button>
 
-      {getPageNumbers(page, totalPages).map((p, index) =>
+      {getPageNumbers(page, totalPages).map((p) =>
         p === "..." ? (
-          <span
-            key={`ellipsis-${index}`}
-            className="px-2 text-xs text-gray-300"
-          >
+          <span key={`ellipsis-before-${p}`} className="px-2 text-gray-500">
             …
           </span>
         ) : (
           <button
-            key={p}
-            onClick={() => onPageChange(p as number)}
-            className={`w-7 h-7 text-xs rounded-lg transition-all font-medium ${page === p ? "bg-button text-white shadow-sm" : "text-gray-400 hover:bg-gray-100"}`}
+            key={`page-${p}`}
+            onClick={() => onPageChange(p)}
+            className={`w-7 h-7 text-xs cursor-pointer rounded-lg transition-all font-medium ${page === p ? "bg-button text-white shadow-sm" : "text-gray-400 hover:bg-gray-100"}`}
           >
             {p}
           </button>
@@ -137,14 +135,14 @@ const Pagination = ({
       <button
         onClick={() => onPageChange(page + 1)}
         disabled={page === totalPages}
-        className="p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 disabled:opacity-30 disabled:pointer-events-none transition-all"
+        className="p-1.5 rounded-lg cursor-pointer text-gray-400 hover:bg-gray-100 disabled:opacity-30 disabled:pointer-events-none transition-all"
       >
         <ChevronRight size={14} />
       </button>
       <button
         onClick={() => onPageChange(totalPages)}
         disabled={page === totalPages}
-        className="px-2 py-1.5 text-xs text-text rounded-lg hover:bg-gray-100 disabled:opacity-80 disabled:pointer-events-none transition-all"
+        className="px-2 py-1.5 text-xs cursor-pointer text-text rounded-lg hover:bg-gray-100 disabled:opacity-80 disabled:pointer-events-none transition-all"
       >
         Last
       </button>
@@ -153,12 +151,12 @@ const Pagination = ({
 );
 
 interface ContactsTableProps {
-  contacts: getAllContactsResponse;
-  loading: boolean;
-  page: number;
-  setPage: (page: number) => void;
-  pageSize: number;
-  onPageSizeChange: (size: number) => void;
+  readonly contacts: getAllContactsResponse;
+  readonly loading: boolean;
+  readonly page: number;
+  readonly setPage: (page: number) => void;
+  readonly pageSize: number;
+  readonly onPageSizeChange: (size: number) => void;
 }
 
 // Main
@@ -181,6 +179,99 @@ export default function ContactsTable({
   const totalPages = Math.ceil(totalElements / pageSize);
   const paginated = contacts.data;
 
+  const renderTableBody = () => {
+    if (loading)
+      return (
+        <tr>
+          <td colSpan={5} className="py-16 text-center">
+            <div className="flex justify-center">
+              <Spinner size={24} />
+            </div>
+          </td>
+        </tr>
+      );
+
+    if (error) return <ErrorState onRetry={refetch} />;
+
+    if (paginated.length === 0) return <EmptyState />;
+
+    return paginated.map((contact: ContactResponseDTO) => {
+      const fullName = `${contact.firstName} ${contact.lastName}`;
+      return (
+        <tr
+          key={contact.id}
+          onClick={() => navigate(`/contact/${contact.id}`)}
+          className="border-b border-gray-50 hover:bg-gray-50/70 cursor-pointer transition-colors group"
+        >
+          <td className="px-4 py-3">
+            <div className="flex items-center gap-3">
+              <Avatar name={fullName} />
+              <span className="font-medium text-heading truncate">
+                {fullName}
+              </span>
+            </div>
+          </td>
+
+          <td className="px-4 py-3 text-gray-500">{contact.title || "—"}</td>
+
+          <td className="px-4 py-3">
+            <div className="flex flex-col gap-1">
+              {contact.emails?.slice(0, 2).map((e) => (
+                <span
+                  key={e.email}
+                  className="flex items-center gap-1.5 text-xs text-gray-500"
+                >
+                  <Mail size={11} className="shrink-0 text-gray-500" />
+                  <span className="truncate max-w-[180px]">{e.email}</span>
+                  <div className="p-1 rounded border border-secondaryButton">
+                    <span className="text-[10px] text-gray-600 capitalize">
+                      {e.label}
+                    </span>
+                  </div>
+                </span>
+              ))}
+              {contact.emails?.length > 2 && (
+                <span className="text-[10px] text-gray-500">
+                  +{contact.emails.length - 2} more
+                </span>
+              )}
+            </div>
+          </td>
+
+          <td className="px-4 py-3">
+            <div className="flex flex-col gap-1">
+              {contact.phones?.slice(0, 2).map((p) => (
+                <span
+                  key={p.phone}
+                  className="flex items-center gap-1.5 text-xs text-gray-500"
+                >
+                  <Phone size={11} className="shrink-0 text-gray-500" />
+                  <span>{p.phone}</span>
+                  <div className="p-1 rounded border border-secondaryButton">
+                    <span className="text-[10px] text-gray-600 capitalize">
+                      {p.label}
+                    </span>
+                  </div>
+                </span>
+              ))}
+              {contact.phones?.length > 2 && (
+                <span className="text-[10px] text-gray-500">
+                  +{contact.phones.length - 2} more
+                </span>
+              )}
+            </div>
+          </td>
+
+          <td className="px-4 py-3">
+            <button className="p-1.5 rounded-lg text-gray-300 hover:text-text hover:bg-gray-100 opacity-0 group-hover:opacity-100 transition-all">
+              <MoreHorizontal size={15} />
+            </button>
+          </td>
+        </tr>
+      );
+    });
+  };
+
   return (
     <div className="w-full mt-8 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden font-poppins">
       <div className="overflow-x-auto">
@@ -199,107 +290,7 @@ export default function ContactsTable({
             </tr>
           </thead>
 
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={5} className="py-16 text-center">
-                  <div className="flex justify-center">
-                    <Spinner size={24} />
-                  </div>
-                </td>
-              </tr>
-            ) : error ? (
-              <ErrorState onRetry={refetch} />
-            ) : paginated.length === 0 ? (
-              <EmptyState />
-            ) : (
-              paginated.map((contact: ContactResponseDTO) => {
-                const fullName = `${contact.firstName} ${contact.lastName}`;
-                return (
-                  <tr
-                    key={contact.id}
-                    onClick={() => navigate(`/contact/${contact.id}`)}
-                    className="border-b border-gray-50 hover:bg-gray-50/70 cursor-pointer transition-colors group"
-                  >
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <Avatar name={fullName} />
-                        <span className="font-medium text-heading truncate">
-                          {fullName}
-                        </span>
-                      </div>
-                    </td>
-
-                    <td className="px-4 py-3 text-gray-500">
-                      {contact.title || "—"}
-                    </td>
-
-                    <td className="px-4 py-3">
-                      <div className="flex flex-col gap-1">
-                        {contact.emails?.slice(0, 2).map((e, i) => (
-                          <span
-                            key={i}
-                            className="flex items-center gap-1.5 text-xs text-gray-500"
-                          >
-                            <Mail
-                              size={11}
-                              className="shrink-0 text-gray-500"
-                            />
-                            <span className="truncate max-w-[180px]">
-                              {e.email}
-                            </span>
-                            <div className="p-1 rounded border border-secondaryButton">
-                              <span className="text-[10px] text-gray-600 capitalize">
-                                {e.label}
-                              </span>
-                            </div>
-                          </span>
-                        ))}
-                        {contact.emails?.length > 2 && (
-                          <span className="text-[10px] text-gray-500">
-                            +{contact.emails.length - 2} more
-                          </span>
-                        )}
-                      </div>
-                    </td>
-
-                    <td className="px-4 py-3">
-                      <div className="flex flex-col gap-1">
-                        {contact.phones?.slice(0, 2).map((p, i) => (
-                          <span
-                            key={i}
-                            className="flex items-center gap-1.5 text-xs text-gray-500"
-                          >
-                            <Phone
-                              size={11}
-                              className="shrink-0 text-gray-500"
-                            />
-                            <span>{p.phone}</span>
-                            <div className="p-1 rounded border border-secondaryButton">
-                              <span className="text-[10px] text-gray-600 capitalize">
-                                {p.label}
-                              </span>
-                            </div>
-                          </span>
-                        ))}
-                        {contact.phones?.length > 2 && (
-                          <span className="text-[10px] text-gray-500">
-                            +{contact.phones.length - 2} more
-                          </span>
-                        )}
-                      </div>
-                    </td>
-
-                    <td className="px-4 py-3">
-                      <button className="p-1.5 rounded-lg text-gray-300 hover:text-text hover:bg-gray-100 opacity-0 group-hover:opacity-100 transition-all">
-                        <MoreHorizontal size={15} />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
+          <tbody>{renderTableBody()}</tbody>
         </table>
       </div>
 

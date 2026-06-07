@@ -50,5 +50,5 @@ export const isTokenExpired = (): boolean => {
 export const logout = () => {
   removeToken();
   toast.success("Successfully logout");
-  window.location.href = "/auth/signin";
+  globalThis.location.href = "/auth/signin";
 };

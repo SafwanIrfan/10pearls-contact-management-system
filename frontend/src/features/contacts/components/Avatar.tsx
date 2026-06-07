@@ -24,7 +24,8 @@ const Avatar = ({
     .join("")
     .slice(0, 2)
     .toUpperCase();
-  const color = AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length];
+  const color =
+    AVATAR_COLORS[(name.codePointAt(0) ?? 0) % AVATAR_COLORS.length];
 
   return (
     <div

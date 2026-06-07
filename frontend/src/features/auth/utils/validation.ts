@@ -1,5 +1,5 @@
 export const isEmail = (val: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
-export const isPhone = (val: string) => /^\+?[\d]{7,15}$/.test(val);
+export const isPhone = (val: string) => /^\+?\d{7,15}$/.test(val);
 
 export const validateIdentifier = (val: string): string | undefined => {
   if (!val.trim()) return "Email or phone number is required.";
