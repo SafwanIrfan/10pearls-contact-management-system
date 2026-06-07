@@ -4,7 +4,6 @@ interface ActionButtonProps {
   title: string;
   onClick: () => void;
   icon: LucideIcon;
-  bgColor?: string;
   variant?: "danger" | "primary";
 }
 

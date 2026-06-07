@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import type {
   ContactResponseDTO,
-  getAllContactsResponse,
+  GetAllContactsResponse,
 } from "../types/contact.types";
 import { useContacts } from "../hooks/useContact";
 import { Spinner } from "../../../shared/components/Spinner";
@@ -151,7 +151,7 @@ const Pagination = ({
 );
 
 interface ContactsTableProps {
-  readonly contacts: getAllContactsResponse;
+  readonly contacts: GetAllContactsResponse;
   readonly loading: boolean;
   readonly page: number;
   readonly setPage: (page: number) => void;

@@ -17,7 +17,7 @@ export default function Button({
   className = "",
   type = "button",
   ...props
-}: ButtonProps) {
+}: Readonly<ButtonProps>) {
   const base = `
     flex items-center gap-0 sm:gap-2 px-3 sm:px-4 py-2.5 text-sm font-medium
     rounded-xl font-poppins transition-all duration-150 active:scale-95

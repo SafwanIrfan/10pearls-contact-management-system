@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { getAllContactsResponse } from "../types/contact.types";
+import type { GetAllContactsResponse } from "../types/contact.types";
 import { fetchPaginatedContacts } from "../services/api";
 
 export const useContacts = (
@@ -7,7 +7,7 @@ export const useContacts = (
   pageSize?: number,
   search?: string,
 ) => {
-  const [contacts, setContacts] = useState<getAllContactsResponse>({
+  const [contacts, setContacts] = useState<GetAllContactsResponse>({
     data: [],
     page: 1,
     size: 10,

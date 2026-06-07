@@ -11,12 +11,12 @@ export const exportContacts = async (): Promise<void> => {
     responseType: "blob",
   });
 
-  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const url = globalThis.URL.createObjectURL(new Blob([response.data]));
   const link = document.createElement("a");
   link.href = url;
   link.download = `contacts_${new Date().toISOString().split("T")[0]}.csv`;
   link.click();
-  window.URL.revokeObjectURL(url);
+  globalThis.URL.revokeObjectURL(url);
 };
 
 // ── Import ──

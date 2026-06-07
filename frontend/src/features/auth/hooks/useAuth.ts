@@ -30,7 +30,7 @@ export const useAuth = () => {
         message === "Invalid Credentials"
       ) {
         setError(message ?? "Invalid email or password.");
-      } else if (!status) {
+      } else if (status === undefined) {
         toast.error(
           "Unable to connect. Please check your internet connection.",
         );
@@ -59,7 +59,7 @@ export const useAuth = () => {
           : (data?.message ?? (Object.values(data ?? {})[0] as string));
       if (status === 400 || status === 401) {
         setError(message ?? "Registration failed! Please check your details.");
-      } else if (!status) {
+      } else if (status === undefined) {
         toast.error(
           "Unable to connect. Please check your internet connection.",
         );

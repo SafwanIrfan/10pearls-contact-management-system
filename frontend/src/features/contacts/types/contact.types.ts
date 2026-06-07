@@ -1,4 +1,4 @@
-export interface getAllContactsResponse {
+export interface GetAllContactsResponse {
   data: ContactResponseDTO[];
   page: number;
   size: number;
@@ -7,13 +7,13 @@ export interface getAllContactsResponse {
 }
 
 export interface Emails {
-  id: number;
+  id?: number;
   email: string;
   label: string;
 }
 
 export interface Phones {
-  id: number;
+  id?: number;
   phone: string;
   label: string;
 }
@@ -34,12 +34,4 @@ export interface ContactResponseDTO {
   emails: Emails[];
   phones: Phones[];
   createdAt: Date;
-}
-
-export interface updateContactRequest {
-  firstName: string;
-  lastName: string;
-  title: string;
-  email: Emails[];
-  phone: Phones[];
 }

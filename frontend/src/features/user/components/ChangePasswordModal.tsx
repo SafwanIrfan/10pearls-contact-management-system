@@ -68,8 +68,14 @@ export const ChangePasswordModal = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div
+        role="button"
+        tabIndex={0}
+        aria-label="Close modal"
         className="absolute inset-0 bg-black/30 backdrop-blur-sm"
         onClick={onCancel}
+        onKeyDown={(e) => {
+          if (e.key === "Escape" || e.key === "Enter") onCancel();
+        }}
       />
       <div className="relative bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm mx-4 flex flex-col gap-5 font-poppins">
         <div className="flex flex-col gap-1">

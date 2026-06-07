@@ -84,6 +84,12 @@ export default function CreateContactPage() {
     }
   }, [contact]);
 
+  const submitLabel = submitting
+    ? "Saving..."
+    : isEditMode
+      ? "Update Contact"
+      : "Save Contact";
+
   // Email helpers
   const updateEmail = (i: number, field: keyof Emails, val: string) =>
     setEmails((prev) =>
@@ -234,7 +240,7 @@ export default function CreateContactPage() {
           >
             {emails.map((e, i) => (
               <AddContactsEntryRow
-                key={i}
+                key={e.id ?? e.email}
                 icon={<Mail size={14} />}
                 value={e.email}
                 label={e.label}
@@ -263,7 +269,7 @@ export default function CreateContactPage() {
           >
             {phones.map((p, i) => (
               <AddContactsEntryRow
-                key={i}
+                key={p.id ?? p.phone}
                 icon={<Phone size={14} />}
                 value={p.phone}
                 label={p.label}
@@ -287,13 +293,7 @@ export default function CreateContactPage() {
         <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-100 mt-4">
           <Button
             type="submit"
-            label={
-              submitting
-                ? "Saving..."
-                : isEditMode
-                  ? "Update Contact"
-                  : "Save Contact"
-            }
+            label={submitLabel}
             variant="primary"
             disabled={submitting}
           />
