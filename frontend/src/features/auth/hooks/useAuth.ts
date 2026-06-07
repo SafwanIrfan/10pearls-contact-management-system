@@ -19,11 +19,23 @@ export const useAuth = () => {
       toast.success("Welcome back to Leadly!");
       navigate("/");
     } catch (err: any) {
-      const message = err?.response?.data?.message;
-      if (err?.response?.status === 400 || err?.response?.status === 401) {
-        setError(message ?? "Invalid email or password."); // inline form error
+      const status = err?.response?.status;
+      const data = err?.response?.data;
+      const message =
+        typeof data === "string" ? data : (data?.message ?? data?.error);
+      console.log(message);
+      if (
+        status === 400 ||
+        status === 401 ||
+        message === "Invalid Credentials"
+      ) {
+        setError(message ?? "Invalid email or password.");
+      } else if (!status) {
+        toast.error(
+          "Unable to connect. Please check your internet connection.",
+        );
       } else {
-        toast.error(message ?? "Something went wrong. Please try again."); // unexpected error
+        toast.error(message ?? "Something went wrong. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -39,11 +51,20 @@ export const useAuth = () => {
       navigate("/");
       toast.success("Welcome to Leadly! Let's get started.");
     } catch (err: any) {
-      const message = err?.response?.data?.message;
-      if (err?.response?.status === 400 || err?.response?.status === 401) {
-        setError(message ?? "Registration failed. Please check your details.");
+      const status = err?.response?.status;
+      const data = err?.response?.data;
+      const message =
+        typeof data === "string"
+          ? data
+          : (data?.message ?? (Object.values(data ?? {})[0] as string));
+      if (status === 400 || status === 401) {
+        setError(message ?? "Registration failed! Please check your details.");
+      } else if (!status) {
+        toast.error(
+          "Unable to connect. Please check your internet connection.",
+        );
       } else {
-        toast.error(message ?? "Something went wrong. Please try again."); // unexpected error
+        toast.error(message ?? "Something went wrong. Please try again.");
       }
     } finally {
       setLoading(false);

@@ -14,6 +14,8 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.log("interceptor error:", error); // add this
+
     const isAuthRoute = error.config?.url?.includes("/auth/");
     if (error.response?.status === 401 && !isAuthRoute) {
       logout();
