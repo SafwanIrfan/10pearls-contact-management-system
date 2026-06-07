@@ -1,50 +1,26 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Lock, Eye, EyeOff, AtSign } from "lucide-react";
-import type { SignInRequestDTO, SignUpRequestDTO } from "../types/auth";
-import { validateIdentifier, validatePassword } from "../utils/validation";
+import type { SignUpRequestDTO } from "../types/auth";
 import { useAuth } from "../hooks/useAuth";
 import Button from "../../../shared/components/Button";
 import appLogo from "./../../../assets/LeadLy.svg";
+import { useAuthForm } from "../hooks/useAuthForm";
 
 const EMPTY_FORM: SignUpRequestDTO = {
   identifier: "",
   password: "",
 };
 
-interface FormErrors {
-  identifier?: string;
-  password?: string;
-}
-
 export default function SignUpPage() {
   const { handleSignUp, loading, error } = useAuth();
+  const { form, errors, update, validate } =
+    useAuthForm<SignUpRequestDTO>(EMPTY_FORM);
 
-  const [form, setForm] = useState<SignUpRequestDTO>(EMPTY_FORM);
-  const [errors, setErrors] = useState<FormErrors>({});
   const [showPass, setShowPass] = useState(false);
 
-  const update = (field: keyof SignUpRequestDTO, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-    setErrors((prev) => ({ ...prev, [field]: undefined }));
-  };
-
-  const validate = (form: SignInRequestDTO): FormErrors => {
-    const errors: FormErrors = {};
-    const identifierError = validateIdentifier(form.identifier);
-    const passwordError = validatePassword(form.password);
-    if (identifierError) errors.identifier = identifierError;
-    if (passwordError) errors.password = passwordError;
-
-    return errors;
-  };
-
   const handleSubmit = async () => {
-    const validationErrors = validate(form);
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
+    if (!validate()) return;
     await handleSignUp(form);
   };
 
