@@ -14,6 +14,7 @@ import CreateContactInputField from "../components/CreateContactInputField";
 import { useContactById } from "../hooks/useContactById";
 import { Spinner } from "../../../shared/components/Spinner";
 import { isEmail, isPhone } from "../../auth/utils/validation";
+import { ConfirmationModal } from "../../../shared/components/ConfirmationModal";
 
 // Constants
 const EMAIL_LABELS = ["Work", "Personal", "Other"];
@@ -73,6 +74,7 @@ export default function CreateContactPage() {
   const [phones, setPhones] = useState<Phones[]>([EMPTY_PHONE()]);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
   useEffect(() => {
     if (contact) {
@@ -113,20 +115,6 @@ export default function CreateContactPage() {
     setPhones((prev) => prev.filter((_, idx) => idx !== i));
 
   const handleSubmit = async () => {
-    const validationErrors = validate(
-      firstName,
-      lastName,
-      title,
-      emails,
-      phones,
-    );
-
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      toast.error("Please fix the errors before submitting.");
-      return;
-    }
-
     const payload: ContactRequestDTO = {
       firstName,
       lastName,
@@ -161,6 +149,22 @@ export default function CreateContactPage() {
 
   return (
     <div className="h-full flex flex-col px-4 py-6 font-poppins">
+      {isConfirmationModalOpen && (
+        <ConfirmationModal
+          title={isEditMode ? "Update Contact" : "Add Contact"}
+          message={
+            isEditMode
+              ? "Are you sure you want to update this contact?"
+              : "Are you sure you want to add this contact?"
+          }
+          confirmLabel={isEditMode ? "Update" : "Add"}
+          variant="primary"
+          loading={submitting}
+          onConfirm={handleSubmit}
+          onCancel={() => setIsConfirmationModalOpen(false)}
+        />
+      )}
+
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <button
@@ -186,7 +190,20 @@ export default function CreateContactPage() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          handleSubmit();
+          e.preventDefault();
+          const validationErrors = validate(
+            firstName,
+            lastName,
+            title,
+            emails,
+            phones,
+          );
+          if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            toast.error("Please fix the errors before submitting.");
+            return;
+          }
+          setIsConfirmationModalOpen(true);
         }}
         className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 flex flex-col flex-1 overflow-hidden"
       >
@@ -240,7 +257,7 @@ export default function CreateContactPage() {
           >
             {emails.map((e, i) => (
               <AddContactsEntryRow
-                key={e.id ?? e.email}
+                key={i}
                 icon={<Mail size={14} />}
                 value={e.email}
                 label={e.label}
@@ -269,7 +286,7 @@ export default function CreateContactPage() {
           >
             {phones.map((p, i) => (
               <AddContactsEntryRow
-                key={p.id ?? p.phone}
+                key={i}
                 icon={<Phone size={14} />}
                 value={p.phone}
                 label={p.label}

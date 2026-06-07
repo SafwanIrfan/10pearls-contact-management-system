@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,8 +39,14 @@ public class ContactService {
             log.info("Incoming request - keyword: {}, page: {}, size: {}",
                     ContactHelper.sanitize(keyword), page, size);
         }
-        Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Contact> contactPage = contactRepo.findAll(ContactSpecification.search(keyword), pageable);
+        PageRequest pageRequest = PageRequest.of(
+                page - 1,
+                size,
+                Sort.by(Sort.Direction.ASC, "createdAt")
+                        .and(Sort.by(Sort.Direction.ASC, "id"))
+
+        );
+        Page<Contact> contactPage = contactRepo.findAll(ContactSpecification.search(keyword), pageRequest);
 
         List<ContactResponseDTO> dtoList = contactPage.getContent()
                 .stream()

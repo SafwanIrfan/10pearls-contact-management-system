@@ -14,7 +14,7 @@ public class CsvHelper {
 
     private CsvHelper() {}
 
-    public static final String CSV_HEADER = "firstName,lastName,title,emails,phones\n";
+    public static final String CSV_HEADER = "First name,Last name,Title,Emails,Phones\n";
 
     public static String escapeCsv(String value) {
         if (value == null) return "";
@@ -25,7 +25,7 @@ public class CsvHelper {
     }
 
     public static String unquote(String value) {
-        return value.trim().replaceAll("(^\"|\"$)", "");
+        return value.trim().replaceAll("^\"", "").replaceAll("\"$", "");
     }
 
     public static String cleanField(String[] fields, int index) {
@@ -104,7 +104,7 @@ public class CsvHelper {
                     email.setContact(contact);
                     return email;
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public static List<PhoneContact> parsePhones(String raw, Contact contact) {
@@ -118,6 +118,6 @@ public class CsvHelper {
                     phone.setContact(contact);
                     return phone;
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 }

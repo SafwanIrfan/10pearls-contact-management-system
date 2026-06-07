@@ -20,9 +20,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -85,8 +85,12 @@ class ContactServiceTest {
     @Test
     @DisplayName("getContacts() → returns paginated contacts")
     void getContacts_returnsPagedResponse() {
-        Page<Contact> page = new PageImpl<>(List.of(mockContact), PageRequest.of(0, 10), 1);
-        when(contactRepo.findAll(ArgumentMatchers.<Specification<Contact>>any(), any(PageRequest.class))).thenReturn(page);
+        Page<Contact> page = new PageImpl<>(
+                List.of(mockContact),
+                PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "createdAt")
+                        .and(Sort.by(Sort.Direction.ASC, "id"))),
+                1
+        );        when(contactRepo.findAll(ArgumentMatchers.<Specification<Contact>>any(), any(PageRequest.class))).thenReturn(page);
 
         PaginatedResponseDTO<ContactResponseDTO> result = contactService.getContacts(null, 1, 10);
 
@@ -99,8 +103,12 @@ class ContactServiceTest {
     @Test
     @DisplayName("getContacts() → returns empty list when no contacts match keyword")
     void getContacts_withKeyword_noMatch_returnsEmpty() {
-        Page<Contact> emptyPage = new PageImpl<>(List.of(), PageRequest.of(0, 10), 0);
-        when(contactRepo.findAll(ArgumentMatchers.<Specification<Contact>>any(), any(PageRequest.class))).thenReturn(emptyPage);
+        Page<Contact> emptyPage = new PageImpl<>(
+                List.of(),
+                PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "createdAt")
+                        .and(Sort.by(Sort.Direction.ASC, "id"))),
+                0
+        );        when(contactRepo.findAll(ArgumentMatchers.<Specification<Contact>>any(), any(PageRequest.class))).thenReturn(emptyPage);
 
         PaginatedResponseDTO<ContactResponseDTO> result = contactService.getContacts("unknown", 1, 10);
 

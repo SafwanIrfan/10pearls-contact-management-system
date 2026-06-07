@@ -61,11 +61,12 @@ class ContactExportImportServiceTest {
         byte[] result = exportImportService.exportContactsToCSV();
         String csv = new String(result, StandardCharsets.UTF_8);
 
-        assertThat(csv).startsWith("firstName,lastName,title,emails,phones");
-        assertThat(csv).contains("Safwan");
-        assertThat(csv).contains("Irfan");
-        assertThat(csv).contains("safwan@test.com:work");
-        assertThat(csv).contains("+923001234567:mobile");
+        assertThat(csv)
+                .startsWith("First name,Last name,Title,Emails,Phones")
+                .contains("Safwan")
+                .contains("Irfan")
+                .contains("safwan@test.com:work")
+                .contains("+923001234567:mobile");
     }
 
     @Test

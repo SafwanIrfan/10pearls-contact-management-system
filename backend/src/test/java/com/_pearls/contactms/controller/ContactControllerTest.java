@@ -60,7 +60,7 @@ class ContactControllerTest {
         mockResponse.setTitle("Software Engineer");
         mockResponse.setEmails(List.of());
         mockResponse.setPhones(List.of());
-        mockResponse.setCreatedAt(LocalDateTime.now(ZoneId.of("UTC")));
+        mockResponse.setCreatedAt(LocalDateTime.of(2026, 6, 7, 6, 30, 0));
 
         // reusable mock request
         EmailRequestDTO email = new EmailRequestDTO();

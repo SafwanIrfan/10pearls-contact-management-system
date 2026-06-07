@@ -69,6 +69,6 @@ class ContactHelperTest {
     @Test
     @DisplayName("sanitize() → returns empty string for null")
     void sanitize_null_returnsEmpty() {
-        assertThat(ContactHelper.sanitize(null)).isEqualTo("");
+        assertThat(ContactHelper.sanitize(null)).isEmpty();
     }
 }

@@ -35,7 +35,7 @@ class CsvHelperTest {
     @Test
     @DisplayName("escapeCsv() → returns empty string for null")
     void escapeCsv_null_returnsEmpty() {
-        assertThat(CsvHelper.escapeCsv(null)).isEqualTo("");
+        assertThat(CsvHelper.escapeCsv(null)).isEmpty();
     }
 
     // unquote()
@@ -59,13 +59,13 @@ class CsvHelperTest {
     @Test
     @DisplayName("formatEmails() → returns empty string for null list")
     void formatEmails_null_returnsEmpty() {
-        assertThat(CsvHelper.formatEmails(null)).isEqualTo("");
+        assertThat(CsvHelper.formatEmails(null)).isEmpty();
     }
 
     @Test
     @DisplayName("formatEmails() → returns empty string for empty list")
     void formatEmails_emptyList_returnsEmpty() {
-        assertThat(CsvHelper.formatEmails(List.of())).isEqualTo("");
+        assertThat(CsvHelper.formatEmails(List.of())).isEmpty();
     }
 
     // formatPhones()
@@ -82,7 +82,7 @@ class CsvHelperTest {
     @Test
     @DisplayName("formatPhones() → returns empty string for null list")
     void formatPhones_null_returnsEmpty() {
-        assertThat(CsvHelper.formatPhones(null)).isEqualTo("");
+        assertThat(CsvHelper.formatPhones(null)).isEmpty();
     }
 
     // validateCsvFile()

@@ -7,7 +7,10 @@ const App = () => (
     <RouterProvider router={router} />
     <Toaster
       position="top-right"
-      toastOptions={{ className: "font-poppins text-sm" }}
+      toastOptions={{
+        className: "font-poppins text-sm",
+        duration: 3000,
+      }}
     />
   </>
 );

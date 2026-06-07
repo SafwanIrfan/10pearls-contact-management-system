@@ -22,6 +22,12 @@ public class ContactSpecification {
             Join<Contact, EmailContact> emailJoin = root.join("email", JoinType.LEFT);
             Join<Contact, PhoneContact> phoneJoin = root.join("phone", JoinType.LEFT);
 
+            // explicitly add createdAt and id to the selection to allow ORDER BY with DISTINCT
+            query.orderBy(
+                    cb.asc(root.get("createdAt")),
+                    cb.asc(root.get("id"))
+            );
+            
             return cb.or(
                     cb.like(cb.lower(root.get("firstName")), pattern),
                     cb.like(cb.lower(root.get("lastName")), pattern),
