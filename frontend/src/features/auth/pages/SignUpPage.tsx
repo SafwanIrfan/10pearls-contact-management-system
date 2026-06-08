@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Lock, Eye, EyeOff, AtSign } from "lucide-react";
 import type { SignUpRequestDTO } from "../types/auth";
 import { useAuth } from "../hooks/useAuth";
 import Button from "../../../shared/components/Button";
@@ -17,8 +15,6 @@ export default function SignUpPage() {
   const { handleSignUp, loading, error } = useAuth();
   const { form, errors, update, validate } =
     useAuthForm<SignUpRequestDTO>(EMPTY_FORM);
-
-  const [showPass, setShowPass] = useState(false);
 
   const handleSubmit = async () => {
     if (!validate()) return;
